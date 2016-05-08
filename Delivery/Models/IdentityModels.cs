@@ -29,5 +29,7 @@ namespace Delivery.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Delivery.Models.Users> Users { get; set; }
     }
 }

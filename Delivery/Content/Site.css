@@ -20,5 +20,129 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 320px;
+}
+
+.loginTitle {
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 49%;
+}
+
+.logo {
+    width: 270px;
+    height: 200px;
+    position: absolute;
+    top: 10%;
+    left: 41%;
+}
+
+.auth-form-body {
+    width: 320px;
+    height: 230px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: 0;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+    background-color: #fff;
+    border: 1px solid #768995;
+    margin-left: -170px;
+    margin-top: -110px;
+    padding: 20px 20px 10px;
+    border-top: 1px solid #d8dee2;
+    border-bottom: 1px solid #d8dee2;
+    border-left: 1px solid #d8dee2;
+    border-right: 1px solid #d8dee2;
+    border-radius: 5px;
+}
+
+.input-block {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.form-control {
+    min-height: 34px;
+    padding: 7px 8px;
+    font-size: 13px;
+    color: #333;
+    vertical-align: middle;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+}
+
+.btn {
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #eee;
+    background-image: -webkit-linear-gradient(#fcfcfc, #eee);
+    background-image: linear-gradient(#fcfcfc, #eee);
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+    -webkit-appearance: none;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-primary {
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
+    background-color: #60b044;
+    background-image: -webkit-linear-gradient(#8add6d, #60b044);
+    background-image: linear-gradient(#8add6d, #60b044);
+    border-color: #5ca941;
+}
+
+body {
+    font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.428571429;
+    color: #333333;
+    background-color: #f9f9f9;
+}
+
+.create-account-callout {
+    padding: 10px 20px;
+    text-align: center;
+    border: 1px solid #d8dee2;
+    border-radius: 5px;
+    width: 320px;
+    position: absolute;
+    left: 50%;
+    top: 85%;
+    margin: 0;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+    background-color: #f9f9f9;
+    border: 1px solid #768995;
+    margin-left: -170px;
+    margin-top: -110px;
+    padding: 20px 20px 10px;
+    border-top: 1px solid #d8dee2;
+    border-bottom: 1px solid #d8dee2;
+    border-left: 1px solid #d8dee2;
+    border-right: 1px solid #d8dee2;
 }
