@@ -7,18 +7,18 @@ using System.Web;
 
 namespace Delivery.Models
 {
-    public class OrderCompetitors
+    public class Addresses
     {
         [Key]
         public int ID { get; set; }
         [ForeignKey("User")]
         [Required]
         public int UserID { get; set; }
-        [ForeignKey("Order")]
+        [ForeignKey("Address")]
         [Required]
-        public int OrderID { get; set; }
+        public int AddressesID { get; set; }
 
         public virtual Users User { get; set; }
-        public virtual Orders Order { get; set; }
+        public virtual Locations Address { get; set; }
     }
 }

@@ -31,5 +31,11 @@ namespace Delivery.Models
         }
 
         public System.Data.Entity.DbSet<Delivery.Models.Users> Users { get; set; }
+        public System.Data.Entity.DbSet<Delivery.Models.Orders> Orders { get; set; }
+        public System.Data.Entity.DbSet<Delivery.Models.Locations> Locations { get; set; }
+        public System.Data.Entity.DbSet<Delivery.Models.Packages> Packages { get; set; }
+        public System.Data.Entity.DbSet<Delivery.Models.Rewards> Rewards { get; set; }
+        public System.Data.Entity.DbSet<Delivery.Models.OrderCompetitors> OrderCompetitors { get; set; }
+        public System.Data.Entity.DbSet<Delivery.Models.Addresses> Addresses { get; set; }
     }
 }

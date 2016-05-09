@@ -198,19 +198,18 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605081128027_InitialCreate.cs" />
-    <Compile Include="Migrations\201605081128027_InitialCreate.Designer.cs">
-      <DependentUpon>201605081128027_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605081239004_add-users.cs" />
-    <Compile Include="Migrations\201605081239004_add-users.Designer.cs">
-      <DependentUpon>201605081239004_add-users.cs</DependentUpon>
+    <Compile Include="Migrations\201605090615039_initial-create.cs" />
+    <Compile Include="Migrations\201605090615039_initial-create.Designer.cs">
+      <DependentUpon>201605090615039_initial-create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\OrderViewModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Addresses.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Locations.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -283,10 +282,14 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Orders\Create.cshtml" />
+    <Content Include="Views\Orders\Delete.cshtml" />
+    <Content Include="Views\Orders\Details.cshtml" />
+    <Content Include="Views\Orders\Edit.cshtml" />
+    <Content Include="Views\Orders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -297,11 +300,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605081128027_InitialCreate.resx">
-      <DependentUpon>201605081128027_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605081239004_add-users.resx">
-      <DependentUpon>201605081239004_add-users.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605090615039_initial-create.resx">
+      <DependentUpon>201605090615039_initial-create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

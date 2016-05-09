@@ -1,0 +1,104 @@
+﻿@model Delivery.Models.Orders
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Orders</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PickLocation.PlaceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickLocation.PlaceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receiver.Account)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receiver.Account)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceiverLocation.PlaceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reward.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reward.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sender.Account)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sender.Account)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PublishTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PublishTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
