@@ -1,16 +1,25 @@
 ﻿@model Delivery.Models.OrderCreateViewModel
 
-@{ 
+@{
     ViewBag.Title = "发起申请";
 }
 
 <html>
 <head>
     @Styles.Render("~/Content/Site.css")
+    @Scripts.Render("~/bundles/jquery")
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
+
 </head>
 
 <body>
+    @section loginUser {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("注册", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("登录", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+    }
+
     <h2>发起申请</h2>
     <div style="width:500px;float:left;display:inline">
         @using (Html.BeginForm("Create", "Orders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "create-order-form", role = "form" }))
@@ -19,38 +28,12 @@
             <div style="width:500px;float:left;">
                 <div class="form-horizontal">
                     @*<h4>Orders</h4>*@
-                    <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.PlaceName, "地点", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.PlaceName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.PlaceName, "", new { @class = "text-danger" })
-                        </div>
+                    <div style="display:none;">
+                        <input id="SenderID" name="SenderID" type="text" value="" />
                     </div>
+                   
                     @*<div class="form-group">
-                        @Html.LabelFor(model => model.Longitude, "经度", htmlAttributes: new { @class = "control-label col-md-2"})
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Longitude, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Longitude, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Latitude, "纬度", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Latitude, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Latitude, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Remark, "地点备注", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
                         @Html.LabelFor(model => model.ExpressCompany, "快递公司", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.ExpressCompany, new { htmlAttributes = new { @class = "form-control" } })
@@ -63,7 +46,48 @@
                             @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
+                    </div>*@
+                    
+                    <div  id="wordx" style="margin-left:5%;margin-top:6%">
+                        <div style="width:75px"><h4>包裹信息</h4></div>
+                        <div style="width:400px">
+                            <a href="#" class="btn-add"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                        </div>
+                        <table class="table" style="width:400px;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">快递公司</th>
+                                    <th style="text-align:center">包裹备注</th>
+                                    <th style="text-align:center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center">京东</td>
+                                    <td style="text-align:center">1kg</td>
+                                    <td>
+                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center">天猫</td>
+                                    <td style="text-align:center">2件</td>
+                                    <td>
+                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center">3</td>
+                                    <td><input type="text" class="form-control"></td>
+                                    <td>
+                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></a>
+                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+
 
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10" style="width:350px;">
@@ -73,23 +97,53 @@
                 </div>
             </div>
         }
-        </div>
+    </div>
 
-        <div style="width:500px;float:right;display:inline">
+    <div style="width:500px; top:20%;float:right;margin-top:3%;display:inline">
+        <h4>地点信息</h4>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.PlaceName, "地点", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PlaceName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PlaceName, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        
+            <div id="r-result" class="form-group">
+                @Html.LabelFor(model => model.PlaceName, "地点", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" id="suggestId" class="form-control" size="20" value="百度" />
+                </div>
+            <br></br>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Remark, "备注", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <br></br>
             <div id="l-map"></div>
-            <div id="r-result">请输入:<input type="text" id="suggestId" size="20" value="百度" style="width:150px;" /></div>
             <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
             @*<div id="allmap"></div>*@
         </div>
-        <div style="width:500px;float:left;">
-            @Html.ActionLink("查看我的订单信息", "Index")
-        </div>
+      </div>
+   <div style="width:500px;float:left;">
+        @Html.ActionLink("查看我的订单信息", "Index")
+   </div>
+
+
+
+
+   
 </body>
 </html>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
 <script type="text/javascript">
+
     // 百度地图API功能
     //var map1 = new BMap.Map("allmap");
     //map1.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
@@ -153,4 +207,12 @@
         local.search(myValue);
         $("#PlaceName").val(myValue);
     }
+    var userId;
+    if (@ViewData["userID"] != null)
+    {
+        userId = @ViewData["userID"].ToString();
+    }
+    $("#SenderID").val(userId);
+    $("#loginLink").text(userId);
+
 </script>

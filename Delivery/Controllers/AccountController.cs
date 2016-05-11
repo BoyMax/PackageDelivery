@@ -83,7 +83,12 @@ namespace Delivery.Controllers
             var user = db.Users.First(u => u.Account == model.Account);
             if (user.Password.Equals(model.Password))
             {
-                return RedirectToLocal(returnUrl);
+                //System.Web.HttpContext.Current.Session["LoginID"] = user.ID;
+                //System.Web.HttpContext.Current.Session["LoginAccount"] = user.Account;
+                //System.Web.HttpContext.Current.Session["LoginName"] = user.Name;
+                return RedirectToAction("Create","Orders", new { UserID = user.ID });
+
+                //return RedirectToLocal(returnUrl);
             }
             return View(model);
             //var result = await SignInManager.PasswordSignInAsync(model.Account, model.Password, model.RememberMe, shouldLockout: false);

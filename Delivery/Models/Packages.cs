@@ -12,7 +12,7 @@ namespace Delivery.Models
         [Key]
         public int ID { get; set; }      
         [ForeignKey("Order")]
-        public int OrderID { get; set; }
+        public int? OrderID { get; set; }
         [StringLength(50)]
         public string ExpressCompany { get; set; }
         [StringLength(200)]

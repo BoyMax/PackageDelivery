@@ -202,9 +202,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605090615039_initial-create.cs" />
-    <Compile Include="Migrations\201605090615039_initial-create.Designer.cs">
-      <DependentUpon>201605090615039_initial-create.cs</DependentUpon>
+    <Compile Include="Migrations\201605111405049_initial-create.cs" />
+    <Compile Include="Migrations\201605111405049_initial-create.Designer.cs">
+      <DependentUpon>201605111405049_initial-create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\OrderViewModels.cs" />
@@ -300,8 +300,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605090615039_initial-create.resx">
-      <DependentUpon>201605090615039_initial-create.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605111405049_initial-create.resx">
+      <DependentUpon>201605111405049_initial-create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -323,6 +323,8 @@
           <DevelopmentServerPort>53919</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:53919</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:53919/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

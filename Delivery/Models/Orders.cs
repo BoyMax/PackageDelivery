@@ -18,20 +18,20 @@ namespace Delivery.Models
         public int ID { get; set; }
 
         [ForeignKey("Sender")]
-        public int SenderID { get; set; }
+        public int? SenderID { get; set; }
 
         [ForeignKey("Receiver")]
-        public int ReceiverID { get; set; }
+        public int? ReceiverID { get; set; }
 
         [ForeignKey("PickLocation")]
         [Required]
-        public int PickLocationID { get; set; }
+        public int? PickLocationID { get; set; }
 
         [ForeignKey("ReceiverLocation")]
-        public int ReceiverLocationID { get; set; }
+        public int? ReceiverLocationID { get; set; }
 
         [ForeignKey("Reward")]
-        public int RewardID { get; set; }
+        public int? RewardID { get; set; }
 
         [Display(Name = "状态")]
         [StringLength(20)]
@@ -48,7 +48,7 @@ namespace Delivery.Models
         public virtual ICollection<Packages> Packages { get; set; }
         public virtual ICollection<OrderCompetitors> OrderCompetitors { get; set; }
 
-        [Required]
+ 
         public virtual Users Sender { get; set; }
         public virtual Users Receiver { get; set; }
         public virtual Locations PickLocation { get; set; }

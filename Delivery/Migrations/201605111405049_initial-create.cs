@@ -26,8 +26,6 @@ namespace Delivery.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        Longitude = c.Single(nullable: false),
-                        Latitude = c.Single(nullable: false),
                         PlaceName = c.String(maxLength: 100),
                         Remark = c.String(maxLength: 200),
                         Users_ID = c.Int(),
@@ -70,11 +68,11 @@ namespace Delivery.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        SenderID = c.Int(nullable: false),
-                        ReceiverID = c.Int(nullable: false),
+                        SenderID = c.Int(),
+                        ReceiverID = c.Int(),
                         PickLocationID = c.Int(nullable: false),
-                        ReceiverLocationID = c.Int(nullable: false),
-                        RewardID = c.Int(nullable: false),
+                        ReceiverLocationID = c.Int(),
+                        RewardID = c.Int(),
                         Status = c.String(maxLength: 20),
                         Mark = c.Int(nullable: false),
                         Comment = c.String(maxLength: 200),
@@ -82,11 +80,11 @@ namespace Delivery.Migrations
                         EndTime = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Locations", t => t.PickLocationID, cascadeDelete: false)
-                .ForeignKey("dbo.Users", t => t.ReceiverID, cascadeDelete: false)
-                .ForeignKey("dbo.Locations", t => t.ReceiverLocationID, cascadeDelete: false)
-                .ForeignKey("dbo.Rewards", t => t.RewardID, cascadeDelete: true)
-                .ForeignKey("dbo.Users", t => t.SenderID, cascadeDelete: false)
+                .ForeignKey("dbo.Locations", t => t.PickLocationID, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.ReceiverID)
+                .ForeignKey("dbo.Locations", t => t.ReceiverLocationID)
+                .ForeignKey("dbo.Rewards", t => t.RewardID)
+                .ForeignKey("dbo.Users", t => t.SenderID)
                 .Index(t => t.SenderID)
                 .Index(t => t.ReceiverID)
                 .Index(t => t.PickLocationID)
@@ -98,12 +96,12 @@ namespace Delivery.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        OrderID = c.Int(nullable: false),
+                        OrderID = c.Int(),
                         ExpressCompany = c.String(maxLength: 50),
                         Description = c.String(maxLength: 200),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Orders", t => t.OrderID, cascadeDelete: true)
+                .ForeignKey("dbo.Orders", t => t.OrderID)
                 .Index(t => t.OrderID);
             
             CreateTable(

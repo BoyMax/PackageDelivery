@@ -11,10 +11,6 @@ namespace Delivery.Models
     {
         [Key]
         public int ID { get; set; }
-        [Required]
-        public float Longitude { get; set; }
-        [Required]
-        public float Latitude { get; set; }
         [StringLength(100)]
         public string PlaceName { get; set; }
         [StringLength(200)]

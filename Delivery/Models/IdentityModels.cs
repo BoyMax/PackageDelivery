@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -37,5 +38,10 @@ namespace Delivery.Models
         public System.Data.Entity.DbSet<Delivery.Models.Rewards> Rewards { get; set; }
         public System.Data.Entity.DbSet<Delivery.Models.OrderCompetitors> OrderCompetitors { get; set; }
         public System.Data.Entity.DbSet<Delivery.Models.Addresses> Addresses { get; set; }
+
+        internal void Refresh(object clientWins, DbSet<Orders> orders)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

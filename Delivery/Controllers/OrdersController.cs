@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Delivery.Models;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
 
 namespace Delivery.Controllers
 {
@@ -17,6 +20,7 @@ namespace Delivery.Controllers
         // GET: Orders
         public ActionResult Index()
         {
+
             var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender);
             return View(orders.ToList());
         }
@@ -39,6 +43,8 @@ namespace Delivery.Controllers
         // GET: Orders/Create
         public ActionResult Create()
         {
+            string userID=Request["UserID"];
+            ViewData["userID"] = userID;
             //ViewBag.PickLocationID = new SelectList(db.Locations, "ID", "PlaceName");
             //ViewBag.ReceiverID = new SelectList(db.Users, "ID", "Account");
             //ViewBag.ReceiverLocationID = new SelectList(db.Locations, "ID", "PlaceName");
@@ -52,21 +58,50 @@ namespace Delivery.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,SenderID,ReceiverID,PickLocationID,ReceiverLocationID,RewardID,Status,Mark,Comment,PublishTime,EndTime")] Orders orders)
+        public ActionResult Create([Bind(Include = "SenderID,PlaceName,Remark,ExpressCompany,Description")] OrderCreateViewModel orderView)
         {
             if (ModelState.IsValid)
             {
-                db.Orders.Add(orders);
+                Locations location = new Locations();
+                location.PlaceName = orderView.PlaceName;
+                location.Remark = orderView.Remark;
+                db.Locations.Add(location);
                 db.SaveChanges();
+               
+                Orders order = new Orders();
+                order.PickLocationID = location.ID;
+                //order.PickLocation = db.Locations.Find(locationID+1);
+                order.Status = "等待接收";
+                order.SenderID = orderView.SenderID;
+                try
+                {
+                    db.Orders.Add(order);                    
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException ex){
+                    throw new Exception(ex.Message);
+                }/*
+                catch (OptimisticConcurrencyException)//处理并发
+                {
+                    db.Refresh(RefreshMode.StoreWins, db.Orders);
+                    db.SaveChanges();
+                }*/
+
+                Packages package = new Packages();
+                package.OrderID = order.ID;
+                package.ExpressCompany = orderView.ExpressCompany;
+                package.Description = orderView.Description;
+                db.Packages.Add(package);
+                db.SaveChanges();           
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PickLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.PickLocationID);
-            ViewBag.ReceiverID = new SelectList(db.Users, "ID", "Account", orders.ReceiverID);
-            ViewBag.ReceiverLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.ReceiverLocationID);
-            ViewBag.RewardID = new SelectList(db.Rewards, "ID", "Type", orders.RewardID);
-            ViewBag.SenderID = new SelectList(db.Users, "ID", "Account", orders.SenderID);
-            return View(orders);
+            //ViewBag.PickLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.PickLocationID);
+            //ViewBag.ReceiverID = new SelectList(db.Users, "ID", "Account", orders.ReceiverID);
+            //ViewBag.ReceiverLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.ReceiverLocationID);
+            //ViewBag.RewardID = new SelectList(db.Rewards, "ID", "Type", orders.RewardID);
+            //ViewBag.SenderID = new SelectList(db.Users, "ID", "Account", orders.SenderID);
+            return View(orderView);
         }
 
         // GET: Orders/Edit/5

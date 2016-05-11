@@ -25,7 +25,8 @@
                     <li>@Html.ActionLink("关于", "About", "Home")</li>
                     <li>@Html.ActionLink("联系", "Contact", "Home")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @*@Html.Partial("_LoginPartial")*@
+                @RenderSection("loginUser", required: false)
             </div>
         </div>
     </div>

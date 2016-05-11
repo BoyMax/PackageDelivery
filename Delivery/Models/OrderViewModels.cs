@@ -6,11 +6,7 @@ namespace Delivery.Models
     public class OrderCreateViewModel
     {
         [Required]
-        [Display(Name = "经度")]
-        public float Longitude { get; set; }
-        [Required]
-        [Display(Name = "纬度")]
-        public float Latitude { get; set; }
+        public int SenderID { get; set; }
         [StringLength(100)]
         [Display(Name = "地点")]
         public string PlaceName { get; set; }
