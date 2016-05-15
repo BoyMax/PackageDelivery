@@ -1,0 +1,88 @@
+﻿@model Delivery.Models.Orders
+
+@{
+    ViewBag.Title = "快递公告";
+}
+
+<h2>快递公告</h2>
+
+<style>
+.left {position: fixed;overflow:scroll;box-shadow:10px 10px 10px rgba(0,0,0,0.3);width:400px;height:400px;border:2px solid rgba(0,0,0,0.3) ;float:left; margin-top: 30px;margin-left: 10px;
+ filter:Alpha(opacity=80)}
+.left p{ position:relative;}
+</style>
+<html>
+<body background="~/Content/1.png " style="background-repeat:no-repeat;
+background-size:100% 100%;
+background-attachment: fixed;"
+      text="#68228B" onload="setInterval('clock()',1000)">
+    <div>
+        <div class="left">
+            <section id="cd-timeline" class="cd-container">
+
+                <div class="cd-timeline-block">
+                    <div class="cd-timeline-img cd-picture">
+                        <img src="~/Content/cd-icon-picture.svg" alt="Picture">
+                    </div>
+
+                    <div class="cd-timeline-content">
+                        <h2 style="font-size:20px">学子译站</h2>
+                        <p>韵达快递—尾号7625—衣服</p>
+                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
+                        <span class="cd-date">2015-01-06</span>
+                    </div>
+                </div>
+
+                <div class="cd-timeline-block">
+                    <div class="cd-timeline-img cd-location">
+                        <img src="~/Content/cd-icon-location.svg" alt="location">
+                    </div>
+
+                    <div class="cd-timeline-content">
+                        <h2 style="font-size:20px">学子译站</h2>
+                        <p>申通快递—尾号7825—书</p>
+                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
+                        <span class="cd-date">2015-01-06</span>
+                    </div>
+                </div>
+
+                <div class="cd-timeline-block">
+                    <div class="cd-timeline-img cd-movie">
+                        <img src="~/Content/cd-icon-movie.svg" alt="movie">
+                    </div>
+
+                    <div class="cd-timeline-content">
+                        <h2 style="font-size:20px">学子译站</h2>
+                        <p>圆通快递—尾号7805—鞋子</p>
+                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
+                        <span class="cd-date">2015-01-06</span>
+                    </div>
+                </div>
+
+                <div class="cd-timeline-block">
+                    <div class="cd-timeline-img cd-movie">
+                        <img src="~/Content/cd-icon-movie.svg" alt="movie">
+                    </div>
+
+                    <div class="cd-timeline-content">
+                        <h2 style="font-size:20px">学子译站</h2>
+                        <p>圆通快递—尾号7805—鞋子</p>
+                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
+                        <span class="cd-date">2015-01-06</span>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+        <div style="width:400px;height:400px;border:2px solid rgba(0,0,0,0.3);float:right;margin-top: 30px;margin-right:10px;box-shadow:10px 10px 10px rgba(0,0,0,0.3)">
+
+        </div>
+
+    </div>
+    <div style="margin: 0 auto;width: 300px;margin-top:570px;filter:Alpha(opacity=40)">
+        <p style="text-align:center;">pakage_version_0.1@ecnu.edu.cn</p>
+    </div>
+</body>
+</html>
+

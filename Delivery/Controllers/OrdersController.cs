@@ -38,6 +38,11 @@ namespace Delivery.Controllers
             }
         }
 
+        public ActionResult Announcement()
+        {
+            return View();
+        }
+
 
         // GET: Orders
         public ActionResult Index()

@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "Recieve";
+}
+
+<html>
+<head>
+    <style>
+        table {
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+
+        th {
+            height: 30px;
+            line-height: 30px;
+            font-family: "微软雅黑";
+            font-size: 16px;
+            font-weight: normal;
+            color: #666;
+            border: 1px solid #ccc;
+            margin: 0;
+            background-color: #fafafa;
+            text-align: center;
+        }
+
+        td {
+            height: 20px;
+            line-height: 20px;
+            font-family: "微软雅黑";
+            font-size: 14px;
+            font-weight: normal;
+            color: #F0d;
+            text-align: center;
+            border: 1px solid #CCC;
+            background-color: #fafafa;
+        }
+
+        #two {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 5;
+            background-color: #d8cece;
+            opacity: 0.4;
+        }
+    </style>
+    <script>
+
+
+        function but(obj) {  //给submit绑定点击事件
+          var  button_id = obj.id;
+            sAlert("确认你已将包裹送到",this);
+            var d = document.getElementById(button_id);
+                var td = d.parentNode;
+                td.removeChild(d);
+                var newtext=document.createTextNode("已接收");
+                var newGraf=document.createElement("p");
+                newGraf.appendChild(newtext);
+                td.appendChild(newGraf);
+ }
+        function sAlert(txt) {
+            var eSrc = (document.all) ? window.event.srcElement : arguments[1];
+            var shield = document.createElement("DIV");
+            shield.id = "shield";
+            shield.style.position = "absolute";
+            shield.style.left = "0px";
+            shield.style.top = "0px";
+            shield.style.width = "100%";
+            shield.style.height = ((document.documentElement.clientHeight > document.documentElement.scrollHeight) ? document.documentElement.clientHeight : document.documentElement.scrollHeight) + "px";
+            shield.style.background = "#333";
+            shield.style.textAlign = "center";
+            shield.style.zIndex = "10000";
+            shield.style.filter = "alpha(opacity=0)";
+            shield.style.opacity = 0;
+            var alertFram = document.createElement("DIV");
+            alertFram.id = "alertFram";
+            alertFram.style.position = "absolute";
+            alertFram.style.left = "50%";
+            alertFram.style.top = "50%";
+            alertFram.style.marginLeft = "-225px";
+            alertFram.style.marginTop = -75 + document.documentElement.scrollTop + "px";
+            alertFram.style.width = "300px";
+            alertFram.style.height = "150px";
+            alertFram.style.background = "#ccc";
+            alertFram.style.textAlign = "center";
+            alertFram.style.lineHeight = "150px";
+            alertFram.style.zIndex = "10001";
+            strHtml = "<ul style=\"list-style:none;margin:0px;padding:0px;width:100%\">\n";
+            strHtml += "	<li style=\"background:#DD828D;text-align:left;padding-left:20px;font-size:14px;font-weight:bold;height:25px;line-height:25px;border:1px solid #F9CADE;\">[系统提示]</li>\n";
+            strHtml += "	<li style=\"background:#fff;text-align:center;font-size:12px;height:120px;line-height:120px;border-left:1px solid #F9CADE;border-right:1px solid #F9CADE;\">" + txt + "</li>\n";
+            strHtml += "	<li style=\"background:#FDEEF4;text-align:center;font-weight:bold;height:25px;line-height:15px; border:1px solid #F9CADE;\"><input type=\"button\" value=\"确 定\" id=\"do_OK\" onclick=\"doOk()\" /></li>\n";
+            strHtml += "</ul>\n";
+            alertFram.innerHTML = strHtml;
+            document.body.appendChild(alertFram);
+            document.body.appendChild(shield);
+            this.setOpacity = function (obj, opacity) {
+                if (opacity >= 1) opacity = opacity / 100;
+                try { obj.style.opacity = opacity; } catch (e) { }
+                try {
+                    if (obj.filters.length > 0 && obj.filters("alpha")) {
+                        obj.filters("alpha").opacity = opacity * 100;
+                    } else {
+                        obj.style.filter = "alpha(opacity=\"" + (opacity * 100) + "\")";
+                    }
+                } catch (e) { }
+            }
+            var c = 0;
+            this.doAlpha = function () {
+                if (++c > 20) { clearInterval(ad); return 0; }
+                setOpacity(shield, c);
+            }
+            var ad = setInterval("doAlpha()", 1);
+            this.doOk = function () {
+                //alertFram.style.display = "none";
+                //shield.style.display = "none";
+                document.body.removeChild(alertFram);
+                document.body.removeChild(shield);
+                eSrc.focus();
+                document.body.onselectstart = function () { return true; }
+                document.body.oncontextmenu = function () { return true; }
+            }
+            document.getElementById("do_OK").focus();
+            eSrc.blur();
+            document.body.onselectstart = function () { return false; }
+            document.body.oncontextmenu = function () { return false; }
+        }
+    </script>
+</head>
+<body>
+    <div id="one" style="overflow:scroll;width:700px;height:300px;border:2px solid rgba(0,0,0,0.3) ;margin: 100px auto">
+
+
+        <div style="margin-bottom:5px">
+            <form>
+                <fieldset>
+                    <legend>收单</legend>
+                    <table style="margin:0 auto">
+                        <tr>
+                            <th>编号</th>
+                            <th>订单号</th>
+                            <th>状态</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>120</td>
+                            <td>
+                                <input id="1" type="button" value="确认" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>134</td>
+                            <td>
+                                <input id="2" type="button" value="确认" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>快递</td>
+                            <td>
+                                <input id="3" type="button" value="确认" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>快递</td>
+                            <td>
+                                <input id="4" type="button" value="确认" onclick="but(this)">
+                            </td>
+                        </tr>
+
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+</html>

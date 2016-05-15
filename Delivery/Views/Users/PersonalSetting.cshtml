@@ -1,0 +1,95 @@
+﻿@model Delivery.Models.Users
+
+@{
+    ViewBag.Title = "个人设置";
+}
+
+<h2>个人设置</h2>
+
+<html>
+<body>
+    <div id="container" style="width:500px;height:auto;border:2px solid rgba(0,0,0,0.3) ;margin: 30px auto">
+
+        <div id="header" style="height:200px">
+            <form action="">
+                <fieldset>
+                    <legend>个人基本信息:</legend>
+                    帐号: <input type="text" name="账号"><br>
+                    姓名: <input type="text" name="姓名"><br>
+                    年级: <input type="text" name="年级"><br>
+                    密码: <input type="text" name="密码">
+                </fieldset>
+            </form>
+        </div>
+
+        <div id="menu" style="height:70px">
+            <form>
+                手机: <input type="text" name="手机">
+            </form>
+            <br><br>
+        </div>
+
+        <div id="content">
+            <form id="Form1" method="post" runat="server" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>常用地址:</legend>
+                    <div>
+                        <table>
+                            <tr>
+                                <td id="tdRrmove" width="2000">
+                                    <!--承接整个file文件框的HTML容器-->
+                                    <div id="uploadContent">
+                                        <!--默认的file文件框
+                                        <div id=div1><input id=file1 type=file size=50 name=upload></div>-->
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <a href="javascript:addUpload()">添加</a>
+                    <br />
+                    <br />
+                </fieldset>
+            </form>
+        </div>
+
+
+
+        <div id="footer" style="margin-bottom:5px">
+            <form name="input" action="html_form_action.php" method="get">
+                <fieldset>
+                    <legend></legend>
+                    <input type="submit" value="保存" style="margin-left:350px;">
+                    <input type="submit" value="取消">
+                </fieldset>
+            </form>
+        </div>
+
+
+    </div>
+</body>
+</html>
+
+
+
+<script language="javascript">
+
+    var count= 0 ;
+    var maxfile = 5;
+     增加元素
+    function addUpload() {
+        if(count >= maxfile)    return;//限制最多maxfile个文件框
+        count++;
+        //自增id不同的HTML对象，并附加到容器最后
+        var newDiv =  "<div id=divUpload" + count +">"
+            + " <input id=text" + count + " type=text size=50 name=upload>"
+            + " <a href=javascript:delUpload('divUpload" + count + "');>删除</a>"
+            + " </div>";
+          document.getElementById("uploadContent").insertAdjacentHTML("beforeEnd", newDiv);
+    }
+    //删除指定元素
+    function delUpload(diva) {
+        count--;
+        document.getElementById(diva).parentNode.removeChild(document.getElementById(diva));
+    }
+</script>

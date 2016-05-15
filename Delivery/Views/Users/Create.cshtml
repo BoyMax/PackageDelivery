@@ -1,0 +1,438 @@
+﻿
+@{
+    ViewBag.Title = "Send";
+}
+<html>
+<head>
+
+    <style>
+        table {
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+
+        th {
+            height: 30px;
+            line-height: 30px;
+            font-family: "微软雅黑";
+            font-size: 16px;
+            font-weight: normal;
+            color: #666;
+            border: 1px solid #ccc;
+            margin: 0;
+            background-color: #fafafa;
+            text-align: center;
+        }
+
+        td {
+            height: 20px;
+            line-height: 20px;
+            font-family: "微软雅黑";
+            font-size: 14px;
+            font-weight: normal;
+            color: #F0d;
+            text-align: center;
+            border: 1px solid #CCC;
+            background-color: #fafafa;
+        }
+
+        #two {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 5;
+            background-color: #d8cece;
+        }
+
+            #two form {
+                color: black;
+                width: 500px;
+                border: 7px solid;
+                margin: 0 auto;
+                margin-top: 10em;
+                box-shadow: 0 0 5px #333;
+                background: white;
+                -webkit-box-shadow: 0 0 5px #333;
+            }
+    </style>
+    <script>
+        var button_id;
+
+        function radioclick(obj) {
+            if (obj.tag == 1)
+            {
+                obj.checked = false;
+                obj.tag = 0;
+            }
+            else
+            {
+                obj.checked = true;
+                obj.tag = 1;
+            }
+        }
+        function but(obj) {  //给submit绑定点击事件
+            button_id =obj.id;
+            var b = document.getElementById("two"); //获取透明层
+            b.style.display = "block";  //点击提交显示透明层
+        }
+        function choice() {
+            var a;
+
+            var arr = document.getElementsByName("rad");
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].checked) {
+                    a = arr[i].value;
+                }
+            }
+                var c = document.getElementById("two"); //获取透明层
+                c.style.display = "none";  //点击提交显示透明层
+                var d = document.getElementById(button_id);
+                var td = d.parentNode;
+                td.removeChild(d);
+                var newtext=document.createTextNode(a);
+                var newGraf=document.createElement("p");
+                newGraf.appendChild(newtext);
+
+                td.appendChild(newGraf);
+
+
+
+
+        }
+    </script>
+</head>
+<body>
+    <div id="one" style="overflow:scroll;width:700px;height:300px;border:2px solid rgba(0,0,0,0.3) ;margin: 100px auto">
+
+
+        <div style="margin-bottom:5px">
+            <form>
+                <fieldset>
+                    <legend>发单</legend>
+                    <table style="margin:0 auto">
+                        <tr>
+                            <th>编号</th>
+                            <th>快递</th>
+                            <th>地址</th>
+                            <th>接单人</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>圆通</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="1" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>快递</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="2" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>快递</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="3" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>快递</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="4" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div id="two">
+        <form>
+            <table style="margin:0 auto">
+                <tr>
+                    <th>
+                    </th>
+                    <th>姓名</th>
+                    <th>账号</th>
+                    <th>手机</th>
+                    <th>地址</th>
+                </tr>
+                <tr>
+                    <td><input id="1" type="radio" value="小洪" name="rad" onclick="radioclick(this)"></td>
+                    <td>小洪</td>
+                    <td>10112110108</td>
+                    <td>15298764670</td>
+                    <td>
+                        华东师范大学本科生公寓6舍
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="2" type="radio" value="张三" name="rad" onclick="radioclick(this)"></td>
+                    <td>张三</td>
+                    <td>快递</td>
+                    <td>地点</td>
+                    <td>
+                        河西食堂
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="3" type="radio" name="rad" value="3" onclick="radioclick(this)"></td>
+                    <td>3</td>
+                    <td>快递</td>
+                    <td>地点</td>
+                    <td>
+                        澡堂
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="4" type="radio" name="rad" value="4" onclick="radioclick(this)"></td>
+                    <td>4</td>
+                    <td>快递</td>
+                    <td>地点</td>
+                    <td>
+                        梅陇路
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+        <div style="margin-left:870px">
+
+            <input type="button" value="确定" onclick="choice()">
+        </div>
+    </div>
+</body>
+</html>
+
+@{
+    ViewBag.Title = "Send";
+}
+<html>
+<head>
+
+    <style>
+        table {
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+
+        th {
+            height: 30px;
+            line-height: 30px;
+            font-family: "微软雅黑";
+            font-size: 16px;
+            font-weight: normal;
+            color: #666;
+            border: 1px solid #ccc;
+            margin: 0;
+            background-color: #fafafa;
+            text-align: center;
+        }
+
+        td {
+            height: 20px;
+            line-height: 20px;
+            font-family: "微软雅黑";
+            font-size: 14px;
+            font-weight: normal;
+            color: #F0d;
+            text-align: center;
+            border: 1px solid #CCC;
+            background-color: #fafafa;
+        }
+
+        #two {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 5;
+            background-color: #d8cece;
+        }
+
+            #two form {
+                color: black;
+                width: 500px;
+                border: 7px solid;
+                margin: 0 auto;
+                margin-top: 10em;
+                box-shadow: 0 0 5px #333;
+                background: white;
+                -webkit-box-shadow: 0 0 5px #333;
+            }
+    </style>
+    <script>
+        var button_id;
+
+        function radioclick(obj) {
+            if (obj.tag == 1)
+            {
+                obj.checked = false;
+                obj.tag = 0;
+            }
+            else
+            {
+                obj.checked = true;
+                obj.tag = 1;
+            }
+        }
+        function but(obj) {  //给submit绑定点击事件
+            button_id =obj.id;
+            var b = document.getElementById("two"); //获取透明层
+            b.style.display = "block";  //点击提交显示透明层
+        }
+        function choice() {
+            var a;
+
+            var arr = document.getElementsByName("rad");
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].checked) {
+                    a = arr[i].value;
+                }
+            }
+                var c = document.getElementById("two"); //获取透明层
+                c.style.display = "none";  //点击提交显示透明层
+                var d = document.getElementById(button_id);
+                var td = d.parentNode;
+                td.removeChild(d);
+                var newtext=document.createTextNode(a);
+                var newGraf=document.createElement("p");
+                newGraf.appendChild(newtext);
+
+                td.appendChild(newGraf);
+
+
+
+
+        }
+    </script>
+</head>
+<body>
+    <div id="one" style="overflow:scroll;width:700px;height:300px;border:2px solid rgba(0,0,0,0.3) ;margin: 100px auto">
+
+
+        <div style="margin-bottom:5px">
+            <form>
+                <fieldset>
+                    <legend>发单</legend>
+                    <table style="margin:0 auto">
+                        <tr>
+                            <th>编号</th>
+                            <th>快递</th>
+                            <th>地址</th>
+                            <th>接单人</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>圆通</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="1" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>快递</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="2" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>快递</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="3" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>快递</td>
+                            <td>地点</td>
+                            <td>
+                                <input id="4" type="button" value="选择" onclick="but(this)">
+                            </td>
+                        </tr>
+
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div id="two">
+        <form>
+            <table style="margin:0 auto">
+                <tr>
+                    <th>
+                    </th>
+                    <th>姓名</th>
+                    <th>账号</th>
+                    <th>手机</th>
+                    <th>地址</th>
+                </tr>
+                <tr>
+                    <td><input id="1" type="radio" value="小洪" name="rad" onclick="radioclick(this)"></td>
+                    <td>小洪</td>
+                    <td>10112110108</td>
+                    <td>15298764670</td>
+                    <td>
+                        华东师范大学本科生公寓6舍
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="2" type="radio" value="张三" name="rad" onclick="radioclick(this)"></td>
+                    <td>张三</td>
+                    <td>快递</td>
+                    <td>地点</td>
+                    <td>
+                        河西食堂
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="3" type="radio" name="rad" value="3" onclick="radioclick(this)"></td>
+                    <td>3</td>
+                    <td>快递</td>
+                    <td>地点</td>
+                    <td>
+                        澡堂
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="4" type="radio" name="rad" value="4" onclick="radioclick(this)"></td>
+                    <td>4</td>
+                    <td>快递</td>
+                    <td>地点</td>
+                    <td>
+                        梅陇路
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+        <div style="margin-left:870px">
+
+            <input type="button" value="确定" onclick="choice()">
+        </div>
+    </div>
+</body>
+</html>
