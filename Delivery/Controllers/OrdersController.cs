@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -8,6 +9,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Delivery.Models;
+using Newtonsoft.Json;  
+using Newtonsoft.Json.Linq;
+using System.Runtime.Serialization.Json;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 
@@ -16,6 +20,24 @@ namespace Delivery.Controllers
     public class OrdersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        //Json数组对象序列化转换
+        public static Object JsonToObj(String json, Type t)
+        {
+            try
+            {
+                System.Runtime.Serialization.Json.DataContractJsonSerializer serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(t);
+                using (System.IO.MemoryStream ms = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(json)))
+                {
+                    return serializer.ReadObject(ms);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
         // GET: Orders
         public ActionResult Index()
@@ -57,43 +79,53 @@ namespace Delivery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SenderID,PlaceName,Remark,ExpressCompany,Description")] OrderCreateViewModel orderView)
+        public JsonResult Create(string SenderID, string PlaceName, string Remark, string pack)
+        //([Bind(Include = "SenderID,PlaceName,Remark,ExpressCompany,Description")] OrderCreateViewModel orderView)
         {
+
             if (ModelState.IsValid)
             {
                 Locations location = new Locations();
-                location.PlaceName = orderView.PlaceName;
-                location.Remark = orderView.Remark;
+                //location.PlaceName = orderView.PlaceName;
+                //location.Remark = orderView.Remark;
+                location.PlaceName = PlaceName;
+                location.Remark = Remark;
                 db.Locations.Add(location);
                 db.SaveChanges();
-               
+
                 Orders order = new Orders();
                 order.PickLocationID = location.ID;
-                //order.PickLocation = db.Locations.Find(locationID+1);
                 order.Status = "等待接收";
-                order.SenderID = orderView.SenderID;
+                order.SenderID = int.Parse(SenderID);
                 try
                 {
-                    db.Orders.Add(order);                    
+                    db.Orders.Add(order);
                     db.SaveChanges();
                 }
-                catch (DbEntityValidationException ex){
+                catch (DbEntityValidationException ex)
+                {
                     throw new Exception(ex.Message);
-                }/*
+                }
+                /*
                 catch (OptimisticConcurrencyException)//处理并发
                 {
                     db.Refresh(RefreshMode.StoreWins, db.Orders);
                     db.SaveChanges();
                 }*/
-
-                Packages package = new Packages();
-                package.OrderID = order.ID;
-                package.ExpressCompany = orderView.ExpressCompany;
-                package.Description = orderView.Description;
-                db.Packages.Add(package);
-                db.SaveChanges();           
-                return RedirectToAction("Index");
+                
+                JObject obj = (JObject)JsonConvert.DeserializeObject(pack);
+                JArray list = (JArray)JsonConvert.DeserializeObject(obj["pack"].ToString());
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Packages package = new Packages();
+                    package.ExpressCompany = list[i]["express"].ToString();//.ExpressCompany;
+                    package.Description = list[i]["describe"].ToString();//.Description;
+                    package.OrderID = order.ID;
+                    db.Packages.Add(package);
+                }
+                db.SaveChanges();
+                return Json("SUCCESS",JsonRequestBehavior.AllowGet);
+                //return RedirectToAction("Index");
             }
 
             //ViewBag.PickLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.PickLocationID);
@@ -101,7 +133,8 @@ namespace Delivery.Controllers
             //ViewBag.ReceiverLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.ReceiverLocationID);
             //ViewBag.RewardID = new SelectList(db.Rewards, "ID", "Type", orders.RewardID);
             //ViewBag.SenderID = new SelectList(db.Users, "ID", "Account", orders.SenderID);
-            return View(orderView);
+            //return View(orderView);
+            return Json("FAIL", JsonRequestBehavior.AllowGet);
         }
 
         // GET: Orders/Edit/5

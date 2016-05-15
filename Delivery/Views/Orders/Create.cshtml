@@ -1,5 +1,4 @@
-﻿@model Delivery.Models.OrderCreateViewModel
-
+﻿
 @{
     ViewBag.Title = "发起申请";
 }
@@ -22,82 +21,60 @@
 
     <h2>发起申请</h2>
     <div style="width:500px;float:left;display:inline">
-        @using (Html.BeginForm("Create", "Orders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "create-order-form", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
-            <div style="width:500px;float:left;">
-                <div class="form-horizontal">
-                    @*<h4>Orders</h4>*@
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div style="display:none;">
-                        <input id="SenderID" name="SenderID" type="text" value="" />
-                    </div>
-                   
-                    @*<div class="form-group">
-                        @Html.LabelFor(model => model.ExpressCompany, "快递公司", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.ExpressCompany, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ExpressCompany, "", new { @class = "text-danger" })
+        @*@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "create-order-form", role = "form" }))
+        {*@
+            <div class = "create-order-form" >
+                @Html.AntiForgeryToken()
+                <div style="width:500px;float:left;">
+                    <div class="form-horizontal">
+                        @*<h4>Orders</h4>*@
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div style="display:none;">
+                            <input id="SenderID" name="SenderID" type="text" value="" />
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Description, "包裹描述", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-                    
-                    <div  id="wordx" style="margin-left:5%;margin-top:6%">
-                        <div style="width:75px"><h4>包裹信息</h4></div>
-                        <div style="width:400px">
-                            <a href="#" class="btn-add"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
-                        </div>
-                        <table class="table" style="width:400px;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center">快递公司</th>
-                                    <th style="text-align:center">包裹备注</th>
-                                    <th style="text-align:center">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="text-align:center">京东</td>
-                                    <td style="text-align:center">1kg</td>
-                                    <td>
-                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:center">天猫</td>
-                                    <td style="text-align:center">2件</td>
-                                    <td>
-                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:center">3</td>
-                                    <td><input type="text" class="form-control"></td>
-                                    <td>
-                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></a>
-                                        <a class="btn-operation" href="#"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.ExpressCompany, "快递公司", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ExpressCompany, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ExpressCompany, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Description, "包裹描述", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10" style="width:350px;">
-                            <input type="submit" value="创建申请" class="btn btn-default" />
+                        <div id="wordx" style="margin-left:5%;margin-top:6%">
+                            <div style="width:75px"><h4>包裹信息</h4></div>
+                            <div style="width:400px">
+                                <a href="#" class="btn-add" onclick="showInsert()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                            </div>
+                            <table class="table" style="width:400px;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">快递公司</th>
+                                        <th style="text-align:center">包裹描述</th>
+                                        <th style="text-align:center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="packageBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10" style="width:350px;">
+                                <input id="submit" type="button" class="btn btn-default" value="创建申请"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+                @*}*@
+                </div>
+</div>
 
     <div style="width:500px; top:20%;float:right;margin-top:3%;display:inline">
         <h4>地点信息</h4>
@@ -110,16 +87,17 @@
         </div>*@
         
             <div id="r-result" class="form-group">
-                @Html.LabelFor(model => model.PlaceName, "地点", htmlAttributes: new { @class = "control-label col-md-2" })
+                @*@Html.LabelFor(model => model.Item1.PlaceName, "地点", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <label class="control-label col-md-2"> 地点</label>
                 <div class="col-md-10">
                     <input type="text" id="suggestId" class="form-control" size="20" value="百度" />
                 </div>
             <br></br>
             <div class="form-group">
-                @Html.LabelFor(model => model.Remark, "备注", htmlAttributes: new { @class = "control-label col-md-2" })
+                @*@Html.LabelFor(model => model.Item1.Remark, "备注", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <label class="control-label col-md-2"> 备注</label>
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    <input type="text" id="Remark" class="form-control"/>
                 </div>
             </div>
     
@@ -207,12 +185,101 @@
         local.search(myValue);
         $("#PlaceName").val(myValue);
     }
-    var userId;
-    if (@ViewData["userID"] != null)
+    var userId=1;
+    @*if (@ViewData["userID"] != null)
     {
         userId = @ViewData["userID"].ToString();
-    }
+    }*@
     $("#SenderID").val(userId);
     $("#loginLink").text(userId);
 
+
+    var isInsert=0;
+    function showInsert(){
+        if(isInsert==0){
+            var addHtml= "<tr id='insertTr'><td style='text-align:center'><input id='express' type='text' class='form-control'>"+
+                         "</td><td><input  id='packageRemark' type='text' class='form-control'></td>"+
+                         " <td><a onclick='submitAdd()' class='btn-operation'><span class='glyphicon glyphicon-ok-circle' aria-hidden='true'></span></a></td></tr>";
+            $("#packageBody").append(addHtml);
+            isInsert=1;
+        }
+    }
+
+    function submitAdd(){
+        var exp= $("#insertTr #express").val();
+        var rmk= $("#insertTr #packageRemark").val();
+        $("#packageBody #insertTr").remove();
+        var addHtml="<tr><td style='text-align:center'>"+exp+
+                     "</td><td style='text-align:center'>"+rmk+"</td>"+
+                     "<td><a onclick='trash(this)' class='btn-operation' href='#'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a></td></tr>";
+        $("#packageBody").append(addHtml);
+        isInsert=0;
+    }
+    
+    function trash(obj){
+        $(obj).parent().parent().remove();
+    }
+
+    $('#submit').click(function(){
+        alert("in");
+        if(isInsert==1){
+            alert("请确认包裹信息");
+            return;
+        }
+        var PlaceName= $("#suggestId").val();
+        var Remark = $("#Remark").val();
+        var SenderID=$("#SenderID").val();
+        var pack={};//新建对象，用来存储所有数据
+        var tableData=[];
+        var onePack=[];//存储每一行数据
+       
+        $("#packageBody tr").each(function(trindex,tritem){//遍历每一行
+            tableData[trindex]=new Array();
+            var o={};
+            var expr;
+            var rema;
+            $(tritem).find("td").each(function(tdindex,tditem){
+                //tableData[trindex][tdindex]=$(tditem).text();//遍历每一个数据，并存入                               
+                if(tdindex==0){ expr=$(tditem).text();}                    
+                else if(tdindex==1){ rema=$(tditem).text();}               
+            });
+            // o.put("express", expr);
+            //o.put("describe", rema);
+            o.express = expr;
+            o.describe = rema;            
+            onePack.push(o);//将每一行的数据存入
+        });
+        //pack.put("pack", onePack);
+        pack.pack = onePack;
+        alert(pack);
+        console.log(pack);
+        console.log(Remark);
+        console.log(PlaceName);
+        if(!PlaceName||PlaceName=='')
+        {
+            alert("请输入地址信息");
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Orders")',
+            data: {  pack: JSON.stringify(pack),
+                     PlaceName: PlaceName,
+                     Remark: Remark,
+                     SenderID: SenderID,
+            },
+            dataType:'json',
+           // contentType: 'application/json',
+            success: function (result) {
+                if (result == "SUCCESS") {
+                    alert("订单创建成功！");
+                }
+                else if (result == "FAIL") {
+                    alert("订单创建失败");
+                }
+            },
+            error: function () { alert("订单创建失败");}
+        });
+
+    });
 </script>

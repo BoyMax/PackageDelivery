@@ -14,6 +14,12 @@ namespace Delivery.Models
         [Display(Name = "地点备注")]
         public string Remark { get; set; }
 
+        public List<PackagesCreate> Packages = new List<PackagesCreate>();
+        
+    }
+
+    public class PackagesCreate
+    {
         [StringLength(50)]
         [Display(Name = "快递公司")]
         public string ExpressCompany { get; set; }
@@ -21,5 +27,6 @@ namespace Delivery.Models
         [Display(Name = "包裹备注")]
         public string Description { get; set; }
     }
+
 }
    
