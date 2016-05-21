@@ -18,14 +18,11 @@
 
 <body style="background-color:lightgoldenrodyellow">
     <div class="row" style="margin-top:40px">
-        <div class="col-md-5" style="margin-top:20px">
-            <img src="~/Content/5.png" class="img-rounded" style="width:100%;height:100%;">
-        </div>
-
-
+        @*<div class="col-md-5" style="margin-top:20px">
+            <img src="~/Content/5.png" class="img-rounded" style="width:80%;height:100%;">
+        </div>*@
         <div class="col-md-6">
-            <div id="one" style="overflow:scroll;width:700px;height:300px;border:2px solid rgba(0,0,0,0.3) ;">
-
+            <div id="one" style="overflow-y:scroll;width:1024px;height:300px;border:2px solid rgba(0,0,0,0.3) ;">
 
                 <div style="margin-bottom:5px">
                     <table class="table">
@@ -42,14 +39,14 @@
                                 @*@Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)*@
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Reward.Type)
+                               酬金类型
                             </th>
                             <th>
                                 代收人
                                 @*@Html.DisplayNameFor(model => model.Receiver.Account)*@
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Status)
+                                状态
                             </th>
                             @*<th>
                                     @Html.DisplayNameFor(model => model.Mark)
@@ -76,15 +73,36 @@
                                         @Html.DisplayFor(modelItem => item.Sender.Account)
                                     </td>*@
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
+                                    @if (item.Status == "等待接收")
+                                    {
+                                        <span>无</span>
+                                    }
+                                    else if (item.Status == "待选择")
+                                    {
+                                        <span>无</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Receiver.Account)
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Reward.Type)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Receiver.Account)
-                                    <button id="1" class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">选择</button>
-                                </td>
+                                    @if (item.Status == "等待接收")
+                                    {
+                                        <span>无</span>
+                                    }
+                                    else if (item.Status == "待选择")
+                                    {
+                                        <button class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">选择</button>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Receiver.Account)
+                                    }
+                                    </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Status)
                                 </td>
@@ -200,14 +218,13 @@
 
 <script>
 
-
+    var button_id;
     function delcfm(url, obj) {
         button_id = obj.id;
         $('#url').val(url);//给会话中的隐藏属性URL赋值
         $('#two').modal();
     }
-    var button_id;
-
+   
     function radioclick(obj) {
         if (obj.tag == 1) {
             obj.checked = false;

@@ -1,98 +1,175 @@
 ﻿@model Delivery.Models.Orders
 
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "详情";
 }
 
-<h2>Details</h2>
+<h2>详情</h2>
 
 <div>
-    <h4>Orders</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.PickLocation.PlaceName)
-        </dt>
+	<h4>订单详情</h4>
+	<hr />
+	<div style="margin-left:100px;float:left;margin-left:200px;">
+		<h5>包裹信息</h5>
+		<table class="table" style="max-width:200px;">
+			<tr>
+				<th>快递公司</th>
+				<th>包裹备注</th>
+			</tr>
+			@foreach (var item in Model.Packages)
+			{
+				<tr>
+					<td>@Html.DisplayFor(modelItem => item.ExpressCompany)</td>
+					<td>@Html.DisplayFor(modelItem => item.Description)</td>
+				</tr>
+			}
+		</table>
+		<p>
+			@Html.ActionLink("修改", "Edit", new { id = Model.ID }) |
+			@Html.ActionLink("返回订单列表", "Index")
+		</p>
+	</div>
+	<div style="float:right;margin-right:300px;">
+		<dl class="dl-horizontal">
+			<dt>
+				@*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
+				领取地点
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PickLocation.PlaceName)
-        </dd>
+			<dd>
+				@Html.DisplayFor(model => model.PickLocation.PlaceName)
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Receiver.Account)
-        </dt>
+			<dt>
+				@*@Html.DisplayNameFor(model => model.Receiver.Account)*@
+				代收人
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Receiver.Account)
-        </dd>
+			<dd>
+				@if (Model.Status== "等待接收")
+				{
+					<span>无</span>
+				}
+				else if (Model.Status == "待选择")
+				{
+					<span>无</span>
+				}
+				else
+				{
+					@Html.DisplayFor(model => model.Receiver.Account)
+				}
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)
-        </dt>
+			<dt>
+				@*@Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)*@
+				代收地点
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ReceiverLocation.PlaceName)
-        </dd>
+			<dd>
+				@if (Model.Status == "等待接收")
+				{
+					<span>无</span>
+				}
+				else if (Model.Status == "待选择")
+				{
+					<span>无</span>
+				}
+				else
+				{
+				   @Html.DisplayFor(model => model.ReceiverLocation.PlaceName)
+				}            
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Reward.Type)
-        </dt>
+			<dt>
+				@Html.DisplayNameFor(model => model.Reward.Type)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Reward.Type)
-        </dd>
+			<dd>
+				@Html.DisplayFor(model => model.Reward.Type)
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Sender.Account)
-        </dt>
+			@*<dt>
+					@Html.DisplayNameFor(model => model.Sender.Account)
+				</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Sender.Account)
-        </dd>
+				<dd>
+					@Html.DisplayFor(model => model.Sender.Account)
+				</dd>*@
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
+			<dt>
+				@Html.DisplayNameFor(model => model.Status)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
+			<dd>
+				@Html.DisplayFor(model => model.Status)
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Mark)
-        </dt>
+			<dt>
+				@Html.DisplayNameFor(model => model.Mark)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Mark)
-        </dd>
+			<dd>
+				@if (Model.Status == "等待接收")
+				{
+					<span>无</span>
+				}
+				else if (Model.Status == "待选择")
+				{
+					<span>无</span>
+				}
+				else
+				{
+					@Html.DisplayFor(model => model.Mark)
+				}              
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
+			<dt>
+				@Html.DisplayNameFor(model => model.Comment)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
+			<dd>
+				@if (Model.Status == "等待接收")
+				{
+					<span>无</span>
+				}
+				else if (Model.Status == "待选择")
+				{
+					<span>无</span>
+				}
+				else
+				{
+					@Html.DisplayFor(model => model.Comment)
+				}               
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PublishTime)
-        </dt>
+			<dt>
+				@Html.DisplayNameFor(model => model.PublishTime)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PublishTime)
-        </dd>
+			<dd>
+				@Html.DisplayFor(model => model.PublishTime)
+			</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EndTime)
-        </dt>
+			<dt>
+				@Html.DisplayNameFor(model => model.EndTime)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.EndTime)
-        </dd>
+			<dd>
+				@if (Model.Status == "等待接收")
+				{
+					<span>--</span>
+				}
+				else if (Model.Status == "待选择")
+				{
+					<span>--</span>
+				}
+				else
+				{
+					@Html.DisplayFor(model => model.EndTime)
+				}                
+			</dd>
 
-    </dl>
+		</dl>
+	</div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

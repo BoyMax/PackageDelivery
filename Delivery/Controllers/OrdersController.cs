@@ -185,8 +185,8 @@ namespace Delivery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(string ID, string location, string type, string money, string remark)
+        //[ValidateAntiForgeryToken]
+        public JsonResult Edit(string ID, string location, string type, string money, string remark)
            // [Bind(Include = "ID,PickLocationID,Reward.Type,Reward.Money,Reward.Remark")] Orders orders)
         {
             Orders o = new Orders();
@@ -202,9 +202,7 @@ namespace Delivery.Controllers
                 r.Remark = remark;
                
                 db.Entry(r).State = EntityState.Modified;
-                db.Entry(o).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                db.Entry(o).State = EntityState.Modified;               
             }
             ViewBag.PickLocationID = new SelectList(db.Locations, "ID", "PlaceName", int.Parse(location));
             //ViewBag.ReceiverID = new SelectList(db.Users, "ID", "Account", orders.ReceiverID);
@@ -215,7 +213,7 @@ namespace Delivery.Controllers
             ViewBag.RewardType = type;
             ViewBag.RewardRemark = remark;
             ViewBag.Money = money;
-            return View(o);
+            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
         }
 
         // GET: Orders/Delete/5
