@@ -13,6 +13,8 @@ namespace Delivery.Models
         public int ID { get; set; }
         //[ForeignKey("Order")]
         //public int OrderID { get; set; }
+
+        [Display(Name ="酬金类型")]
         [StringLength(50)]
         public string Type  { get; set; }
         public int Money { get; set; }

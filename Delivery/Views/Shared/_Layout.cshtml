@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - 包裹代取</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 
 </head>
 <body>
@@ -26,7 +27,7 @@
                     <li>@Html.ActionLink("联系", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
-                @RenderSection("loginUser", required: false)
+                @*@RenderSection("loginUser", required: false)*@
             </div>
         </div>
     </div>

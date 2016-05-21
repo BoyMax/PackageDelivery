@@ -69,7 +69,7 @@ namespace Delivery.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace Delivery.Controllers
             var user = db.Users.First(u => u.Account == model.Account);
             if (user.Password.Equals(model.Password))
             {
-                //System.Web.HttpContext.Current.Session["LoginID"] = user.ID;
+                System.Web.HttpContext.Current.Session["LoginId"] = user.ID;
                 //System.Web.HttpContext.Current.Session["LoginAccount"] = user.Account;
                 //System.Web.HttpContext.Current.Session["LoginName"] = user.Name;
                 return RedirectToAction("Create","Orders", new { UserID = user.ID });

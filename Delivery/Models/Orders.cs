@@ -17,19 +17,23 @@ namespace Delivery.Models
         [Key]
         public int ID { get; set; }
 
+       
         [ForeignKey("Sender")]
         public int? SenderID { get; set; }
 
         [ForeignKey("Receiver")]
         public int? ReceiverID { get; set; }
 
+        [Display(Name = "领取地点")]
         [ForeignKey("PickLocation")]
         [Required]
         public int? PickLocationID { get; set; }
 
+        [Display(Name = "代收地点")]
         [ForeignKey("ReceiverLocation")]
         public int? ReceiverLocationID { get; set; }
 
+        [Display(Name = "酬金")]
         [ForeignKey("Reward")]
         public int? RewardID { get; set; }
 
@@ -37,11 +41,18 @@ namespace Delivery.Models
         [StringLength(20)]
         public string Status { get; set; }
 
+        [Display(Name = "评分")]
         public int Mark { get; set; }
+
+        [Display(Name = "评论")]
         [StringLength(200)]
         public string Comment { get; set; }
+
+        [Display(Name = "发单时间")]
         [Column(TypeName = "datetime2")]
         public DateTime PublishTime { get; set; }
+
+        [Display(Name = "接单时间")]
         [Column(TypeName = "datetime2")]
         public DateTime EndTime { get; set; }
 
