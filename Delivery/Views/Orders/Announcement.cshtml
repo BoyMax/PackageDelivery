@@ -1,88 +1,325 @@
-﻿@model Delivery.Models.Orders
+﻿@model IEnumerable<Delivery.Models.Orders>
 
 @{
-    ViewBag.Title = "快递公告";
+    ViewBag.Title = "订单公告";
 }
 
-<h2>快递公告</h2>
+<html lang="zh">
+<head>
+    <link rel="stylesheet" type="text/css"
+          href="~/Content/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/default.css">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet"
+          type="text/css" />
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet"
+          type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery.min.js"
+            type="text/javascript"></script>
+    <script src="~/Scripts/jquery.bootstrap.newsbox.min.js"
+            type="text/javascript"></script>
 
-<style>
-.left {position: fixed;overflow:scroll;box-shadow:10px 10px 10px rgba(0,0,0,0.3);width:400px;height:400px;border:2px solid rgba(0,0,0,0.3) ;float:left; margin-top: 30px;margin-left: 10px;
- filter:Alpha(opacity=80)}
-.left p{ position:relative;}
-</style>
-<html>
-<body background="~/Content/1.png " style="background-repeat:no-repeat;
-background-size:100% 100%;
-background-attachment: fixed;"
-      text="#68228B" onload="setInterval('clock()',1000)">
-    <div>
-        <div class="left">
-            <section id="cd-timeline" class="cd-container">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
 
-                <div class="cd-timeline-block">
-                    <div class="cd-timeline-img cd-picture">
-                        <img src="~/Content/cd-icon-picture.svg" alt="Picture">
+</head>
+<body>
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-info">
+            <div class="panel-heading" style="height:100px;text-align:center;">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" style="font-size:40px;font-family:华文琥珀" href="#collapseOne">
+                        包裹公告
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" style="background-color:beige">
+                <div class="panel-body">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-list-alt"></span><b>News</b>
                     </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table cellpadding="4">
+                                    <tr>
+                                        <th>发单人</th>
+                                        <th style="width:200px">
+                                            领取地点
+                                            @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
+                                        </th>
+                                        <th>
+                                            酬金类型
+                                        </th>
+                                        <th>
+                                            酬劳
+                                        </th>
+                                        @*<th>
+                                                @Html.DisplayNameFor(model => model.Mark)
+                                            </th>*@
+                                        @*<th>
+                                                @Html.DisplayNameFor(model => model.Comment)
+                                            </th>*@
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.PublishTime)
+                                        </th>
+                                        @*<th>
+                                                @Html.DisplayNameFor(model => model.EndTime)
+                                            </th>*@
+                                        <th>操作</th>
+                                    </tr>
 
-                    <div class="cd-timeline-content">
-                        <h2 style="font-size:20px">学子译站</h2>
-                        <p>韵达快递—尾号7625—衣服</p>
-                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
-                        <span class="cd-date">2015-01-06</span>
+                                    @foreach (var item in Model)
+                                    {
+                                            <tr>
+                                                @Html.HiddenFor(modelItem => item.ID)
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Sender.Name)
+                                                </td>
+                                                <td id="PlaceName">
+                                                    @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Reward.Type)
+                                                </td>
+                                                <td>
+                                                    @if (item.Reward.Type == "现金")
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Reward.Money)
+                                                        <span>元</span>
+                                                    }
+                                                    else if (item.Reward.Type == "物品")
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Reward.Remark)
+                                                    }
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.PublishTime)
+                                                </td>
+
+                                                <td>
+                                                    <button id="1"  class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">
+                                                        帮忙代收
+                                                    </button>
+                                                    <button class="btn btn-default" onclick="showLoc(this)">定位地址</button>
+                                                </td>
+                                            </tr>
+                                    }
+                                </table>
+                            </div>
+
+
+                        </div>
                     </div>
+                    @*<div class="panel-footer"> </div>*@
+
                 </div>
 
-                <div class="cd-timeline-block">
-                    <div class="cd-timeline-img cd-location">
-                        <img src="~/Content/cd-icon-location.svg" alt="location">
-                    </div>
+            </div>
 
-                    <div class="cd-timeline-content">
-                        <h2 style="font-size:20px">学子译站</h2>
-                        <p>申通快递—尾号7825—书</p>
-                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
-                        <span class="cd-date">2015-01-06</span>
-                    </div>
-                </div>
-
-                <div class="cd-timeline-block">
-                    <div class="cd-timeline-img cd-movie">
-                        <img src="~/Content/cd-icon-movie.svg" alt="movie">
-                    </div>
-
-                    <div class="cd-timeline-content">
-                        <h2 style="font-size:20px">学子译站</h2>
-                        <p>圆通快递—尾号7805—鞋子</p>
-                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
-                        <span class="cd-date">2015-01-06</span>
-                    </div>
-                </div>
-
-                <div class="cd-timeline-block">
-                    <div class="cd-timeline-img cd-movie">
-                        <img src="~/Content/cd-icon-movie.svg" alt="movie">
-                    </div>
-
-                    <div class="cd-timeline-content">
-                        <h2 style="font-size:20px">学子译站</h2>
-                        <p>圆通快递—尾号7805—鞋子</p>
-                        <a href="http://www.helloweba.com/view-blog-285.html" class="cd-read-more" target="_blank">查看</a>
-                        <span class="cd-date">2015-01-06</span>
-                    </div>
-                </div>
-
-            </section>
 
         </div>
-        <div style="width:400px;height:400px;border:2px solid rgba(0,0,0,0.3);float:right;margin-top: 30px;margin-right:10px;box-shadow:10px 10px 10px rgba(0,0,0,0.3)">
+    </div>
 
+    <hr>
+    <div style="height:80px">
+        <label class="control-label col-md-2"> 地点查看</label>
+        <div id="r-result"  class="col-md-10">
+            <input type="hidden" id="suggestId" class="form-control" size="20" value="百度" />
         </div>
+        <hr>
+        <div id="l-map"></div>
+        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+    </div>
 
-    </div>
-    <div style="margin: 0 auto;width: 300px;margin-top:570px;filter:Alpha(opacity=40)">
-        <p style="text-align:center;">pakage_version_0.1@ecnu.edu.cn</p>
-    </div>
+
+
+
+    <!-- 信息确认 -->
+    <div class="modal fade" id="delcfmModel">
+        <div class="modal-dialog">
+            <div class="modal-content message_align">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">确认您的联系方式</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <tbody id="myInfo">
+                            <tr class="active">
+                                <td>联系人</td>
+                                <td id="name"></td>
+                            </tr>
+                            <tr class="success">
+                                <td>手机</td>
+                                <td id="phone"></td>
+                            </tr>
+                            <tr class="warning">
+                                <td>地址</td>
+                                <td><input type="text" class="form-control" id="address" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="url" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                    <a onclick="apply()" class="btn btn-success" data-dismiss="modal">确定</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
 </html>
 
+
+<script type="text/javascript">
+    // 百度地图API功能
+    function G(id) {
+        return document.getElementById(id);
+    }
+
+    var map = new BMap.Map("l-map");
+    map.centerAndZoom("北京", 12);                   // 初始化地图,设置城市和地图级别。
+
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+		{
+		    "input": "suggestId"
+		, "location": map
+		});
+
+    ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+        var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province + _value.city + _value.district + _value.street + _value.business;
+        }
+        str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province + _value.city + _value.district + _value.street + _value.business;
+        }
+        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+        G("searchResultPanel").innerHTML = str;
+    });
+
+    var myValue;
+    ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+        var _value = e.item.value;
+        myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+        G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+
+        setPlace();
+    });
+
+    function setPlace() {
+        map.clearOverlays();    //清除地图上所有覆盖物
+        function myFun() {
+            var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            map.centerAndZoom(pp, 18);
+            map.addOverlay(new BMap.Marker(pp));    //添加标注
+        }
+        var local = new BMap.LocalSearch(map, { //智能搜索
+            onSearchComplete: myFun
+        });
+        local.search(myValue);
+    }
+
+    /*自动定位地图信息*/
+    function showLoc(obj) {
+        myValue = $(obj).closest("tr").find("#PlaceName").text();
+        setPlace();
+    }
+
+    var orderID;
+    function delcfm(url, obj) {
+        button_id = obj.id;
+        $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+        //alert("here");
+        $.ajax({
+            type:'POST',
+            url: '@Url.Action("GetInfo","Orders")',
+            data: {},
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);                
+                $("#name").html(data.name);
+                $("#phone").html(data.phone);
+                orderID=$(obj).closest("tr").find("#item_ID").val();
+            },
+            error:function(){}
+        });
+    }
+
+    function apply() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Apply","Orders")',
+            data: {
+                orderId:orderID,
+                address: $("#address").val(),
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                if (data == "SUCCESS") {
+                    alert("申请成功！");
+                }
+                else if (data == "FAIL") {
+                    alert("申请失败");
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function () { }
+        });
+    }
+    /*
+    $(function () {
+        $(".demo1").bootstrapNews({
+            newsPerPage: 5,
+            autoplay: true,
+            pauseOnHover: true,
+            direction: 'up',
+            newsTickerInterval: 4000,
+            onToDo: function () {
+                //console.log(this);
+            }
+        });
+
+        $(".demo2").bootstrapNews({
+            newsPerPage: 4,
+            autoplay: true,
+            pauseOnHover: true,
+            navigation: false,
+            direction: 'down',
+            newsTickerInterval: 2500,
+            onToDo: function () {
+                //console.log(this);
+            }
+        });
+
+        $("#demo3").bootstrapNews({
+            newsPerPage: 3,
+            autoplay: false,
+            onToDo: function () {
+                //console.log(this);
+            }
+        });
+    });*/
+
+
+   
+
+
+
+</script>

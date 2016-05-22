@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Delivery.Models.Orders>
+﻿@model IEnumerable<Delivery.Models.Orders> 
 
 @{
     ViewBag.Title = "我的订单信息";
@@ -11,9 +11,10 @@
 
 <html>
 <head>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+    @Styles.Render("~/Content/Site.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 </head>
 
 <body style="background-color:lightgoldenrodyellow">
@@ -65,7 +66,9 @@
 
                         @foreach (var item in Model)
                         {
-                            <tr>
+                            if (item.Status != "已删除")
+                            {
+                            <tr>@Html.HiddenFor(modelItem => item.ID)
                                 <td>
                                     @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
                                 </td>
@@ -121,15 +124,26 @@
                                 <td>
                                     @if (item.Status == "等待接收")
                                     {
-                                        @Html.ActionLink("修改", "Edit", new { id = item.ID }) }
+                                        @Html.ActionLink("修改", "Edit", new { id = item.ID })
+                                        <span>|</span>
+                                        @Html.ActionLink("详情", "Details", new { id = item.ID })
+                                        <span>|</span>
+                                        <a onclick="deleteOrder(this)">删除</a>//@Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                    }
                                     else if (item.Status == "待选择")
                                     {
-                                        @Html.ActionLink("选择代收人", "Edit", new { id = item.ID }) }
-                                    | @Html.ActionLink("详情", "Details", new { id = item.ID }) |
-                                    @Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                         @Html.ActionLink("详情", "Details", new { id = item.ID }) 
+                                         <span>|</span>
+                                         @Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                    }
+                                    else if (item.Status == "接收中")
+                                    {
+                                         @Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                    }
                                 </td>
                             </tr>
-                        }
+                            }
+                            }
 
                     </table>
 
@@ -187,6 +201,19 @@
                                 <th>手机</th>
                                 <th>地址</th>
                             </tr>
+                            @foreach (var item in (IEnumerable<Delivery.Models.OrderCompetitors>)ViewBag.competitors)
+                            {
+                                <tr class="success">
+                                    <td><input type="radio" name="rad" onclick="radioclick(this)"></td>
+                                    <td>@Html.DisplayFor(modelItem => item.User.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User.Account)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User.PhoneNumber)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Location.PlaceName)
+                                        @Html.DisplayFor(modelItem => item.Location.Remark)
+                                    </td>
+                                </tr>
+                            }
                             <tr class="success">
                                 <td><input id="1" type="radio" value="小洪" name="rad" onclick="radioclick(this)"></td>
                                 <td>小洪</td>
@@ -223,8 +250,25 @@
         button_id = obj.id;
         $('#url').val(url);//给会话中的隐藏属性URL赋值
         $('#two').modal();
+        orderId=$(obj).closest("tr").find("#item_ID").val();
+        $.ajax({
+            type:'POST',
+            url: '@Url.Action("GetCompetitors","Orders")',
+            data: {
+                orderId: orderId,
+            },
+            dataType:'json',
+            success: function (data) {
+                console.log(data);
+                if (data == "FAIL") {
+                    alert("获取代收人失败");
+                }
+            },
+            error: function () { alert("获取代收人失败");}
+        });
+
     }
-   
+
     function radioclick(obj) {
         if (obj.tag == 1) {
             obj.checked = false;
@@ -259,5 +303,29 @@
         newGraf.appendChild(newtext);
 
         td.appendChild(newGraf);
+    }
+
+
+    function deleteOrder(obj) {
+        if (confirm("确认删除该订单？")) {
+            var id = $(obj).closest("tr").find("#item_ID").val();
+            $.ajax({
+                type: "POST",
+                url:'@Url.Action("DeleteOrder","Orders")',
+                data: { 'id': id},
+                dataType: 'json',
+                success:function(data){
+                    if(data=="SUCCESS"){
+                        alert("删除成功");
+                        window.location.reload();
+                    }
+                    else{
+                        alert("删除失败");
+                    }
+                },
+                error :function(){alert("删除失败");}
+            });
+        }
+
     }
 </script>

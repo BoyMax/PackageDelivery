@@ -17,8 +17,13 @@ namespace Delivery.Models
         [ForeignKey("Order")]
         [Required]
         public int OrderID { get; set; }
+        [ForeignKey("Location")]
+        [Required]
+        public int LocationID { get; set; }
 
         public virtual Users User { get; set; }
         public virtual Orders Order { get; set; }
+        public virtual Locations Location { get; set; }
+
     }
 }

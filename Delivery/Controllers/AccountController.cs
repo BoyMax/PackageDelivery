@@ -80,13 +80,13 @@ namespace Delivery.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
 
             //Users user = db.Users.Find({ })
-            var user = db.Users.First(u => u.Account == model.Account);
-            if (user.Password.Equals(model.Password))
+            var user = db.Users.FirstOrDefault(u => u.Account == model.Account);
+            if (user!=null && user.Password.Equals(model.Password))
             {
                 System.Web.HttpContext.Current.Session["LoginId"] = user.ID;
                 //System.Web.HttpContext.Current.Session["LoginAccount"] = user.Account;
                 //System.Web.HttpContext.Current.Session["LoginName"] = user.Name;
-                return RedirectToAction("Create","Orders", new { UserID = user.ID });
+                return RedirectToAction("Announcement", "Orders", new { UserID = user.ID });
 
                 //return RedirectToLocal(returnUrl);
             }
@@ -106,6 +106,7 @@ namespace Delivery.Controllers
             //        return View(model);
             //}
         }
+
 
         /*
         // GET: /Account/VerifyCode

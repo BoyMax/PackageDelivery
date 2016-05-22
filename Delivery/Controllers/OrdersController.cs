@@ -40,7 +40,8 @@ namespace Delivery.Controllers
 
         public ActionResult Announcement()
         {
-            return View();
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收");
+            return View(orders.ToList());
         }
 
 
@@ -90,14 +91,23 @@ namespace Delivery.Controllers
 
             if (ModelState.IsValid)
             {
-                Locations location = new Locations();
-                //location.PlaceName = orderView.PlaceName;
-                //location.Remark = orderView.Remark;
-                location.PlaceName = PlaceName;
-                location.Remark = Remark;
-                db.Locations.Add(location);
-                db.SaveChanges();
-
+                var loc = db.Locations.FirstOrDefault(u => u.PlaceName == PlaceName && u.Remark==Remark);
+                int locID;
+                if (loc == null)
+                {
+                    Locations location = new Locations();
+                    //location.PlaceName = orderView.PlaceName;
+                    //location.Remark = orderView.Remark;
+                    location.PlaceName = PlaceName;
+                    location.Remark = Remark;
+                    db.Locations.Add(location);
+                    db.SaveChanges();
+                    locID = location.ID;
+                }
+                else
+                {
+                    locID = loc.ID;
+                }
                 Rewards reward = new Rewards();
                 if (rewardType.Equals("0"))
                 {
@@ -113,7 +123,7 @@ namespace Delivery.Controllers
                 db.SaveChanges();
 
                 Orders order = new Orders();
-                order.PickLocationID = location.ID;
+                order.PickLocationID = locID;
                 order.Status = "等待接收";
                 order.SenderID = int.Parse(Session["LoginId"].ToString());
                 order.RewardID = reward.ID;
@@ -242,6 +252,112 @@ namespace Delivery.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpPost]
+        public JsonResult DeleteOrder(string id)
+        {
+            int ID = int.Parse(id);
+            Orders order = db.Orders.Find(ID);
+            order.Status = "已删除";           
+            db.Entry(order).State = EntityState.Modified;
+            int result=db.SaveChanges();
+            if (result == 0)
+            {
+                return Json("FAIL", JsonRequestBehavior.AllowGet);
+            }
+            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult GetInfo()
+        {
+            var res = new JsonResult();
+            int userid = int.Parse(Session["LoginId"].ToString());
+            Users user = db.Users.Find(userid);
+            var person = new { name = user.Account, phone = user.PhoneNumber };
+            res.Data = person;//返回单个对象；  
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;//允许使用GET方式获取，否则用GET获取是会报错。  
+            return res;
+        }
+
+        [HttpPost]
+        public JsonResult Apply(string address, string orderId)
+        {
+            var res = new JsonResult();
+            int userid = int.Parse(Session["LoginId"].ToString());
+            int locId;
+            var oid = int.Parse(orderId);
+            var orderCompetitor = db.OrderCompetitors.FirstOrDefault(u => u.OrderID == oid && u.UserID == userid);
+            if (orderCompetitor == null) {
+                var loc = db.Locations.FirstOrDefault(u => u.PlaceName == address);
+                if (loc == null)
+                {
+                    Locations location = new Locations();
+                    location.PlaceName = address;
+                    db.Locations.Add(location);
+                    db.SaveChanges();
+                    locId = location.ID;
+                    //Addresses myAddress = new Addresses();
+                    //myAddress.UserID = userid;
+                    //myAddress.AddressesID = location.ID;
+                }
+                else
+                {
+                    //Addresses myAddress = new Addresses();
+                    //myAddress.UserID = userid;
+                    //myAddress.AddressesID = loc.ID;  
+                    locId = loc.ID;
+                }
+                Orders order = db.Orders.Find(oid);
+                if (order.Status == "等待接收")
+                {
+                    order.Status = "待选择";
+                    db.Entry(order).State = EntityState.Modified;
+                }
+                
+                OrderCompetitors oc = new OrderCompetitors();
+                oc.OrderID = oid;
+                oc.UserID = userid;
+                oc.LocationID = locId;
+                db.OrderCompetitors.Add(oc);
+                int result=db.SaveChanges();
+                if (result != 0)
+                {
+                    res.Data = "SUCCESS";
+                }
+                else
+                {
+                    res.Data = "FAIL";
+                }
+            }
+            else
+            {
+                res.Data = "您已申请！请等待发件人选择!";
+            }
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;//允许使用GET方式获取，否则用GET获取是会报错。  
+            return res;
+        }
+
+        [HttpPost]
+        public JsonResult GetCompetitors(string orderId)
+        {
+            var res = new JsonResult();
+            int oid = int.Parse(orderId);
+            var oc = db.OrderCompetitors.FirstOrDefault(c => c.OrderID == oid);
+            if (oc==null)
+            {
+                res.Data = "FAIL";
+            }
+            else
+            {
+                var competitors = db.OrderCompetitors.Include(o => o.User).Where(o => o.OrderID == oid);
+                /*页面显示多个代收人信息....明天完成哟~*/
+                ViewBag.competitors=competitors.ToList();
+            }
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;//允许使用GET方式获取，否则用GET获取是会报错。  
+            return res;
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

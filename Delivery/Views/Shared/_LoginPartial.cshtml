@@ -4,7 +4,7 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+    @*@Html.AntiForgeryToken()*@
 
         <ul class="nav navbar-nav navbar-right">
             @*<li>
@@ -12,10 +12,11 @@
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>*@
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>  @Session["LoginId"].ToString()<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>  
+                @Session["LoginId"].ToString()<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-header">订单信息</li>
-                    <li><a href="#">我发出的订单</a></li>
+                    <li>@Html.ActionLink("我发出的订单", "Index", "Orders")</li>
                     <li><a href="#">我接收的订单</a></li>
                     <li class="divider"></li>
                     <li class="dropdown-header">个人信息</li>
