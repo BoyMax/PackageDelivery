@@ -4,92 +4,154 @@
     ViewBag.Title = "个人设置";
 }
 
-<h2>个人设置</h2>
-
 <html>
+<head>
+
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/app.css">
+
+    <script src="~/scripts/app.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</head>
+
 <body>
-    <div id="container" style="width:500px;height:auto;border:2px solid rgba(0,0,0,0.3) ;margin: 30px auto">
-
-        <div id="header" style="height:200px">
-            <form action="">
-                <fieldset>
-                    <legend>个人基本信息:</legend>
-                    帐号: <input type="text" name="账号"><br>
-                    姓名: <input type="text" name="姓名"><br>
-                    年级: <input type="text" name="年级"><br>
-                    密码: <input type="text" name="密码">
-                </fieldset>
-            </form>
+    <section class="bg-light">
+        <div class="container">
+            <header>
+                <h1>Personal information setting----are you ready?</h1>
+            </header>
+            <div style="margin-left:460px">
+                <a href="#about" class="scroll-link"><span class="glyphicon glyphicon-chevron-down"></span></a>
+            </div>
         </div>
+    </section>
 
-        <div id="menu" style="height:70px">
-            <form>
-                手机: <input type="text" name="手机">
-            </form>
-            <br><br>
-        </div>
+    <section id="about">
+        <div class="container">
+            <header>
+                <h2>个人设置</h2>
+            </header>
 
-        <div id="content">
-            <form id="Form1" method="post" runat="server" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>常用地址:</legend>
-                    <div>
-                        <table>
-                            <tr>
-                                <td id="tdRrmove" width="2000">
-                                    <!--承接整个file文件框的HTML容器-->
-                                    <div id="uploadContent">
-                                        <!--默认的file文件框
-                                        <div id=div1><input id=file1 type=file size=50 name=upload></div>-->
-                                    </div>
-                                </td>
-                            </tr>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="icon-box">
+                        <img src="~/images/clock.png" alt="Clock icon">
+                        <h3>基本信息</h3>
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-sm-3 control-label">User</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="user">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-sm-3 control-label">Name</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-sm-3 control-label">Grade</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="grade">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-sm-3 control-label">Password</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="inputPassword">
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="icon-box">
+                        <img src="~/images/graph.png" alt="Graph icon">
+                        <h3>联系方式</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr class="active">
+                                    <td>手机号</td>
+                                    <td> <input type="text" class="form-control" id="number"></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
-                    <a href="javascript:addUpload()">添加</a>
-                    <br />
-                    <br />
-                </fieldset>
-            </form>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="icon-box">
+                        <img src="~/images/open-box.png" alt="Box icon">
+                        <div id="content">
+                            <form id="Form1" method="post" runat="server"
+                                  enctype="multipart/form-data">
+                                <fieldset>
+                                    <legend>常用地址:</legend>
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <td id="tdRrmove" width="2000">
+                                                    <!--承接整个file文件框的HTML容器-->
+                                                    <div id="uploadContent">
+                                                        <!--默认的file文件框
+                                                                                                <div id=div1><input id=file1
+
+                                                        type=file size=50 name=upload></div>-->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <a href="javascript:addUpload()"><span class="glyphicon glyphicon-plus"></span></a>
+                                    <br />
+                                    <br />
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-lg">
+                <a href="javascript:Router.goToQuotePage()" class="btn btn-lg btn-action">保存</a>
+            </div>
         </div>
+    </section>
 
 
+    @*<section class="bg-light">
+                <div class="container">
+                    <div class="text-center">
+                        <h2 class="mb-lg">Ready to order your package?</h2>
+                        <a href="text" class="btn btn-lg btn-action">let's go</a>
+                    </div>
+                </div>
+            </section>
 
-        <div id="footer" style="margin-bottom:5px">
-            <form name="input" action="html_form_action.php" method="get">
-                <fieldset>
-                    <legend></legend>
-                    <input type="submit" value="保存" style="margin-left:350px;">
-                    <input type="submit" value="取消">
-                </fieldset>
-            </form>
-        </div>
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 footer-copy">
+                            &copy;2016 Package@ecnu.edu.cn
+                        </div>
 
+                        <div class="col-md-6 footer-links">
+                            <a href="text">Home</a>
+                            <a href="Create">Create</a>
+                            <a href="Details">Details</a>
+                        </div>
 
-    </div>
+                        <div class="col-md-3 footer-socials socials">
+                            <img src="~/images/4.png">
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        </div>*@
 </body>
 </html>
-
-
-
-<script language="javascript">
-
-    var count= 0 ;
-    var maxfile = 5;
-     增加元素
-    function addUpload() {
-        if(count >= maxfile)    return;//限制最多maxfile个文件框
-        count++;
-        //自增id不同的HTML对象，并附加到容器最后
-        var newDiv =  "<div id=divUpload" + count +">"
-            + " <input id=text" + count + " type=text size=50 name=upload>"
-            + " <a href=javascript:delUpload('divUpload" + count + "');>删除</a>"
-            + " </div>";
-          document.getElementById("uploadContent").insertAdjacentHTML("beforeEnd", newDiv);
-    }
-    //删除指定元素
-    function delUpload(diva) {
-        count--;
-        document.getElementById(diva).parentNode.removeChild(document.getElementById(diva));
-    }
-</script>
