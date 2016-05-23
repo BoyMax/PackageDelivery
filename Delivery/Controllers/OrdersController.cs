@@ -407,7 +407,7 @@ namespace Delivery.Controllers
         public JsonResult AcceptedOrder(string id)
         {
             int oid = int.Parse(id);
-            Orders order = db.Orders.Find(id);
+            Orders order = db.Orders.Find(oid);
             order.Status = "已代收";
             db.Entry(order).State = EntityState.Modified;
             int result = db.SaveChanges();
@@ -422,7 +422,7 @@ namespace Delivery.Controllers
         public JsonResult ConfirmOrder(string id)
         {
             int oid = int.Parse(id);
-            Orders order = db.Orders.Find(id);
+            Orders order = db.Orders.Find(oid);
             order.Status = "订单完成";
             db.Entry(order).State = EntityState.Modified;
             int result = db.SaveChanges();
@@ -437,12 +437,34 @@ namespace Delivery.Controllers
         public JsonResult getRcvrName(string id)
         {
             int oid = int.Parse(id);
-            Orders order = db.Orders.Find(id);
-            string name = order.Receiver.Name;           
+            Orders order = db.Orders.Find(oid);
+            string name = order.Receiver.Name;    
+            if(name==null)
+            {
+                name = " ";
+            }       
             return Json(name, JsonRequestBehavior.AllowGet);
         }
 
         
+        [HttpPost]
+        public JsonResult commentOrder(string id,string mark,string remark)
+        {
+            int oid = int.Parse(id);
+            Orders order = db.Orders.Find(oid);
+            string name = order.Receiver.Name;
+            order.Mark = int.Parse(mark);
+            order.Comment = remark;
+            db.Entry(order).State = EntityState.Modified;
+            int result=db.SaveChanges();
+            if (result == 0)
+            {
+                return Json("FAIL", JsonRequestBehavior.AllowGet);
+            }
+            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

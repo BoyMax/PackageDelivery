@@ -23,7 +23,7 @@
             <img src="~/Content/5.png" class="img-rounded" style="width:80%;height:100%;">
         </div>*@
         <div class="col-md-6">
-            <div id="one" style="overflow-y:scroll;width:1024px;height:300px;border:2px solid rgba(0,0,0,0.3) ;">
+            <div id="one" style="overflow-y:scroll;width:1024px;height:500px;border:2px solid rgba(0,0,0,0.3) ;">
 
                 <div style="margin-bottom:5px">
                     <table class="table">
@@ -110,7 +110,7 @@
                                 <td>
                                     @if (item.Status == "已代收")
                                     {
-                                        <button class="btn btn-primary" onClick="confirm(this)">确认接收</button>
+                                        <button class="btn btn-primary" onClick="confirmOrder(this)">确认接收</button>
                                     }
                                     else
                                     {
@@ -261,7 +261,7 @@
                         </tr>
                         <tr class="warning">
                             <td>评分</td>
-                            <td><input id="c_mark" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)</td>
+                            <td><input id="c_mark" class="form-control" type="text" size="14" maxlength="2" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(评分范围1-5)</td>
                         </tr>
                         <tr class="danger">
                             <td>评价</td>
@@ -388,7 +388,7 @@
         });
     }
 
-    function confirm(obj) {
+    function confirmOrder(obj) {
         if (confirm("确认已收到包裹？")) {
             var id = $(obj).closest("tr").find("#item_ID").val();
             $.ajax({
@@ -432,19 +432,49 @@
         }
     }
 
+    var commentId;
     function comment(obj) {
         $('#comment_modal').modal();
         var orderId = $(obj).closest("tr").find("#item_ID").val();
+        commentId = orderId;
         $('#c_orderId').text(orderId);
         $.ajax({
             type: "POST",
             url:'@Url.Action("getRcvrName","Orders")',
-            data: { 'id': id},
+            data: { 'id': orderId },
             dataType: 'json',
             success:function(data){               
                  $('#c_name').text(data);               
             },
             error :function(){alert("出错了");}
+        });
+    }
+
+    function commentSubmit() {
+        var mark = $("#c_mark").val();
+        if (mark > 5 || mark < 1)
+        {
+            alert("评分范围为 1-5");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("commentOrder", "Orders")',
+            data: {
+                'id': commentId,
+                'mark': mark,
+                'remark': $("#c_rmk").val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data == "SUCCESS") {
+                    alert("评论成功");
+                }
+                else {
+                    alert("评论失败");
+                }
+            },
+            error: function () { alert("出错了"); }
         });
     }
 </script>
