@@ -40,7 +40,7 @@ namespace Delivery.Controllers
 
         public ActionResult Announcement()
         {
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收");
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收"|| o.Status =="待选择");
             return View(orders.ToList());
         }
 
@@ -52,6 +52,15 @@ namespace Delivery.Controllers
             var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId);
             return View(orders.ToList());
         }
+
+
+        public ActionResult ReceiveIndex()
+        {
+            var userId = int.Parse(Session["LoginId"].ToString());
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.ReceiverID == userId);
+            return View(orders.ToList());
+        }
+
 
         // GET: Orders/Details/5
         public ActionResult Details(int? id)
@@ -352,12 +361,88 @@ namespace Delivery.Controllers
             else
             {
                 var competitors = db.OrderCompetitors.Include(o => o.User).Where(o => o.OrderID == oid);
-                /*页面显示多个代收人信息....明天完成哟~*/
+                /*页面显示多个代收人信息....明天完成哟~*/               
                 ViewBag.competitors=competitors.ToList();
+                var list = competitors.ToList();
+                JArray json = new JArray();
+                for(int i=0;i<list.Count;i++)
+                {
+                    JObject obj = new JObject();
+                    obj.Add("id", list[i].UserID);
+                    obj.Add("name", list[i].User.Name);
+                    obj.Add("account", list[i].User.Account);
+                    obj.Add("phone", list[i].User.PhoneNumber);
+                    obj.Add("address", list[i].Location.PlaceName);
+                    //obj.Add("remark", list[i].Location.Remark);
+                    json.Add(obj);
+                }
+                res.Data = json.ToString();
+                //return Json(list);
             }
             res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;//允许使用GET方式获取，否则用GET获取是会报错。  
             return res;
         }
+
+        [HttpPost]
+        public JsonResult ConfirmReceivers(string userId,string orderId)
+        {
+            int uid = int.Parse(userId);
+            int oid = int.Parse(orderId);
+            var competitor = db.OrderCompetitors.FirstOrDefault(oc => oc.OrderID == oid && oc.UserID == uid);
+            Orders order = db.Orders.Find(oid);
+            order.ReceiverID = uid;
+            order.ReceiverLocationID = competitor.LocationID;
+            order.Status = "接收中";
+            db.Entry(order).State = EntityState.Modified;
+            int result = db.SaveChanges();
+            if (result == 0)
+            {
+                return Json("FAIL", JsonRequestBehavior.AllowGet);
+            }
+            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult AcceptedOrder(string id)
+        {
+            int oid = int.Parse(id);
+            Orders order = db.Orders.Find(id);
+            order.Status = "已代收";
+            db.Entry(order).State = EntityState.Modified;
+            int result = db.SaveChanges();
+            if (result == 0)
+            {
+                return Json("FAIL", JsonRequestBehavior.AllowGet);
+            }
+            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ConfirmOrder(string id)
+        {
+            int oid = int.Parse(id);
+            Orders order = db.Orders.Find(id);
+            order.Status = "订单完成";
+            db.Entry(order).State = EntityState.Modified;
+            int result = db.SaveChanges();
+            if (result == 0)
+            {
+                return Json("FAIL", JsonRequestBehavior.AllowGet);
+            }
+            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult getRcvrName(string id)
+        {
+            int oid = int.Parse(id);
+            Orders order = db.Orders.Find(id);
+            string name = order.Receiver.Name;           
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
+
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

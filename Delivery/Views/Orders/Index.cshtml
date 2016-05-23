@@ -86,7 +86,7 @@
                                     }
                                     else
                                     {
-                                        @Html.DisplayFor(modelItem => item.Receiver.Account)
+                                        @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
                                     }
                                 </td>
                                 <td>
@@ -99,7 +99,8 @@
                                     }
                                     else if (item.Status == "待选择")
                                     {
-                                        <button class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">选择</button>
+                                        <button class="btn btn-primary" onClick="delcfm(this)">选择</button>
+                                        @*<button class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">选择</button>*@
                                     }
                                     else
                                     {
@@ -107,7 +108,14 @@
                                     }
                                     </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
+                                    @if (item.Status == "已代收")
+                                    {
+                                        <button class="btn btn-primary" onClick="confirm(this)">确认接收</button>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    }
                                 </td>
                                 @*<td>
                                         @Html.DisplayFor(modelItem => item.Mark)
@@ -134,11 +142,16 @@
                                     {
                                          @Html.ActionLink("详情", "Details", new { id = item.ID }) 
                                          <span>|</span>
-                                         @Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                        <a onclick="deleteOrder(this)">删除</a>
                                     }
-                                    else if (item.Status == "接收中")
+                                    else if (item.Status == "订单完成")
                                     {
-                                         @Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                        <a onclick="comment(this)">评价</a>
+                                        <a onclick="deleteOrder(this)">删除</a>
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("详情", "Details", new { id = item.ID })
                                     }
                                 </td>
                             </tr>
@@ -192,7 +205,6 @@
                 </div>
                 <div class="modal-body">
                     <table class="table">
-                        <tbody>
                             <tr class="active">
                                 <th>
                                 </th>
@@ -201,7 +213,9 @@
                                 <th>手机</th>
                                 <th>地址</th>
                             </tr>
-                            @foreach (var item in (IEnumerable<Delivery.Models.OrderCompetitors>)ViewBag.competitors)
+                        <tbody id="tbody">
+                                            @*@if (@ViewBag.competitors!=null) {
+                            foreach (var item in (IEnumerable<Delivery.Models.OrderCompetitors>)ViewBag.competitors)
                             {
                                 <tr class="success">
                                     <td><input type="radio" name="rad" onclick="radioclick(this)"></td>
@@ -213,28 +227,58 @@
                                         @Html.DisplayFor(modelItem => item.Location.Remark)
                                     </td>
                                 </tr>
-                            }
-                            <tr class="success">
-                                <td><input id="1" type="radio" value="小洪" name="rad" onclick="radioclick(this)"></td>
-                                <td>小洪</td>
-                                <td>10112110108</td>
-                                <td>15298764670</td>
-                                <td>
-                                    华东师范大学本科生公寓6舍
-                                </td>
-                            </tr>
+                               }
+                            }*@
                         </tbody>
                     </table>
 
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" id="url" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <a onclick="choice()" class="btn btn-success" data-dismiss="modal">确定</a>
+                    <button class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button class="btn btn-success" data-dismiss="modal" onclick="submit()">确定</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div class="modal fade" id="comment_modal">
+        <div class="modal-dialog">
+            <div class="modal-content message_align">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">评价订单</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <tr class="active">
+                            <td>订单号</td>
+                            <td id="c_orderId"></td>
+                        </tr>
+                        <tr class="success">
+                            <td>代收人</td>
+                            <td id="c_name"></td>
+                        </tr>
+                        <tr class="warning">
+                            <td>评分</td>
+                            <td><input id="c_mark" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)</td>
+                        </tr>
+                        <tr class="danger">
+                            <td>评价</td>
+                            <td><input id="c_rmk" class="form-control" type="text" /></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="url" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="commentSubmit()" class="btn btn-success" data-dismiss="modal">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 
     <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
         <a href="#" target="_blank">Package.com@ecnu.edu.cn</a>
@@ -245,12 +289,13 @@
 
 <script>
 
-    var button_id;
-    function delcfm(url, obj) {
-        button_id = obj.id;
-        $('#url').val(url);//给会话中的隐藏属性URL赋值
+    var selectOrder;
+    function delcfm(obj) {
+        //button_id = obj.id;
+        //$('#url').val(url);//给会话中的隐藏属性URL赋值
         $('#two').modal();
-        orderId=$(obj).closest("tr").find("#item_ID").val();
+        orderId = $(obj).closest("tr").find("#item_ID").val();
+        selectOrder = orderId;
         $.ajax({
             type:'POST',
             url: '@Url.Action("GetCompetitors","Orders")',
@@ -263,8 +308,21 @@
                 if (data == "FAIL") {
                     alert("获取代收人失败");
                 }
+                else {
+                    var addHtml="";
+                    $.each($.parseJSON(data), function (index, item) {
+                        console.log(item);
+                        addHtml += "<tr class='success'><td><input type='radio' name='radio' value='" + item.id + "' onclick='radioclick(this)'></td>" +
+                                "<td>" + item.name + "</td>" +
+                                "<td>" + item.account + "</td>" +
+                                "<td>" + item.phone + "</td>" +
+                                "<td>" + item.address + "</td></tr>";
+                               // "<td>" + item.remark + "</td> </tr>";
+                    });
+                    $("#tbody").html(addHtml);
+                }
             },
-            error: function () { alert("获取代收人失败");}
+            error: function () { alert("出错了");}
         });
 
     }
@@ -279,14 +337,13 @@
             obj.tag = 1;
         }
     }
-    function but(obj) {  //给submit绑定点击事件
-        button_id = obj.id;
+   /* function but(obj) {  //给submit绑定点击事件
+        //button_id = obj.id;
         var b = document.getElementById("two"); //获取透明层
         b.style.display = "block";  //点击提交显示透明层
-    }
-    function choice() {
-        var a;
-
+    }*/
+    function submit() {
+     /* var a;
         var arr = document.getElementsByName("rad");
         for (var i = 0; i < arr.length; i++) {
             if (arr[i].checked) {
@@ -301,10 +358,57 @@
         var newtext = document.createTextNode(a);
         var newGraf = document.createElement("p");
         newGraf.appendChild(newtext);
-
         td.appendChild(newGraf);
+        */
+        
+        if ($('input[name="radio"]:checked').length == 0) {
+            alert("未选择代收人，提交失败！");
+            return;
+        }
+        var receiverId = $('input[name="radio"]:checked').val();
+        alert(receiverId);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ConfirmReceivers","Orders")',
+            data: {
+                'userId': receiverId,
+                'orderId': selectOrder,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data == "SUCCESS") {
+                    alert("选择成功");
+                    window.location.reload();
+                }
+                else {
+                    alert("选择失败");
+                }
+            },
+            error: function () { alert("出错了"); }
+        });
     }
 
+    function confirm(obj) {
+        if (confirm("确认已收到包裹？")) {
+            var id = $(obj).closest("tr").find("#item_ID").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmOrder", "Orders")',
+                data: { 'id': id },
+                dataType: 'json',
+                success: function (data) {
+                    if (data == "SUCCESS") {
+                        alert("确认接收");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("确认失败");
+                    }
+                },
+                error: function () { alert("出错了"); }
+            });
+        }
+    }
 
     function deleteOrder(obj) {
         if (confirm("确认删除该订单？")) {
@@ -323,9 +427,24 @@
                         alert("删除失败");
                     }
                 },
-                error :function(){alert("删除失败");}
+                error :function(){alert("出错了");}
             });
         }
+    }
 
+    function comment(obj) {
+        $('#comment_modal').modal();
+        var orderId = $(obj).closest("tr").find("#item_ID").val();
+        $('#c_orderId').text(orderId);
+        $.ajax({
+            type: "POST",
+            url:'@Url.Action("getRcvrName","Orders")',
+            data: { 'id': id},
+            dataType: 'json',
+            success:function(data){               
+                 $('#c_name').text(data);               
+            },
+            error :function(){alert("出错了");}
+        });
     }
 </script>

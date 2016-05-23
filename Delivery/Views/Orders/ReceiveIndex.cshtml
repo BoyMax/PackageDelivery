@@ -1,0 +1,296 @@
+﻿@model IEnumerable<Delivery.Models.Orders>
+
+@{
+    ViewBag.Title = "接收订单信息";
+}
+<h2>接收订单信息</h2>
+
+<p>
+    @Html.ActionLink("我发出的订单", "Index")
+</p>
+
+<html>
+<head>
+    @Styles.Render("~/Content/Site.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+
+<body>
+    @*<section class="bg-pic bg-pic-team" style="background-image:url(/Content/4.png)">
+            <img src="~/Content/6.png" style="opacity:0.8">
+        </section>*@
+
+
+
+    <div class="container">
+        <div class="row half-boxes">
+            <div class="col-md-6 col-md-push-6 half-box">
+                <h2 class="mb-lg">Perfect Package</h2>
+                <p>
+                    Trust us because we have the convenient service.Open your computer and telephone.
+                </p>
+                <p>
+                    Drop us an email at <a href="445072942@qq.com">445072942@qq.com(77)</a>
+                </p>
+                <p>
+                    Contact us if you have any questions.
+                </p>
+            </div>
+            <div class="col-md-6 col-md-pull-6 half-box">
+                <img src="~/Content/3.png" class="img-responsive radius" style="height:250px;margin-left:45px;width:400px;">
+            </div>
+        </div>
+    </div>
+    <div style="overflow:scroll;width:1024px;height:500px;  border:2px solid rgba(0,0,0,0.3) ;margin: 20px auto">
+        <div style="margin-bottom:5px">
+            <table class="table">
+                <tr>
+                    <th>
+                        发单人
+                    </th>
+                    <th>
+                        手机号
+                    </th>
+                    <th style="width:200px">
+                        领取地点
+                        @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Sender.Account)
+                        </th>*@
+                    <th style="width:200px">
+                        代收地点
+                        @*@Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)*@
+                    </th>
+                    <th>
+                        酬金类型
+                    </th>
+                    
+                    <th>
+                        状态
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Mark)
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Comment)
+                        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.PublishTime)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </th>*@
+                    <th>操作</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    if (item.Status != "已删除")
+                    {
+                        <tr>
+                            @Html.HiddenFor(modelItem => item.ID)
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sender.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sender.PhoneNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Sender.Account)
+                                </td>*@
+                            <td>
+                                @if (item.Status == "等待接收")
+                                {
+                                    <span>无</span>
+                                }
+                                else if (item.Status == "待选择")
+                                {
+                                    <span>无</span>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Reward.Type)
+                            </td>
+                            <td>
+                                @if (item.Status == "接收中")
+                                {
+                                    <button class="btn btn-primary" onClick="confirmOrder(this)">确认代收</button>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                }
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Mark)
+                                </td>*@
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Comment)
+                                </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PublishTime)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.EndTime)
+                                </td>*@
+                            <td>
+                                @if (item.Status == "订单完成")
+                                {
+                                    @Html.ActionLink("详情", "Details", new { id = item.ID })
+                                    <span>|</span>
+                                    <a onclick="deleteOrder(this)">删除</a>
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("详情", "Details", new { id = item.ID })
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>
+
+    @*<div class="modal fade" id="two">
+        <div class="modal-dialog">
+            <div class="modal-content message_align">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">确认信息</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                            <tr class="active">
+                                <td>订单号</td>
+                                <td>10123</td>
+                            </tr>
+                            <tr class="success">
+                                <td>收件人</td>
+                                <td>小洪</td>
+                            </tr>
+                            <tr class="warning">
+                                <td>地址</td>
+                                <td>
+                                    河西食堂
+                                </td>
+                            </tr>
+                            <tr class="danger">
+                                <td></td>
+                                <td>
+                                    确认对方已收？
+                                </td>
+                            </tr>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="url" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" onclick="sure()" class="btn btn-success" data-dismiss="modal">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->*@
+
+    <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+        <a href="#">10130160103@ecnu.edu.cn</a>
+    </div>
+
+</body>
+</html>
+
+<script>
+   /* var selectOrder;
+    function confirmShow(obj) {
+        $('#two').modal();
+        orderId = $(obj).closest("tr").find("#item_ID").val();
+        selectOrder = orderId;
+        $.ajax({
+            type: 'POST',
+            url: 'Url.Action("GetCompetitors","Orders")',
+            data: {
+                orderId: orderId,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                if (data == "FAIL") {
+                    alert("获取代收人失败");
+                }
+                else {
+                    var addHtml = "";
+                    $.each($.parseJSON(data), function (index, item) {
+                        console.log(item);
+                        addHtml += "<tr class='success'><td><input type='radio' name='radio' value='" + item.id + "' onclick='radioclick(this)'></td>" +
+                                "<td>" + item.name + "</td>" +
+                                "<td>" + item.account + "</td>" +
+                                "<td>" + item.phone + "</td>" +
+                                "<td>" + item.address + "</td></tr>";
+                        // "<td>" + item.remark + "</td> </tr>";
+                    });
+                    $("#tbody").html(addHtml);
+                }
+            },
+            error: function () { alert("出错了"); }
+        });
+
+    }*/
+
+    
+    function confirmOrder(obj) {
+        if (confirm("确认已收到包裹？")) {
+            var id = $(obj).closest("tr").find("#item_ID").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AcceptedOrder", "Orders")',
+                data: { 'id': id },
+                dataType: 'json',
+                success: function (data) {
+                    if (data == "SUCCESS") {
+                        alert("确认代收");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("确认代收");
+                    }
+                },
+                error: function () { alert("出错了"); }
+            });
+        }
+    }
+
+    function deleteOrder(obj) {
+        if (confirm("确认删除该订单？")) {
+            var id = $(obj).closest("tr").find("#item_ID").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteOrder","Orders")',
+                data: { 'id': id },
+                dataType: 'json',
+                success: function (data) {
+                    if (data == "SUCCESS") {
+                        alert("删除成功");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("删除失败");
+                    }
+                },
+                error: function () { alert("出错了"); }
+            });
+        }
+
+    }
+</script>
