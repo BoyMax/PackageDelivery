@@ -24,7 +24,7 @@
                     <li>@Html.ActionLink("我接收的订单", "ReceiveIndex", "Orders")</li>
                     <li class="divider"></li>
                     <li class="dropdown-header">个人信息</li>
-                    <li><a href="#">个人设置</a></li>
+                    <li>@Html.ActionLink("个人设置", "PersonalSetting", "Users")</li>
                 </ul>
             </li>
             <li>@Html.ActionLink("注销", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>

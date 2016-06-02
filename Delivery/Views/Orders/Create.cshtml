@@ -11,15 +11,20 @@
 
 </head>
 
-<body>
+<body background="~/images/7.png " style="background-repeat:no-repeat ;
+background-size:100% 100%;
+background-attachment: fixed;">
     <h2>发起申请</h2>
-    <div style="width:500px;float:left;display:inline">
+    <p>@Html.ActionLink("查看我的订单信息", "Index")</p>
+   
+    <div class="row "style="background: rgba(250,250,250, 0.3);border-radius:20px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);" >
+    <div  class="col-md-5" display="inline">
         @*@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "create-order-form", role = "form" }))
         {*@
-            <div class = "create-order-form" >
+            
                 @Html.AntiForgeryToken()
-                <div style="width:500px;float:left;">
-                    <div class="form-horizontal">
+          
+              
                         @*<h4>Orders</h4>*@
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         @*<div style="display:none;">
@@ -27,11 +32,8 @@
                         </div>*@
 
                         <div id="wordx" style="margin-left:5%;margin-top:6%">
-                            <div style="width:75px"><h4>包裹信息</h4></div>
-                            <div style="width:400px">
-                                <a href="#" class="btn-add" onclick="showInsert()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
-                            </div>
-                            <table class="table" style="width:400px;">
+                                <h4>包裹信息<a href="#" class="btn-add" onclick="showInsert()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h4>
+                               <table class="bordered" style="width:400px;">
                                 <thead>
                                     <tr>
                                         <th style="text-align:center">快递公司</th>
@@ -42,62 +44,67 @@
                                 <tbody id="packageBody"></tbody>
                             </table>
                         </div>
-                       <div class="form-group">
-                           <label class="control-label col-md-2"> 酬金类型</label>
-                        <div class="col-md-10">
-                            <input id="Reward_Type" name="Reward.Type" onclick="change(0)" type="radio" value="0" checked="checked">现金
-                            <input id="Reward_Type" name="Reward.Type" onclick="change(1)" type="radio" value="1">物品
-                        </div>
-                       </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-2"> 金额</label>
-                            <div class="col-md-10">
-                                <input id="moneyInput" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label col-md-2"> 物品信息</label>
-                            <div class="col-md-10">
-                                <input id="remarkInput" class="form-control" type="text"  />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10" style="width:350px;">
-                                <input id="submit" type="button" class="btn btn-default" value="创建申请"/>
-                            </div>
-                        </div>
                     </div>
-                </div>
-                @*}*@
-                </div>
-</div>
+           
+          
+  
+    <div class="col-md-7" display="inline" style="margin-top:80px">
+        <form  class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="control-label col-sm-4"> 酬金类型</label>
+            <div class="col-sm-5">
+                <input id="Reward_Type" name="Reward.Type" onclick="change(0)" type="radio" value="0" checked="checked">现金
+                <input id="Reward_Type" name="Reward.Type" onclick="change(1)" type="radio" value="1">物品
+            </div>
+        </div>
+            <br><br>
+        <div class="form-group">
+            <label class="control-label col-sm-4">酬金金额</label>
+            <div class="col-sm-5">
+                <input id="moneyInput" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)
+            </div>
+        </div>
+            <br><br>
+        <div class="form-group">
+            <label class="control-label col-sm-4"> 物品信息</label>
+            <div class="col-sm-5">
+                <input id="remarkInput" class="form-control" type="text" />
+            </div>
+        </div>
 
-    <div style="width:500px; top:20%;float:right;margin-top:3%;display:inline">
-        <h4>地点信息</h4>
+        <div class="form-group">
+            <div class="col-md-offset-6 col-sm-10" style="width:350px;">
+                <input id="submit" type="button" class="btn btn-default" value="创建申请" />
+            </div>
+        </div>
+       </form>
+      </div>
+        </div>
 
-            <div id="r-result" class="form-group">
-                <label class="control-label col-md-2"> 地点</label>
-                <div class="col-md-10">
+   
+
+    
+    <div id="r-result" >
+        <div class="row" style="margin-top:80px">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-2"> 地点</label>
                     <input type="text" id="suggestId" class="form-control" size="20" value="百度" />
                 </div>
-            <br></br>
-            <div class="form-group">
-                <label class="control-label col-md-2"> 备注</label>
-                <div class="col-md-10">
-                    <input type="text" id="Remark" class="form-control"/>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-2"> 备注</label>
+                    <input type="text" id="Remark" class="form-control" />
                 </div>
-            </div> 
-            <br></br>
-            <div id="l-map"></div>
-            <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
-            @*<div id="allmap"></div>*@
+            </div>
         </div>
-      </div>
-   <div style="width:500px;float:left;">
-        @Html.ActionLink("查看我的订单信息", "Index")
-   </div>
-
+              <br></br>
+              <div id="l-map" style="border-radius:20px;"></div>
+              <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+              @*<div id="allmap"></div>*@
+          </div>
+   
 
 
 

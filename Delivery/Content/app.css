@@ -639,8 +639,9 @@ address {
   line-height: 1.428571429; }
 
 .container {
+   
   margin-right: auto;
-  margin-left: auto;
+  margin-left:auto;
   padding-left: 15px;
   padding-right: 15px; }
   .container:before, .container:after {
@@ -653,7 +654,7 @@ address {
       width: 750px; } }
   @media (min-width: 992px) {
     .container {
-      width: 970px; } }
+      width: 1000px; } }
   @media (min-width: 1200px) {
     .container {
       width: 1170px; } }
@@ -5260,7 +5261,7 @@ section {
   color: #fff; }
 
 .bg-light {
-  background-color: #98AECC;
+  background-color: #008EE2;
   color: #fff; }
   .bg-light h1, .bg-light h2 {
     color: white; }

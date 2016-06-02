@@ -3,11 +3,8 @@
 @{
     ViewBag.Title = "接收订单信息";
 }
-<h2>接收订单信息</h2>
 
-<p>
-    @Html.ActionLink("我发出的订单", "Index")
-</p>
+
 
 <html>
 <head>
@@ -15,16 +12,156 @@
     @Styles.Render("~/Content/bootstrap.min.css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/app.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/default.css">
+    <script src="~/scripts/app.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 
-<body>
+<body style="background-color:antiquewhite" >
     @*<section class="bg-pic bg-pic-team" style="background-image:url(/Content/4.png)">
             <img src="~/Content/6.png" style="opacity:0.8">
         </section>*@
+    <div class="container-fluid" style="margin-top:80px;border-radius:10px;width:1000px">
+        <header>
+            <h1 align="center">接收订单信息 </h1>
+        </header>
+        <div>
+            <p align="center">
+                @Html.ActionLink("我发出的订单", "Index")
+            </p>
+        </div>
+    </div>
+    <div class="row" align="center">
+        <div class="col-sm-4">
+            <img src="~/images/clock.png" alt="Clock icon">
+        </div>
+        <div class="col-sm-4">
+            <img src="~/images/graph.png" alt="Graph icon">
+        </div>
+        <div class="col-sm-4">
+            <img src="~/images/open-box.png" alt="Box icon">
+        </div>
+    </div>
+    <table class="bordered" align="center"  style="margin-top:100px">
+        <tr>
+            <th>
+                发单人
+            </th>
+            <th>
+                手机号
+            </th>
+            <th style="width:200px">
+                领取地点
+                @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Sender.Account)
+                </th>*@
+            <th style="width:200px">
+                代收地点
+                @*@Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)*@
+            </th>
+            <th style="width:100px">
+                酬金类型
+            </th>
+
+            <th>
+                状态
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Mark)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Comment)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.PublishTime)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </th>*@
+            <th style="width:150px">操作</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            if (item.Status != "已删除")
+            {
+                <tr>
+                    @Html.HiddenFor(modelItem => item.ID)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sender.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sender.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Sender.Account)
+                        </td>*@
+                    <td>
+                        @if (item.Status == "等待接收")
+                        {
+                            <span>无</span>
+                        }
+                        else if (item.Status == "待选择")
+                        {
+                            <span>无</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reward.Type)
+                    </td>
+                    <td>
+                        @if (item.Status == "接收中")
+                        {
+                            <button class="btn btn-primary" onClick="confirmOrder(this)">确认代收</button>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Status)
+                        }
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Mark)
+                        </td>*@
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PublishTime)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.EndTime)
+                        </td>*@
+                    <td>
+                        @if (item.Status == "订单完成")
+                        {
+                            @Html.ActionLink("详情", "Details", new { id = item.ID })
+                            <span>|</span>
+                                    <a onclick="deleteOrder(this)">删除</a>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("详情", "Details", new { id = item.ID })
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
 
 
-
-    <div class="container">
+    <div class="container" style="margin-top:100px">
         <div class="row half-boxes">
             <div class="col-md-6 col-md-push-6 half-box">
                 <h2 class="mb-lg">Perfect Package</h2>
@@ -39,129 +176,14 @@
                 </p>
             </div>
             <div class="col-md-6 col-md-pull-6 half-box">
-                <img src="~/Content/3.png" class="img-responsive radius" style="height:250px;margin-left:45px;width:400px;">
+                <img src="~/images/3.png" class="img-responsive radius" style="height:250px;margin-left:20px;width:400px;">
             </div>
         </div>
     </div>
-    <div style="overflow:scroll;width:1024px;height:500px;  border:2px solid rgba(0,0,0,0.3) ;margin: 20px auto">
-        <div style="margin-bottom:5px">
-            <table class="table">
-                <tr>
-                    <th>
-                        发单人
-                    </th>
-                    <th>
-                        手机号
-                    </th>
-                    <th style="width:200px">
-                        领取地点
-                        @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
-                    </th>
-                    @*<th>
-                            @Html.DisplayNameFor(model => model.Sender.Account)
-                        </th>*@
-                    <th style="width:200px">
-                        代收地点
-                        @*@Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)*@
-                    </th>
-                    <th>
-                        酬金类型
-                    </th>
-                    
-                    <th>
-                        状态
-                    </th>
-                    @*<th>
-                            @Html.DisplayNameFor(model => model.Mark)
-                        </th>*@
-                    @*<th>
-                            @Html.DisplayNameFor(model => model.Comment)
-                        </th>*@
-                    <th>
-                        @Html.DisplayNameFor(model => model.PublishTime)
-                    </th>
-                    @*<th>
-                            @Html.DisplayNameFor(model => model.EndTime)
-                        </th>*@
-                    <th>操作</th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    if (item.Status != "已删除")
-                    {
-                        <tr>
-                            @Html.HiddenFor(modelItem => item.ID)
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Sender.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Sender.PhoneNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
-                            </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.Sender.Account)
-                                </td>*@
-                            <td>
-                                @if (item.Status == "等待接收")
-                                {
-                                    <span>无</span>
-                                }
-                                else if (item.Status == "待选择")
-                                {
-                                    <span>无</span>
-                                }
-                                else
-                                {
-                                    @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Reward.Type)
-                            </td>
-                            <td>
-                                @if (item.Status == "接收中")
-                                {
-                                    <button class="btn btn-primary" onClick="confirmOrder(this)">确认代收</button>
-                                }
-                                else
-                                {
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                }
-                            </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.Mark)
-                                </td>*@
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.Comment)
-                                </td>*@
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PublishTime)
-                            </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.EndTime)
-                                </td>*@
-                            <td>
-                                @if (item.Status == "订单完成")
-                                {
-                                    @Html.ActionLink("详情", "Details", new { id = item.ID })
-                                    <span>|</span>
-                                    <a onclick="deleteOrder(this)">删除</a>
-                                }
-                                else
-                                {
-                                    @Html.ActionLink("详情", "Details", new { id = item.ID })
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-
-            </table>
-        </div>
-    </div>
+          
+           
+      
+      
 
     @*<div class="modal fade" id="two">
         <div class="modal-dialog">
@@ -205,7 +227,7 @@
     </div><!-- /.modal -->*@
 
     <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
-        <a href="#">10130160103@ecnu.edu.cn</a>
+        <a href="#">Package.com@ecnu.edu.cn</a>
     </div>
 
 </body>

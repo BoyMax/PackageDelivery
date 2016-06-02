@@ -4,215 +4,231 @@
     ViewBag.Title = "修改订单";
 }
 
-<h2>修改订单</h2>
 
 
 
-<div>
-    @Html.AntiForgeryToken()
+<html>
+<head>
+    @Styles.Render("~/Content/bootstrap.css")
+</head>
+<body background="~/images/5.png " style="background-repeat:no-repeat ;
+background-size:100% 100%;
+background-attachment: fixed;">
+    <div style="background: rgba(245,245,245, 0.8);
+filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:150px;border-radius:8px">
+        @Html.AntiForgeryToken()
+        <h2>修改订单</h2>
+        <p>@Html.ActionLink("返回订单信息", "Index")</p>
+        <div class="row">
+            <div class="col-md-6">
+        <div class="form-horizontal" >
 
-    <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID)
 
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.SenderID, "SenderID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("SenderID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SenderID, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
 
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.SenderID, "SenderID", htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.ReceiverID, "ReceiverID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("ReceiverID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ReceiverID, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PickLocationID, "领取地点", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("SenderID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.SenderID, "", new { @class = "text-danger" })
+                    @Html.DropDownList("PickLocationID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PickLocationID, "", new { @class = "text-danger" })
                 </div>
-            </div>*@
+            </div>
 
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.ReceiverID, "ReceiverID", htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.ReceiverLocationID, "ReceiverLocationID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("ReceiverLocationID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ReceiverLocationID, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.RewardID, "RewardID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("RewardID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RewardID, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Reward.Type, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("ReceiverID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ReceiverID, "", new { @class = "text-danger" })
+                    @*<input class="form-control" id="Reward_Type" name="Reward.Type" type="radio" value="0" checked="checked" onclick="change(0)"/>)现金
+                        <input class="form-control" id="Reward_Type" name="Reward.Type" type="radio" value="1" onclick="change(1)" />物品*@
+                    @Html.RadioButtonFor(model => model.Reward.Type, 0, new { @onclick = "change(0)" })现金
+                    @Html.RadioButtonFor(model => model.Reward.Type, 1, new { @onclick = "change(1)" })物品
+                    @*@Html.EditorFor(model => model.Reward.Type, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Reward.Type, "", new { @class = "text-danger" })*@
                 </div>
-            </div>*@
+            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PickLocationID, "领取地点", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("PickLocationID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PickLocationID, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Reward.Money, "金额", htmlAttributes: new { @class = "control-label col-md-2", onkeyup = "check()" })
+                <div class="col-md-10">
+                    <input id="moneyInput" name="Reward.Money" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)
+                    @*@Html.EditorFor(model => model.Reward.Remark, new { htmlAttributes = new { @id = "moneyInput", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Reward.Remark, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Reward.Remark, "物品信息", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Reward.Remark, new { htmlAttributes = new { @id = "remarkInput", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Reward.Remark, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.Mark, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Mark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Mark, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PublishTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PublishTime, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PublishTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                <div class="col-md-offset-7 col-md-10">
+                    <input id="submit" type="button" value="保存" class="btn btn-default" />
+                </div>
             </div>
         </div>
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.ReceiverLocationID, "ReceiverLocationID", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("ReceiverLocationID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ReceiverLocationID, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.RewardID, "RewardID", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("RewardID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.RewardID, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Reward.Type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*<input class="form-control" id="Reward_Type" name="Reward.Type" type="radio" value="0" checked="checked" onclick="change(0)"/>)现金
-                    <input class="form-control" id="Reward_Type" name="Reward.Type" type="radio" value="1" onclick="change(1)" />物品*@
-                @Html.RadioButtonFor(model => model.Reward.Type, 0, new { @onclick = "change(0)" })现金
-                @Html.RadioButtonFor(model => model.Reward.Type, 1, new { @onclick = "change(1)" })物品
-                @*@Html.EditorFor(model => model.Reward.Type, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Reward.Type, "", new { @class = "text-danger" })*@
-            </div>
+</div>
+        <div class="col-md-5" style="margin-top:30px">
+            <img src="~/images/9.png" alt="First slide">
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Reward.Money, "金额", htmlAttributes: new { @class = "control-label col-md-2", onkeyup = "check()" })
-            <div class="col-md-10">
-                <input id="moneyInput" name="Reward.Money" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)
-                @*@Html.EditorFor(model => model.Reward.Remark, new { htmlAttributes = new { @id = "moneyInput", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Reward.Remark, "", new { @class = "text-danger" })*@
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Reward.Remark, "物品信息", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Reward.Remark, new { htmlAttributes = new { @id = "remarkInput", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Reward.Remark, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                 </div>
-            </div>*@
 
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.Mark, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Mark, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Mark, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PublishTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PublishTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PublishTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input id="submit" type="button" value="保存" class="btn btn-default" />
-            </div>
-        </div>
+           
+        
     </div>
-</div>
 
-<div>
-    @Html.ActionLink("返回订单信息", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-<script type="text/javascript">
-
-    var type = "现金";
-    $("#PublishTime").attr("disabled",true);
-    if('@ViewBag.RewardType'=="现金"){
-        $("#Reward_Type").attr("checked", 0);
-        $("#moneyInput").val(@ViewBag.Money);
-        $("#remarkInput").val("");
-        $("#remarkInput").attr("disabled", true);
-        type = "现金";
+ 
+</body>
+</html>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
     }
-    else if('@ViewBag.RewardType'=="物品"){
-        $("#Reward_Type").attr("checked", 1);
-        $("#moneyInput").val("");
-        $("#moneyInput").attr("disabled", true);
-        $("#remarkInput").val(@ViewBag.RewardRemark);
-        type = "物品";
-    }
-    function change(type) {
-        if (type == 0) {
+    <script type="text/javascript">
+
+        var type = "现金";
+        $("#PublishTime").attr("disabled", true);
+        if ('@ViewBag.RewardType' == "现金") {
+            $("#Reward_Type").attr("checked", 0);
+            $("#moneyInput").val(@ViewBag.Money);
+            $("#remarkInput").val("");
             $("#remarkInput").attr("disabled", true);
-            $("#moneyInput").attr("disabled", false);
+            type = "现金";
         }
-        else
-        {
+        else if ('@ViewBag.RewardType' == "物品") {
+            $("#Reward_Type").attr("checked", 1);
+            $("#moneyInput").val("");
             $("#moneyInput").attr("disabled", true);
-            $("#remarkInput").attr("disabled", false);
+            $("#remarkInput").val(@ViewBag.RewardRemark);
+            type = "物品";
         }
-    }
-
-    function check() {
-        if (isNaN($("#moneyInput").val())) {
-            alert("只能输入数字！");
-            $("#moneyInput").val('');
+        function change(type) {
+            if (type == 0) {
+                $("#remarkInput").attr("disabled", true);
+                $("#moneyInput").attr("disabled", false);
+            }
+            else {
+                $("#moneyInput").attr("disabled", true);
+                $("#remarkInput").attr("disabled", false);
+            }
         }
-    }
 
-    $('#submit').click(function () {
-        alert("in");
-        var id = $("#ID").val();
-        var location = $("#PickLocationID").val();
-        var money = $("#moneyInput").val();
-        var remark = $("#remarkInput").val();
-        console.log("id"+id);
-        console.log("location:"+location);
-        console.log("type:"+type);
-        console.log("money:" + money);
-        console.log("remark:" + remark);
+        function check() {
+            if (isNaN($("#moneyInput").val())) {
+                alert("只能输入数字！");
+                $("#moneyInput").val('');
+            }
+        }
+
+        $('#submit').click(function () {
+            alert("in");
+            var id = $("#ID").val();
+            var location = $("#PickLocationID").val();
+            var money = $("#moneyInput").val();
+            var remark = $("#remarkInput").val();
+            console.log("id" + id);
+            console.log("location:" + location);
+            console.log("type:" + type);
+            console.log("money:" + money);
+            console.log("remark:" + remark);
 
 
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("Edit", "Orders")',
-            data: {
-                ID: id,
-                location: location,
-                type: type,
-                money: money,
-                remark: remark,
-            },
-            dataType: 'json',
-            // contentType: 'application/json',
-            success: function (result) {
-                if (result == "SUCCESS") {
-                    alert("订单修改成功！");
-                }
-                else if (result == "FAIL") {
-                    alert("订单修改失败");
-                }
-            },
-            error: function () { alert("订单修改失败"); }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Edit", "Orders")',
+                data: {
+                    ID: id,
+                    location: location,
+                    type: type,
+                    money: money,
+                    remark: remark,
+                },
+                dataType: 'json',
+                // contentType: 'application/json',
+                success: function (result) {
+                    if (result == "SUCCESS") {
+                        alert("订单修改成功！");
+                    }
+                    else if (result == "FAIL") {
+                        alert("订单修改失败");
+                    }
+                },
+                error: function () { alert("订单修改失败"); }
+            });
+
         });
-
-    });
-</script>
+    </script>

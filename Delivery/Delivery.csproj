@@ -257,6 +257,8 @@
     <Content Include="images\5.png" />
     <Content Include="images\6.png" />
     <Content Include="images\7.png" />
+    <Content Include="images\8.png" />
+    <Content Include="images\9.png" />
     <Content Include="images\aif.png" />
     <Content Include="images\clock.png" />
     <Content Include="images\google.png" />

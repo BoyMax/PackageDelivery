@@ -786,6 +786,7 @@ pre code {
 .row {
   margin-right: -15px;
   margin-left: -15px;
+
 }
 
 .row:before,
@@ -5607,7 +5608,7 @@ button.close {
 body.modal-open,
 .modal-open .navbar-fixed-top,
 .modal-open .navbar-fixed-bottom {
-  margin-right: 15px;
+  margin-right:15px;
 }
 
 .modal {
