@@ -127,14 +127,12 @@ namespace Delivery.Controllers
             dataStream1.Close();
             response.Close();
             response1.Close();
-            Regex reg = new Regex("name=\"xm\" value=\" (.+);");
-            Match match = reg.Match(responseFromServer1);
-            string value = match.Groups[1].Value; 
-           /* Regex reg = new Regex("name = 'xm' value = '(.*?)'");
-            Match match = reg.Match(responseFromServer1);
-            string key = match.Groups[1].Value;*/
 
-                if (user!=null && user.Password.Equals(model.Password))
+            Regex reg = new Regex("name=\"xm\" value=\"(.+?)\"");
+            Match match = reg.Match(responseFromServer1);
+            string key = match.Groups[1].Value;
+
+            if (user!=null && user.Password.Equals(model.Password))
             {
                 System.Web.HttpContext.Current.Session["LoginId"] = user.ID;
                 //System.Web.HttpContext.Current.Session["LoginAccount"] = user.Account;
