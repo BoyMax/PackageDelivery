@@ -9,6 +9,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Delivery.Models;
+using System.Net;
+using System.Text;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Delivery.Controllers
 {
@@ -75,13 +79,62 @@ namespace Delivery.Controllers
             {
                 return View(model);
             }
+            //Users user = db.Users.Find({ })
+            var user = db.Users.FirstOrDefault(u => u.Account == model.Account);
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
 
-            //Users user = db.Users.Find({ })
-            var user = db.Users.FirstOrDefault(u => u.Account == model.Account);
-            if (user!=null && user.Password.Equals(model.Password))
+            /*学校数据爬虫*/
+            /*信息登录*/
+            CookieContainer cookieContainer = new CookieContainer();
+            HttpWebRequest request =(HttpWebRequest)HttpWebRequest.Create("http://www.xgb.ecnu.edu.cn/main/index.asp");
+            request.Method = "POST";
+            string postData = "user_id=10130160103&password=7777777&Submit=''&flag=2";
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = byteArray.Length;
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+            request.CookieContainer = new CookieContainer();
+            cookieContainer = request.CookieContainer;
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            //response.Cookies = cookieContainer.GetCookies(request.RequestUri);
+            dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string responseFromServer = reader.ReadToEnd();
+            Console.WriteLine(responseFromServer);
+            reader.Close();
+            dataStream.Close();
+
+            /*进入个人信息界面*/
+            HttpWebRequest request1 = (HttpWebRequest)HttpWebRequest.Create("http://www.xgb.ecnu.edu.cn/xxcj/xxwh.asp");
+            request1.CookieContainer = new CookieContainer();
+            request1.Method = "POST";
+            request1.CookieContainer.Add(cookieContainer.GetCookies(response.ResponseUri));
+            //CookieCollection cookies = 
+            Stream dataStream1 = request1.GetRequestStream();         
+            HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+            Console.WriteLine(((HttpWebResponse)response1).StatusDescription);
+            dataStream1 = response1.GetResponseStream();
+            Encoding gb2312 = Encoding.GetEncoding("GB2312"); 
+            StreamReader reader1 = new StreamReader(dataStream1, gb2312);
+            string responseFromServer1 = reader1.ReadToEnd();
+            Console.WriteLine(responseFromServer1);
+            reader1.Close();
+            dataStream1.Close();
+            response.Close();
+            response1.Close();
+            Regex reg = new Regex("name=\"xm\" value=\" (.+);");
+            Match match = reg.Match(responseFromServer1);
+            string value = match.Groups[1].Value; 
+           /* Regex reg = new Regex("name = 'xm' value = '(.*?)'");
+            Match match = reg.Match(responseFromServer1);
+            string key = match.Groups[1].Value;*/
+
+                if (user!=null && user.Password.Equals(model.Password))
             {
                 System.Web.HttpContext.Current.Session["LoginId"] = user.ID;
                 //System.Web.HttpContext.Current.Session["LoginAccount"] = user.Account;
@@ -105,6 +158,11 @@ namespace Delivery.Controllers
             //        ModelState.AddModelError("", "Invalid login attempt.");
             //        return View(model);
             //}
+        }
+
+        private void InternetSetCookie(string v1, string v2, string v3)
+        {
+            throw new NotImplementedException();
         }
 
 

@@ -13,52 +13,70 @@
     <script src="~/scripts/app.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script language="javascript">
+
+    var count= 0 ;
+    var maxfile = 5;
+     增加元素
+     function addUpload() {
+         var input_id = "text" + count;
+         if (count >= maxfile)
+             return;//限制最多maxfile个文件框
+         if (count > 0 && document.getElementById(input_id).value == "") {
+             alert("请输入地址后，再进行添加");
+             return;
+         }
+            
+        count++;
+        //自增id不同的HTML对象，并附加到容器最后
+        var newDiv =  "<div id=divUpload" + count +">"+" <div class=row><div class=col-md-6>"
+            + " <input id=text" + count + "  class=form-control  type=text  placeholder=请输入地址 name=upload></div><div class=col-md-2 > "
+            + "<a    href=javascript:delUpload('divUpload" + count + "');><span class='glyphicon glyphicon-trash'></span></a></div></div><br>"
+            + " </div>";
+          document.getElementById("uploadContent").insertAdjacentHTML("beforeEnd", newDiv);
+    }
+    //删除指定元素
+    function delUpload(diva) {
+        count--;
+        document.getElementById(diva).parentNode.removeChild
+
+(document.getElementById(diva));
+    }
+    </script>
 </head>
 
-<body>
-    <section class="bg-light">
-        <div class="container">
-            <header>
-                <h1>Personal information setting----are you ready?</h1>
-            </header>
-            <div style="margin-left:460px">
-                <a href="#about" class="scroll-link"><span class="glyphicon glyphicon-chevron-down"></span></a>
-            </div>
-        </div>
-    </section>
+<body background="~/images/2.png " style="background-repeat:no-repeat ;
+background-size:100% 100%;
+background-attachment: fixed;">
+    
 
-    <section id="about">
-        <div class="container">
-            <header>
-                <h2>个人设置</h2>
-            </header>
-
-            <div class="row">
+            <div class="row" >
+                <h2 align="center">个人设置</h2>
                 <div class="col-sm-4">
                     <div class="icon-box">
                         <img src="~/images/clock.png" alt="Clock icon">
                         <h3>基本信息</h3>
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">User</label>
+                                <label for="inputPassword" class="col-sm-3 control-label">用户</label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control" id="user">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">Name</label>
+                                <label for="inputPassword" class="col-sm-3 control-label">姓名</label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control" id="name">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">Grade</label>
+                                <label for="inputPassword" class="col-sm-3 control-label">年级</label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control" id="grade">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">Password</label>
+                                <label for="inputPassword" class="col-sm-3 control-label">密码</label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control" id="inputPassword">
                                 </div>
@@ -93,12 +111,12 @@
                                     <legend>常用地址:</legend>
                                     <div>
                                         <table>
-                                            <tr>
-                                                <td id="tdRrmove" width="2000">
+                                            <tr >
+                                                <td id="tdRrmove"  width="2000">
                                                     <!--承接整个file文件框的HTML容器-->
                                                     <div id="uploadContent">
                                                         <!--默认的file文件框
-                                                                                                <div id=div1><input id=file1
+                                                                               <div id=div1><input id=file1
 
                                                         type=file size=50 name=upload></div>-->
                                                     </div>
@@ -119,8 +137,7 @@
             <div class="text-center mt-lg">
                 <a href="javascript:Router.goToQuotePage()" class="btn btn-lg btn-action">保存</a>
             </div>
-        </div>
-    </section>
+   
 
 
     @*<section class="bg-light">

@@ -21,28 +21,32 @@
 </head>
 
 <body style="background-color:lavender">
-    <div class="container-fluid" style="margin-top:80px;border-radius:10px;width:1000px">
-        <header>
-            <h1 align="center">订单信息 </h1>
-        </header>
-        <div >
-            <p align="center">
-                @Html.ActionLink("创建新的订单", "Create")
-            </p>
+    <section class="bg-danger" style="height:350px;margin-top:100px">
+        <div class="container">
+            <header>
+                <h1 align="center">订单信息 </h1>
+                <p align="center">
+                    @Html.ActionLink("创建新的订单", "Create")
+                </p>
+            </header>
+            <div class="row" align="center">
+                <div class="col-sm-4">
+                    <img src="~/images/11.png">
+                </div>
+                <div class="col-sm-4">
+                    <img src="~/images/4.png">
+                </div>
+                <div class="col-sm-4">
+                    <img src="~/images/10.png">
+                </div>
+
+            </div>
         </div>
-    </div>
+       
+    </section>
+    
    
-    <div class="row" align="center">
-        <div class="col-sm-4">
-            <img src="~/images/clock.png" alt="Clock icon">
-        </div>
-        <div class="col-sm-4">
-            <img src="~/images/graph.png" alt="Graph icon">
-        </div>
-        <div class="col-sm-4">
-            <img src="~/images/open-box.png" alt="Box icon">
-        </div>
-    </div>
+  
         @*<div class="col-md-5" style="margin-top:20px">
             <img src="~/Content/5.png" class="img-rounded" style="width:80%;height:100%;">
         </div>*@
