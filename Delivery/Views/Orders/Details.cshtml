@@ -15,13 +15,16 @@ background-attachment: fixed;">
         <div class="row" style="background:rgba(255,255,255, 0.8);
 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:100px;border-radius:20px">
             <h2 style="color:black">订单详情</h2>
-            <p>
+            <div style="float: left;left: 100px;">
                 @*@Html.ActionLink("修改", "Edit", new { id = Model.ID }) |*@
-                @Html.ActionLink("返回发单列表", "Index")
-                @Html.ActionLink("返回接单列表", "ReceiveIndex")
-            </p>
+                @Html.ActionLink("返回发起订单", "Index",null,new { @class = "btn btn-link" })
+            </div>
+            <div>
+                @Html.ActionLink("返回接收订单", "ReceiveIndex", null, new { @class = "btn btn-link" })
+            </div>
+            </br></hr>
             <div class="col-md-4">
-                <h5>包裹信息</h5>
+                <h4>包裹信息</h4>
                 <table class="table">
                     <tr >
                         <th>快递公司</th>
