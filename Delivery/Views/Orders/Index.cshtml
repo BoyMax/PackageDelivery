@@ -68,11 +68,11 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                 <th style="width:100px">
                     酬金类型
                 </th>
-                <th>
+                <th style="width:80px">
                     代收人
                     @*@Html.DisplayNameFor(model => model.Receiver.Account)*@
                 </th>
-                <th>
+                <th style="width:80px">
                     状态
                 </th>
                 @*<th>
@@ -277,8 +277,6 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
 
     var selectOrder;
     function delcfm(obj) {
-        //button_id = obj.id;
-        //$('#url').val(url);//给会话中的隐藏属性URL赋值
         $('#two').modal();
         orderId = $(obj).closest("tr").find("#item_ID").val();
         selectOrder = orderId;
@@ -352,7 +350,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
             return;
         }
         var receiverId = $('input[name="radio"]:checked').val();
-        alert(receiverId);
+        //alert(receiverId);
         $.ajax({
             type: "POST",
             url: '@Url.Action("ConfirmReceivers","Orders")',

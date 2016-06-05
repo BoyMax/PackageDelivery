@@ -18,9 +18,9 @@ namespace Delivery.Models
         public string Name { get; set; }
         [StringLength(20)]
         public string Sex { get; set; }
-        [StringLength(20)]
+        [StringLength(200)]
         public string Grade { get; set; }
-        [StringLength(20)]
+        [StringLength(100)]
         public string Degree { get; set; }
         [StringLength(20)]
         public string PhoneNumber { get; set; }

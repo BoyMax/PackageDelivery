@@ -82,59 +82,97 @@ namespace Delivery.Controllers
             //Users user = db.Users.Find({ })
             var user = db.Users.FirstOrDefault(u => u.Account == model.Account);
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            if (user == null)
+            {
+                /*学校数据爬虫*/
+                /*信息登录*/
+                CookieContainer cookieContainer = new CookieContainer();
+                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("http://www.xgb.ecnu.edu.cn/main/index.asp");
+                request.Method = "POST";
+                string postData = "user_id="+ model.Account+ "&password="+model.Password+"&Submit=''&flag=2";
+                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = byteArray.Length;
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                request.CookieContainer = new CookieContainer();
+                cookieContainer = request.CookieContainer;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                dataStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                string responseFromServer = reader.ReadToEnd();
+                reader.Close();
+                dataStream.Close();
+                Regex regError = new Regex("history.back()");
+                if (regError.IsMatch(responseFromServer))
+                {
+                    //Console.WriteLine("用户名或密码错误");
+                    //return Content("<script>alert(\"用户名或密码错误\")</script>");
+                    Response.Write("<script>alert('用户名或密码错误!');</script>");
+                    return View(model);
+                }
 
-            /*学校数据爬虫*/
-            /*信息登录*/
-            CookieContainer cookieContainer = new CookieContainer();
-            HttpWebRequest request =(HttpWebRequest)HttpWebRequest.Create("http://www.xgb.ecnu.edu.cn/main/index.asp");
-            request.Method = "POST";
-            string postData = "user_id=10130160103&password=7777777&Submit=''&flag=2";
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = byteArray.Length;
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            request.CookieContainer = new CookieContainer();
-            cookieContainer = request.CookieContainer;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-            //response.Cookies = cookieContainer.GetCookies(request.RequestUri);
-            dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
-            Console.WriteLine(responseFromServer);
-            reader.Close();
-            dataStream.Close();
+                //Console.WriteLine(responseFromServer);
+               
+                //获取信息并存入数据库
+                /*进入个人信息界面*/
+                HttpWebRequest request1 = (HttpWebRequest)HttpWebRequest.Create("http://www.xgb.ecnu.edu.cn/xxcj/xxwh.asp");
+                request1.CookieContainer = new CookieContainer();
+                request1.Method = "POST";
+                request1.CookieContainer.Add(cookieContainer.GetCookies(response.ResponseUri));
+                //CookieCollection cookies = 
+                Stream dataStream1 = request1.GetRequestStream();
+                HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                //Console.WriteLine(((HttpWebResponse)response1).StatusDescription);
+                dataStream1 = response1.GetResponseStream();
+                Encoding gb2312 = Encoding.GetEncoding("GB2312");
+                StreamReader reader1 = new StreamReader(dataStream1, gb2312);
+                string responseFromServer1 = reader1.ReadToEnd();
+                //Console.WriteLine(responseFromServer1);
+                reader1.Close();
+                dataStream1.Close();
+                response.Close();
+                response1.Close();
 
-            /*进入个人信息界面*/
-            HttpWebRequest request1 = (HttpWebRequest)HttpWebRequest.Create("http://www.xgb.ecnu.edu.cn/xxcj/xxwh.asp");
-            request1.CookieContainer = new CookieContainer();
-            request1.Method = "POST";
-            request1.CookieContainer.Add(cookieContainer.GetCookies(response.ResponseUri));
-            //CookieCollection cookies = 
-            Stream dataStream1 = request1.GetRequestStream();         
-            HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
-            Console.WriteLine(((HttpWebResponse)response1).StatusDescription);
-            dataStream1 = response1.GetResponseStream();
-            Encoding gb2312 = Encoding.GetEncoding("GB2312"); 
-            StreamReader reader1 = new StreamReader(dataStream1, gb2312);
-            string responseFromServer1 = reader1.ReadToEnd();
-            Console.WriteLine(responseFromServer1);
-            reader1.Close();
-            dataStream1.Close();
-            response.Close();
-            response1.Close();
+                Regex reg = new Regex("name=\"xh\" value=\"(.*?)\"");
+                Match match = reg.Match(responseFromServer1);
+                string accountStr = match.Groups[1].Value;
 
-            Regex reg = new Regex("name=\"xm\" value=\"(.+?)\"");
-            Match match = reg.Match(responseFromServer1);
-            string key = match.Groups[1].Value;
+                Regex regName = new Regex("name=\"xm\" value=\"(.*?)\"");
+                Match matchName = regName.Match(responseFromServer1);
+                string nameStr = matchName.Groups[1].Value;
 
-            if (user!=null && user.Password.Equals(model.Password))
+                Regex regPhone = new Regex("name=\"yddh\" value=\"(.*?)\"");
+                Match matchPhone = regPhone.Match(responseFromServer1);
+                string phoneStr = matchPhone.Groups[1].Value;
+
+                Regex regGender = new Regex("select   name=\"xb\"  value=\"(.*?)\"");
+                Match matchGender = regGender.Match(responseFromServer1);
+                string genderStr = matchGender.Groups[1].Value;
+
+                Regex regGrade = new Regex("select   name=\"bj\"  value=\"(.*?)\"");
+                Match matchGrade = regGrade.Match(responseFromServer1);
+                string gradeStr = matchGrade.Groups[1].Value;
+
+                Regex regDegree = new Regex("name=\"lb\" value=\"(.*?)\"");
+                Match matchDegree = regDegree.Match(responseFromServer1);
+                string degreeStr = matchDegree.Groups[1].Value;
+                var newUser = new Users { Account = model.Account, Password = model.Password, Name = nameStr,Sex = genderStr,PhoneNumber=phoneStr,Degree=degreeStr,Grade=gradeStr};
+                db.Users.Add(newUser);
+                db.SaveChanges();
+                System.Web.HttpContext.Current.Session["LoginId"] = newUser.ID;
+                System.Web.HttpContext.Current.Session["LoginName"] = newUser.Name;
+                return RedirectToAction("Announcement", "Orders", new { UserID = newUser.ID });
+            }
+
+
+
+            else if (user!=null && user.Password.Equals(model.Password))
             {
                 System.Web.HttpContext.Current.Session["LoginId"] = user.ID;
+                System.Web.HttpContext.Current.Session["LoginName"] = user.Name;
                 //System.Web.HttpContext.Current.Session["LoginAccount"] = user.Account;
                 //System.Web.HttpContext.Current.Session["LoginName"] = user.Name;
                 return RedirectToAction("Announcement", "Orders", new { UserID = user.ID });

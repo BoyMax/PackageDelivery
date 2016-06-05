@@ -13,36 +13,7 @@
     <script src="~/scripts/app.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-    <script language="javascript">
 
-    var count= 0 ;
-    var maxfile = 5;
-     增加元素
-     function addUpload() {
-         var input_id = "text" + count;
-         if (count >= maxfile)
-             return;//限制最多maxfile个文件框
-         if (count > 0 && document.getElementById(input_id).value == "") {
-             alert("请输入地址后，再进行添加");
-             return;
-         }
-            
-        count++;
-        //自增id不同的HTML对象，并附加到容器最后
-        var newDiv =  "<div id=divUpload" + count +">"+" <div class=row><div class=col-md-6>"
-            + " <input id=text" + count + "  class=form-control  type=text  placeholder=请输入地址 name=upload></div><div class=col-md-2 > "
-            + "<a    href=javascript:delUpload('divUpload" + count + "');><span class='glyphicon glyphicon-trash'></span></a></div></div><br>"
-            + " </div>";
-          document.getElementById("uploadContent").insertAdjacentHTML("beforeEnd", newDiv);
-    }
-    //删除指定元素
-    function delUpload(diva) {
-        count--;
-        document.getElementById(diva).parentNode.removeChild
-
-(document.getElementById(diva));
-    }
-    </script>
 </head>
 
 <body background="~/images/2.png " style="background-repeat:no-repeat ;
@@ -56,33 +27,34 @@ background-attachment: fixed;">
                     <div class="icon-box">
                         <img src="~/images/clock.png" alt="Clock icon">
                         <h3>基本信息</h3>
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">用户</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="user">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">姓名</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">年级</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="grade">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPassword" class="col-sm-3 control-label">密码</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputPassword">
-                                </div>
-                            </div>
-                        </form>
-
+                        <table>
+                            <tbody>
+                                <tr class="active">
+                                    <td>用户</td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Account, new { htmlAttributes = new { @class = "col-sm-8" } })
+                                    </td>
+                                </tr>
+                                <tr class="active">
+                                    <td>姓名</td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Name)
+                                    </td>
+                                </tr>
+                                <tr class="active">
+                                    <td>性别</td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Sex)
+                                    </td>
+                                </tr>
+                                <tr class="active">
+                                    <td>院系</td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Grade)
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -90,11 +62,13 @@ background-attachment: fixed;">
                     <div class="icon-box">
                         <img src="~/images/graph.png" alt="Graph icon">
                         <h3>联系方式</h3>
-                        <table class="table">
+                        <table>
                             <tbody>
                                 <tr class="active">
                                     <td>手机号</td>
-                                    <td> <input type="text" class="form-control" id="number"></td>
+                                    <td>
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -105,10 +79,10 @@ background-attachment: fixed;">
                     <div class="icon-box">
                         <img src="~/images/open-box.png" alt="Box icon">
                         <div id="content">
-                            <form id="Form1" method="post" runat="server"
+                            <form id="Form1" method="post"
                                   enctype="multipart/form-data">
                                 <fieldset>
-                                    <legend>常用地址:</legend>
+                                    <legend>常用地址:   <a href="javascript:addUpload()"><span class="glyphicon glyphicon-plus"></span></a></legend>                                 
                                     <div>
                                         <table>
                                             <tr >
@@ -124,7 +98,7 @@ background-attachment: fixed;">
                                             </tr>
                                         </table>
                                     </div>
-                                    <a href="javascript:addUpload()"><span class="glyphicon glyphicon-plus"></span></a>
+                                    
                                     <br />
                                     <br />
                                 </fieldset>
@@ -135,40 +109,59 @@ background-attachment: fixed;">
             </div>
 
             <div class="text-center mt-lg">
-                <a href="javascript:Router.goToQuotePage()" class="btn btn-lg btn-action">保存</a>
+                <a class="btn btn-lg btn-action" onclick="save()">保存</a>
             </div>
-   
-
-
-    @*<section class="bg-light">
-                <div class="container">
-                    <div class="text-center">
-                        <h2 class="mb-lg">Ready to order your package?</h2>
-                        <a href="text" class="btn btn-lg btn-action">let's go</a>
-                    </div>
-                </div>
-            </section>
-
-            <footer>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 footer-copy">
-                            &copy;2016 Package@ecnu.edu.cn
-                        </div>
-
-                        <div class="col-md-6 footer-links">
-                            <a href="text">Home</a>
-                            <a href="Create">Create</a>
-                            <a href="Details">Details</a>
-                        </div>
-
-                        <div class="col-md-3 footer-socials socials">
-                            <img src="~/images/4.png">
-                        </div>
-
-                    </div>
-                </div>
-            </footer>
-        </div>*@
 </body>
 </html>
+
+<script language="javascript">
+
+    var count = 0;
+    //新增地址输入框
+     function addUpload() {
+         var input_id = "text" + count;
+         if (count > 0 && document.getElementById(input_id).value == "") {
+             alert("请输入地址后，再进行添加");
+             return;
+         }
+
+        count++;
+        //自增id 
+        var newDiv =  "<div id=divUpload" + count +">"+" <div class=row><div class=col-md-6>"
+            + " <input id=text" + count + "  class=form-control  type=text  placeholder=请输入地址 name=upload></div><div class=col-md-2 > "
+            + "<a href=javascript:delUpload('divUpload" + count + "');><span class='glyphicon glyphicon-trash'></span></a></div></div><br>"
+            + " </div>";
+          document.getElementById("uploadContent").insertAdjacentHTML("beforeEnd", newDiv);
+    }
+    //删除常用地址
+    function delUpload(diva) {
+        count--;
+        document.getElementById(diva).parentNode.removeChild(document.getElementById(diva));
+    }
+
+    function save() {
+        var phone = $('#PhoneNumber').val();
+        var addresses = [];
+        for (var i = 1; i <= count;i++){ 
+            addresses.push($("#text"+i).val());
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "Users")',
+            data: {
+                addresses: addresses,
+                phone: phone,
+            },
+            dataType:'json',
+            success: function (result) {
+                if (result == "SUCCESS") {
+                    alert("保存成功！");
+                }
+                else if (result == "FAIL") {
+                    alert("保存失败");
+                }
+            },
+            error: function () { alert("保存失败");}
+        });
+    }
+</script>

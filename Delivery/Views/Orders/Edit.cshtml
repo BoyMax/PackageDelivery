@@ -18,7 +18,7 @@ background-attachment: fixed;">
 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:150px;border-radius:8px">
         @Html.AntiForgeryToken()
         <h2>修改订单</h2>
-        <p>@Html.ActionLink("返回订单信息", "Index")</p>
+        <p>@Html.ActionLink(" 返回订单信息", "Index")</p>
         <div class="row">
             <div class="col-md-6">
         <div class="form-horizontal" >
@@ -47,6 +47,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                 @Html.LabelFor(model => model.PickLocationID, "领取地点", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.DropDownList("PickLocationID", null, htmlAttributes: new { @class = "form-control" })
+                    <span>  (常用地址)</span>
                     @Html.ValidationMessageFor(model => model.PickLocationID, "", new { @class = "text-danger" })
                 </div>
             </div>

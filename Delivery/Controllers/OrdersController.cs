@@ -188,7 +188,7 @@ namespace Delivery.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.PickLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.PickLocationID);
+            ViewBag.PickLocationID = new SelectList(db.Addresses.Include(a => a.Address).Where(a => a.UserID == orders.SenderID), "AddressesID", "Address.PlaceName", orders.PickLocationID);
             //ViewBag.ReceiverID = new SelectList(db.Users, "ID", "Account", orders.ReceiverID);
             //ViewBag.ReceiverLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.ReceiverLocationID);
             ViewBag.RewardID = new SelectList(db.Rewards, "ID", "Type", orders.RewardID);
@@ -284,7 +284,7 @@ namespace Delivery.Controllers
             var res = new JsonResult();
             int userid = int.Parse(Session["LoginId"].ToString());
             Users user = db.Users.Find(userid);
-            var person = new { name = user.Account, phone = user.PhoneNumber };
+            var person = new { name = user.Name, phone = user.PhoneNumber };
             res.Data = person;//返回单个对象；  
             res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;//允许使用GET方式获取，否则用GET获取是会报错。  
             return res;

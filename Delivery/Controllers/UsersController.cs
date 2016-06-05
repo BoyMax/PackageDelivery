@@ -22,8 +22,44 @@ namespace Delivery.Controllers
 
         // GET: Users/PersonalSetting
         public ActionResult PersonalSetting()
+        {         
+            if (Session["LoginId"].ToString() == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            int userID = int.Parse(Session["LoginId"].ToString());
+            Users user = db.Users.Find(userID);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        public JsonResult Save(string[] addresses,string phone )
         {
-            return View();
+            if (Session["LoginId"].ToString()!=null)
+            {
+                int userID = int.Parse(Session["LoginId"].ToString());
+                Users user = db.Users.Find(userID);
+                user.PhoneNumber = phone;
+                db.Entry(user).State = EntityState.Modified;
+
+                for (int i = 0; i < addresses.Length; i++) {
+                    var location = new Locations();
+                    location.PlaceName = addresses[i];
+                    db.Locations.Add(location);
+                    db.SaveChanges();
+
+                    var address = new Addresses();
+                    address.UserID = userID;
+                    address.AddressesID = location.ID;
+                    db.Addresses.Add(address);
+                    db.SaveChanges();
+                }
+                return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+            }
+            return Json("FAIL", JsonRequestBehavior.AllowGet);
         }
 
         // GET: Users/Details/5
