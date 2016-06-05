@@ -215,6 +215,7 @@ namespace Delivery.Controllers
 
                 o = db.Orders.Find(int.Parse(ID));
                 o.PickLocationID = int.Parse(location);
+                o.PublishTime = DateTime.Now;
                 Rewards r=db.Rewards.Find(o.RewardID);
                 r.Type = type;
                 r.Money = int.Parse(money);
@@ -424,6 +425,7 @@ namespace Delivery.Controllers
             int oid = int.Parse(id);
             Orders order = db.Orders.Find(oid);
             order.Status = "订单完成";
+            order.EndTime= DateTime.Now; 
             db.Entry(order).State = EntityState.Modified;
             int result = db.SaveChanges();
             if (result == 0)

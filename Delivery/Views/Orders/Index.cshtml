@@ -172,8 +172,11 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                         }
                         else if (item.Status == "订单完成")
                         {
+                            @Html.ActionLink("详情", "Details", new { id = item.ID })
+                            <span>|</span>
                             <a onclick="comment(this)">评价</a>
-                                        <a onclick="deleteOrder(this)">删除</a>
+                            <span>|</span>
+                            <a onclick="deleteOrder(this)">删除</a>
                         }
                         else
                         {
