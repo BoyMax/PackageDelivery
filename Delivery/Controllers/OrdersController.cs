@@ -57,7 +57,8 @@ namespace Delivery.Controllers
         public ActionResult ReceiveIndex()
         {
             var userId = int.Parse(Session["LoginId"].ToString());
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.ReceiverID == userId);
+            var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId);
             return View(orders.ToList());
         }
 
@@ -117,6 +118,17 @@ namespace Delivery.Controllers
                 {
                     locID = loc.ID;
                 }
+                int loginID = int.Parse(Session["LoginId"].ToString();
+                
+                var addr = db.Addresses.FirstOrDefault(a => a.AddressesID == locID && a.UserID == loginID);
+                if (addr == null)
+                {
+                    Addresses address = new Addresses();
+                    address.UserID = loginID;
+                    address.AddressesID = locID;
+                    db.Addresses.Add(address);
+                    db.SaveChanges();
+                }
                 Rewards reward = new Rewards();
                 if (rewardType.Equals("0"))
                 {
@@ -134,7 +146,7 @@ namespace Delivery.Controllers
                 Orders order = new Orders();
                 order.PickLocationID = locID;
                 order.Status = "等待接收";
-                order.SenderID = int.Parse(Session["LoginId"].ToString());
+                order.SenderID = loginID;
                 order.RewardID = reward.ID;
                 try
                 {
