@@ -118,7 +118,7 @@ namespace Delivery.Controllers
                 {
                     locID = loc.ID;
                 }
-                int loginID = int.Parse(Session["LoginId"].ToString();
+                int loginID = int.Parse(Session["LoginId"].ToString());
                 
                 var addr = db.Addresses.FirstOrDefault(a => a.AddressesID == locID && a.UserID == loginID);
                 if (addr == null)
