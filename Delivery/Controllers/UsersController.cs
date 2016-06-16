@@ -36,6 +36,30 @@ namespace Delivery.Controllers
             return View(user);
         }
 
+        public JsonResult AddressGet()
+        {
+            if (Session["LoginId"].ToString() == null)
+            {
+                return Json("FAIL", JsonRequestBehavior.AllowGet);
+            }
+            int userID = int.Parse(Session["LoginId"].ToString());
+            Users user = db.Users.Find(userID);
+            //ViewBag.ReceiverLocationID = new SelectList(db.Locations, "ID", "PlaceName", orders.ReceiverLocationID);
+            var list= db.Addresses.Include(a => a.Address).Where(a => a.UserID==userID);
+            List<string> resultList = new List<string>();
+            if (list.Count() > 0)
+            {
+                foreach (var item in list)
+                {
+                    resultList.Add(item.Address.PlaceName);
+                }
+            }
+            JsonResult result = new JsonResult();
+            result.Data = resultList;
+            return Json(resultList, JsonRequestBehavior.AllowGet);
+        }
+
+
         public JsonResult Save(string[] addresses,string phone )
         {
             if (Session["LoginId"].ToString()!=null)
@@ -44,16 +68,28 @@ namespace Delivery.Controllers
                 Users user = db.Users.Find(userID);
                 user.PhoneNumber = phone;
                 db.Entry(user).State = EntityState.Modified;
-
+                var addr = db.Addresses.Where(a => a.UserID == userID);
+                foreach(var item in addr)
+                {
+                    db.Addresses.Remove(item);
+                }
                 for (int i = 0; i < addresses.Length; i++) {
+                    var addrStr = addresses[i];
+                    var loc = db.Locations.FirstOrDefault(l => l.PlaceName == addrStr && l.Remark == null);
                     var location = new Locations();
-                    location.PlaceName = addresses[i];
-                    db.Locations.Add(location);
-                    db.SaveChanges();
-
+                    if (loc == null)
+                    {                     
+                        location.PlaceName = addresses[i];
+                        db.Locations.Add(location);
+                        db.SaveChanges();
+                    }
                     var address = new Addresses();
                     address.UserID = userID;
-                    address.AddressesID = location.ID;
+                    if (loc == null)
+                    {
+                        address.AddressesID = location.ID;
+                    }
+                    else { address.AddressesID = loc.ID; }
                     db.Addresses.Add(address);
                     db.SaveChanges();
                 }

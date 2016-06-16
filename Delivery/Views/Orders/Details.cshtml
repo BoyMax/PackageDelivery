@@ -64,7 +64,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                         }
                         else
                         {
-                            @Html.DisplayFor(model => model.Receiver.Account)
+                            @Html.DisplayFor(model => model.Receiver.Name)
                         }
                     </dd>
                     <dt >
@@ -91,6 +91,24 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                     <dd >
                         @Html.DisplayFor(model => model.Reward.Type)
                     </dd>
+                    @if (Model.Reward.Type == "现金" || Model.Reward.Type == "现金+物品")
+                    {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Reward.Money)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Reward.Money)
+                    </dd>
+                    }
+                    else if (Model.Reward.Type == "物品" || Model.Reward.Type == "现金+物品")
+                    {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Reward.Remark)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Reward.Remark)
+                    </dd>
+                    }
                     @*<dt>
                             @Html.DisplayNameFor(model => model.Sender.Account)
                         </dt>

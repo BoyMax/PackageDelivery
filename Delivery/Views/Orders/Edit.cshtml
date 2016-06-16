@@ -75,6 +75,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                         <input class="form-control" id="Reward_Type" name="Reward.Type" type="radio" value="1" onclick="change(1)" />物品*@
                     @Html.RadioButtonFor(model => model.Reward.Type, 0, new { @onclick = "change(0)" })现金
                     @Html.RadioButtonFor(model => model.Reward.Type, 1, new { @onclick = "change(1)" })物品
+                    @Html.RadioButtonFor(model => model.Reward.Type, 2, new { @onclick = "change(2)" })现金+物品
                     @*@Html.EditorFor(model => model.Reward.Type, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Reward.Type, "", new { @class = "text-danger" })*@
                 </div>
@@ -177,13 +178,23 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
             $("#remarkInput").val(@ViewBag.RewardRemark);
             type = "物品";
         }
+        else if ('@ViewBag.RewardType' == "现金+物品") {
+            $("#Reward_Type").attr("checked", 2);
+            $("#moneyInput").val(@ViewBag.Money);
+            $("#remarkInput").val(@ViewBag.RewardRemark);
+            type = "现金+物品";
+        }
         function change(type) {
             if (type == 0) {
                 $("#remarkInput").attr("disabled", true);
                 $("#moneyInput").attr("disabled", false);
             }
-            else {
+            else if (type == 1)  {
                 $("#moneyInput").attr("disabled", true);
+                $("#remarkInput").attr("disabled", false);
+            }
+            else if (type == 2) {
+                $("#moneyInput").attr("disabled", false);
                 $("#remarkInput").attr("disabled", false);
             }
         }

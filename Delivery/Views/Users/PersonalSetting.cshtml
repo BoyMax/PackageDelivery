@@ -117,6 +117,29 @@ background-attachment: fixed;">
 <script language="javascript">
 
     var count = 0;
+    $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddressGet", "Users")',
+            data: {},
+            dataType:'json',
+            success: function (data) {
+                console.log(data);
+                if (data!="FAIL") {
+                    $.each(data, function (index, value) {
+                        count++;
+                        var newDiv = "<div id=divUpload" + count + ">" + " <div class=row><div class=col-md-6>"
+                + " <input id=text" + count + "  class=form-control  type=text name=upload value="+value+"></div><div class=col-md-2 > "
+                + "<a href=javascript:delUpload('divUpload" + count + "');><span class='glyphicon glyphicon-trash'></span></a></div></div><br>"
+                + " </div>";
+                        document.getElementById("uploadContent").insertAdjacentHTML("beforeEnd", newDiv);                      
+                    });
+                }
+                else if (result == "FAIL") {
+                    alert("获取常用地址失败");
+                }
+            },
+            error: function () { alert("失败");}
+        });
     //新增地址输入框
      function addUpload() {
          var input_id = "text" + count;
@@ -126,7 +149,7 @@ background-attachment: fixed;">
          }
 
         count++;
-        //自增id 
+        //自增id
         var newDiv =  "<div id=divUpload" + count +">"+" <div class=row><div class=col-md-6>"
             + " <input id=text" + count + "  class=form-control  type=text  placeholder=请输入地址 name=upload></div><div class=col-md-2 > "
             + "<a href=javascript:delUpload('divUpload" + count + "');><span class='glyphicon glyphicon-trash'></span></a></div></div><br>"
@@ -142,7 +165,7 @@ background-attachment: fixed;">
     function save() {
         var phone = $('#PhoneNumber').val();
         var addresses = [];
-        for (var i = 1; i <= count;i++){ 
+        for (var i = 1; i <= count;i++){
             addresses.push($("#text"+i).val());
         }
         $.ajax({
@@ -161,7 +184,7 @@ background-attachment: fixed;">
                     alert("保存失败");
                 }
             },
-            error: function () { alert("保存失败");}
+            error: function () { alert("失败");}
         });
     }
 </script>

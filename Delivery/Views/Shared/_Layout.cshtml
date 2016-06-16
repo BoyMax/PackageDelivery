@@ -18,12 +18,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("包裹代取", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("包裹代取", "Index", "Home", new { area = "" }, new { @class = "navbar-brand glyphicon glyphicon-th-large" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav nav-tabs">
                     <li></li>
-                    <li>@Html.ActionLink("公告", "Announcement", "Orders")</li>
+                    <li>@Html.ActionLink("资讯", "Announcement", "Orders", routeValues: null, htmlAttributes: new { @class = "glyphicon glyphicon-list-alt" })</li>
+                    <li>@Html.ActionLink("建单", "Create", "Orders", routeValues: null, htmlAttributes: new { @class = "glyphicon glyphicon-pencil" })</li>
+                    <li>@Html.ActionLink("发单", "Index", "Orders", routeValues: null, htmlAttributes: new { @class = "glyphicon glyphicon-arrow-right" })</li>
+                    <li>@Html.ActionLink("收单", "ReceiveIndex", "Orders", routeValues: null, htmlAttributes: new { @class = "glyphicon glyphicon-arrow-left" })</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
                 @*@RenderSection("loginUser", required: false)*@

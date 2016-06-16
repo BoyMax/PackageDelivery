@@ -19,6 +19,41 @@
     <script src="~/scripts/app.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <style>
+     
+        /*分页样式*/
+        #divPage {
+            text-align: center;
+            margin: 10px 0px;
+            height: 30px;
+            font-size: 12px;
+        }
+
+            #divPage a, #divPage span {
+                text-decoration: none;
+                color: Blue;
+                background-color: White;
+                padding: 3px 5px;
+                font-family: Consolas;
+                text-align: center;
+                border: solid 1px #ddd;
+                display: inline-block;
+            }
+
+            #divPage span {
+                color: gray;
+            }
+
+            #divPage a:hover {
+                color: Red;
+            }
+
+            #divPage .aCur {
+                background-color: green;
+                color: White;
+                font-weight: bold;
+            }
+    </style>
 </head>
 
 <body style="background-color:antiquewhite" >
@@ -46,6 +81,22 @@
             <img src="~/images/17.png" >
         </div>
     </div>
+    <div class="row" align="center">
+        @using (Html.BeginForm())
+        {
+            <div class="">
+                <select class="" name="type">
+                    <option value="0">全部</option>
+                    <option value="1">领取地点</option>
+                    <option value="2">代收地点</option>
+                    <option value="3">状态</option>
+                </select>
+            </div>
+            <input type="text" class="form-control" name="key">
+            <input type="submit" class="btn-default" value="search" />
+        }
+
+    </div>  
     <table class="bordered" align="center"  style="margin-top:100px">
         <tr>
             <th style="width:80px">
@@ -86,6 +137,7 @@
                 </th>*@
             <th style="width:130px">操作</th>
         </tr>
+        <tbody id="table2">
         @foreach (var item in Model)
         {
             if (item.Status != "已删除")
@@ -158,8 +210,9 @@
                 </tr>
             }
         }
+            </tbody>
     </table>
-
+    <div id="divPage" style="margin-top:30px"></div>
 
     <div class="container" style="margin-top:100px">
         <div class="row half-boxes">
@@ -314,5 +367,98 @@
             });
         }
 
+    }
+
+    //分页
+    var theTable = document.getElementById("table2");
+    var numberRowsInTable = theTable.rows.length;
+    var TableOper = {
+
+        iniTable: function () {
+            this.goPage(1);
+        },
+        // pageIndex：该页面位于第几页;
+        goPage: function (pageIndex) {
+            this.hideTable();
+            var count;
+            var i = (pageIndex - 1) * 10;
+
+            if (pageIndex < Math.ceil(numberRowsInTable / 10) || pageIndex == numberRowsInTable / 10) {
+                count = 10;
+            } else {
+                count = numberRowsInTable % 10;
+            }
+
+
+            for (var k = 0; k < count; k++)
+                theTable.rows[i + k].style.display = '';
+
+            this.jsPage('divPage', numberRowsInTable, 10, pageIndex, 'goPage');
+        },
+
+        hideTable: function () {
+            for (var i = 0; i < numberRowsInTable; i++) {
+                theTable.rows[i].style.display = 'none';
+            }
+        },
+
+        //js分页
+        //el:分页容器 count:总记录数 pageStep:每页显示多少个 pageNum:第几页 fnGo:分页跳转函数
+        jsPage: function (el, count, pageStep, pageNum, fnGo) {
+            this.getLink = function (fnGo, index, pageNum, text) {
+                var s = '<a href="#p' + index + '" onclick="TableOper.' + fnGo + '(' + index + ');" ';
+                if (index == pageNum) {
+                    s += 'class="aCur" ';
+                }
+                text = text || index;
+                s += '>' + text + '</a> ';
+
+                return s;
+
+            }
+
+            //总页数
+            var pageNumAll = Math.ceil(count / pageStep);
+            if (pageNumAll == 1) {
+                divPage.innerHTML = '';
+                return;
+            }
+            var itemNum = 5; //当前页左右两边显示个数
+            pageNum = Math.max(pageNum, 1);
+            pageNum = Math.min(pageNum, pageNumAll);
+            var s = '';
+            if (pageNum > 1) {
+                s += this.getLink(fnGo, pageNum - 1, pageNum, '上一页');
+            } else {
+                s += '<span>上一页</span> ';
+            }
+            var begin = 1;
+            if (pageNum - itemNum > 1) {
+                s += this.getLink(fnGo, 1, pageNum) + '... ';
+                begin = pageNum - itemNum;
+            }
+            var end = Math.min(pageNumAll, begin + itemNum * 2);
+            if (end == pageNumAll - 1) {
+                end = pageNumAll;
+            }
+            for (var i = begin; i <= end; i++) {
+                s += this.getLink(fnGo, i, pageNum);
+            }
+            if (end < pageNumAll) {
+                s += '... ' + this.getLink(fnGo, pageNumAll, pageNum);
+            }
+            if (pageNum < pageNumAll) {
+                s += this.getLink(fnGo, pageNum + 1, pageNum, '下一页');
+            } else {
+                s += '<span>下一页</span> ';
+            }
+            var divPage = document.getElementById(el);
+            divPage.innerHTML = s;
+        }
+
+    }
+    window.onload = function () {
+        var tableOper = TableOper;
+        tableOper.iniTable();
     }
 </script>

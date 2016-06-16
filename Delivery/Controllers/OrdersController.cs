@@ -43,6 +43,24 @@ namespace Delivery.Controllers
             var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收"|| o.Status =="待选择");
             return View(orders.ToList());
         }
+        [HttpPost]
+        public ActionResult Announcement(int type, string key)
+        {
+            IQueryable<Orders> orders;
+            if (type == 1)
+            {
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.PickLocation != null && o.PickLocation.PlaceName.Contains(key) &&( o.Status == "等待接收" || o.Status == "待选择" ));
+            }
+            else if (type == 2)
+            {
+                int money = int.Parse(key);
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Reward != null && o.Reward.Money == money && (o.Status == "等待接收" || o.Status == "待选择"));
+            }
+            else
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收" || o.Status == "待选择");
+            ModelState.Clear();
+            return View(orders.ToList());
+        }
 
 
         // GET: Orders
@@ -53,12 +71,64 @@ namespace Delivery.Controllers
             return View(orders.ToList());
         }
 
+        [HttpPost]
+        public ActionResult Index(int type, string key)
+        {
+            var userId = int.Parse(Session["LoginId"].ToString());
+            IQueryable<Orders> orders;
+            if (type == 1)
+            {
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId &&o.PickLocation != null && o.PickLocation.PlaceName.Contains(key) );
+            }
+            else if (type == 2)
+            {
+                int money = int.Parse(key);
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId &&  o.ReceiverLocation != null && o.ReceiverLocation.PlaceName.Contains(key));
+            }
+
+            else if (type == 3)
+            {              
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId && o.Status != null && o.Status.Contains(key));
+            }
+            else
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where( o => o.SenderID == userId);
+            ModelState.Clear();
+            return View(orders.ToList());
+        }
+
+
 
         public ActionResult ReceiveIndex()
         {
             var userId = int.Parse(Session["LoginId"].ToString());
             var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
             var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId);
+            return View(orders.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult ReceiveIndex(int type, string key)
+        {
+            var userId = int.Parse(Session["LoginId"].ToString());
+            var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
+            IQueryable<Orders> orders;
+            if (type == 1)
+            {
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => (db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status == "待选择" || o.ReceiverID == userId) && o.PickLocation != null && o.PickLocation.PlaceName.Contains(key));
+            }
+            else if (type == 2)
+            {
+                //int money = int.Parse(key);
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => (db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status == "待选择" || o.ReceiverID == userId) && o.ReceiverLocation != null && o.ReceiverLocation.PlaceName.Contains(key));
+            }
+
+            else if (type == 3)
+            {
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => (db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status == "待选择" || o.ReceiverID == userId) && o.Status != null && o.Status.Contains(key));
+            }
+            else
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status == "待选择" || o.ReceiverID == userId);
+            ModelState.Clear();
             return View(orders.ToList());
         }
 
@@ -135,9 +205,15 @@ namespace Delivery.Controllers
                     reward.Type = "现金";
                     reward.Money = int.Parse(money);
                 }
-                else
+                else if (rewardType.Equals("1"))
                 {
                     reward.Type = "物品";
+                    reward.Remark = rewardRmk;
+                }
+                else if (rewardType.Equals("2"))
+                {
+                    reward.Type = "现金+物品";
+                    reward.Money = int.Parse(money);
                     reward.Remark = rewardRmk;
                 }
                 db.Rewards.Add(reward);
