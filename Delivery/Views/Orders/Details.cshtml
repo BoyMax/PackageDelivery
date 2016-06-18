@@ -6,8 +6,14 @@
 <html>
 <head>
  
-    @Styles.Render("~/Content/bootstrap.css")
-</head>
+     
+    @Styles.Render("~/Content/Site.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/app.css"></head>
+
 <body background="~/images/6.png " style="background-repeat:no-repeat ;
 background-size:100% 100%; 
 background-attachment: fixed;">
@@ -64,7 +70,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                         }
                         else
                         {
-                            @Html.DisplayFor(model => model.Receiver.Name)
+                            @Html.DisplayFor(model => model.Receiver.Account)
                         }
                     </dd>
                     <dt >
@@ -91,24 +97,6 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                     <dd >
                         @Html.DisplayFor(model => model.Reward.Type)
                     </dd>
-                    @if (Model.Reward.Type == "现金" || Model.Reward.Type == "现金+物品")
-                    {
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Reward.Money)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Reward.Money)
-                    </dd>
-                    }
-                    else if (Model.Reward.Type == "物品" || Model.Reward.Type == "现金+物品")
-                    {
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Reward.Remark)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Reward.Remark)
-                    </dd>
-                    }
                     @*<dt>
                             @Html.DisplayNameFor(model => model.Sender.Account)
                         </dt>

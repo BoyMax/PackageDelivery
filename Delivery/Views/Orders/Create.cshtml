@@ -5,16 +5,23 @@
 
 <html>
 <head>
-    @Styles.Render("~/Content/Site.css")
+    
+ @Styles.Render("~/Content/Site.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
     @Scripts.Render("~/bundles/jquery")
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/app.css">
+    
+ <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
 
 </head>
+
 
 <body background="~/images/7.png " style="background-repeat:no-repeat ;
 background-size:100% 100%;
 background-attachment: fixed;">
-    <h2>发起申请</h2>
+  <br></br>  <h2>发起申请</h2>
     <p>@Html.ActionLink("查看我的订单信息", "Index")</p>
    
     <div class="row "style="background: rgba(250,250,250, 0.3);border-radius:20px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);" >
@@ -55,7 +62,6 @@ background-attachment: fixed;">
             <div class="col-sm-5">
                 <input id="Reward_Type" name="Reward.Type" onclick="change(0)" type="radio" value="0" checked="checked">现金
                 <input id="Reward_Type" name="Reward.Type" onclick="change(1)" type="radio" value="1">物品
-                <input id="Reward_Type" name="Reward.Type" onclick="change(2)" type="radio" value="2">现金+物品
             </div>
         </div>
             <br><br>
@@ -217,14 +223,9 @@ background-attachment: fixed;">
             $("#remarkInput").attr("disabled", true);
             $("#moneyInput").attr("disabled", false);
         }
-        else if(type==1){
+        else {
             rewardType = '1';
             $("#moneyInput").attr("disabled", true);
-            $("#remarkInput").attr("disabled", false);
-        }
-        else {
-            rewardType = '2';
-            $("#moneyInput").attr("disabled", false);
             $("#remarkInput").attr("disabled", false);
         }
     }

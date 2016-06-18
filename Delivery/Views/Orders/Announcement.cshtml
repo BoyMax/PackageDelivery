@@ -52,7 +52,7 @@
  }
     </style>
 </head>
-<body style="background-color:lavender">
+<body>
  
         <div class="container" style="margin-top:80px;border-radius:10px">
             <header>
@@ -70,22 +70,28 @@
         <div class="col-sm-4">
             <img src="~/images/open-box.png" alt="Box icon">
         </div>
-        <div class="row" align="center">
-            @using (Html.BeginForm())
-            {              
-            <div class="">
-                <select class="" name="type">
-                    <option value="0">全部</option>
-                    <option value="1">领取地点</option>
-                    <option value="2">酬劳[现金]</option>
-                </select>
-            </div>
-            <input type="text"class="search_key" name="key" >               
-            <input type="submit" class="btn_submit" value="search"/> 
-            }
             
         </div>
                      <section id="news">
+                        
+                             @using (Html.BeginForm())
+                             {
+                                <div class="row" style="height:100px;background: rgba(14, 148, 130, 0.1);border-radius:5px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);" >
+                                    <div class="col-md-2 col-md-offset-2"style="padding-top:30px">
+                                        <select style="border-radius:3px" name="type">
+                                            <option value="0">全部</option>
+                                            <option value="1">领取地点</option>
+                                            <option value="2">酬劳[现金]</option>
+                                        </select></div>
+                                 <div class="col-md-7"style="padding-top:25px;">
+                                    <div class="kuan">
+                                        <input type="text" name="key" style="width:330px; height:50px;float:left;border-radius:2px; " ></div>
+                                    <div class="an"style="background-color:darksalmon">
+                                        <button type="submit" class="btn_submit bgcolor-8"style="width:90px; height:50px;float:left;border-radius:2px"><span class="glyphicon glyphicon-search"></span></button></div>
+                                     </div>
+                                    </div>
+                             }
+                        
                             <div  id="collapseOne"style="width:100%;">
                                 <table class="bordered table-striped" id="table1">
                                     <tr>
