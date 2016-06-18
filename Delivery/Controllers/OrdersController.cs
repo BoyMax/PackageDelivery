@@ -457,12 +457,13 @@ namespace Delivery.Controllers
                 for(int i=0;i<list.Count;i++)
                 {
                     JObject obj = new JObject();
-                    obj.Add("id", list[i].UserID);
+                    int competitorId = list[i].UserID;
+                    var comment=db.Orders.Where(o => o.ReceiverID == competitorId && o.Status=="订单完成").Select(s => s.Mark).Average();
+                    obj.Add("id", competitorId);
                     obj.Add("name", list[i].User.Name);
-                    obj.Add("account", list[i].User.Account);
                     obj.Add("phone", list[i].User.PhoneNumber);
                     obj.Add("address", list[i].Location.PlaceName);
-                    //obj.Add("remark", list[i].Location.Remark);
+                    obj.Add("comment", String.Format("{0:F}", comment));//默认为保留两位
                     json.Add(obj);
                 }
                 res.Data = json.ToString();

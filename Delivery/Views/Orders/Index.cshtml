@@ -273,10 +273,10 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                             <tr class="active">
                                 <th>
                                 </th>
-                                <th>姓名</th>
-                                <th>账号</th>
+                                <th>姓名</th>           
                                 <th>手机</th>
                                 <th>地址</th>
+                                <th>评分</th>
                             </tr>
                             <tbody id="tbody">
                                 @*@if (@ViewBag.competitors!=null) {
@@ -371,11 +371,10 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                     $.each($.parseJSON(data), function (index, item) {
                         console.log(item);
                         addHtml += "<tr class='success'><td><input type='radio' name='radio' value='" + item.id + "' onclick='radioclick(this)'></td>" +
-                                "<td>" + item.name + "</td>" +
-                                "<td>" + item.account + "</td>" +
+                                "<td>" + item.name + "</td>" +                               
                                 "<td>" + item.phone + "</td>" +
-                                "<td>" + item.address + "</td></tr>";
-                               // "<td>" + item.remark + "</td> </tr>";
+                                "<td>" + item.address + "</td>"+
+                                "<td>" + item.comment + "</td> </tr>";
                     });
                     $("#tbody").html(addHtml);
                 }

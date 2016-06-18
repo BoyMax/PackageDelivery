@@ -2760,7 +2760,7 @@ tbody.collapse.in {
       color: #ccc; }
 
 .navbar-inverse {
-  background-color: #CD4F39;
+  background-color:rgba(32, 199, 61, 0.09);
   border-color: #fff; }
   .navbar-inverse .navbar-brand {
     color: #9d9d9d; }
