@@ -80,7 +80,7 @@
         <div class="col-sm-4">
             <img src="~/images/17.png" >
         </div>
-    </div><br><br>
+    </div><br>
     
         @using (Html.BeginForm())
         {
@@ -380,6 +380,7 @@
     //分页
     var theTable = document.getElementById("table2");
     var numberRowsInTable = theTable.rows.length;
+    var size = 5;
     var TableOper = {
 
         iniTable: function () {
@@ -389,19 +390,19 @@
         goPage: function (pageIndex) {
             this.hideTable();
             var count;
-            var i = (pageIndex - 1) * 10;
+            var i = (pageIndex - 1) * size;
 
-            if (pageIndex < Math.ceil(numberRowsInTable / 10) || pageIndex == numberRowsInTable / 10) {
-                count = 10;
+            if (pageIndex < Math.ceil(numberRowsInTable / size) || pageIndex == numberRowsInTable / size) {
+                count = size;
             } else {
-                count = numberRowsInTable % 10;
+                count = numberRowsInTable % size;
             }
 
 
             for (var k = 0; k < count; k++)
                 theTable.rows[i + k].style.display = '';
 
-            this.jsPage('divPage', numberRowsInTable, 10, pageIndex, 'goPage');
+            this.jsPage('divPage', numberRowsInTable, size, pageIndex, 'goPage');
         },
 
         hideTable: function () {

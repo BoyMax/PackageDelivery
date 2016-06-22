@@ -57,14 +57,17 @@
 </head>
 
 <body>
-    <section class="bg-grey" style="height:350px;margin-top:100px">
-        <div class="container">
-            <header>
-                <h1 align="center">订单信息 </h1>
-                <p align="center">
-                    @Html.ActionLink("创建新的订单", "Create")
-                </p>
-            </header>
+    <div class="container-fluid" style="margin-top:80px;border-radius:10px;width:1000px">
+        <header>
+            <h1 align="center">发出订单信息 </h1>
+        </header>
+        <div>
+            <p align="center">
+                @Html.ActionLink("创建新的订单", "Create")
+            </p>
+        </div>
+    </div>
+    
             <div class="row" align="center">
                 <div class="col-sm-4">
                     <img src="~/images/11.png">
@@ -77,10 +80,7 @@
                 </div>
 
             </div>
-        </div>
-       
-    </section>
-    <br><br><br>
+    <br>
     @using (Html.BeginForm())
     {
         <div class="row" style="height:100px;background: rgba(14, 148, 130, 0.1);border-radius:5px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);">
@@ -538,28 +538,29 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
     //分页
     var theTable = document.getElementById("table2");
     var numberRowsInTable = theTable.rows.length;
+    var size = 5;
     var TableOper = {
 
         iniTable: function () {
             this.goPage(1);
         },
-        // pageIndex：该页面位于第几页;
+        // pageIndex：该页面位于第几页;       
         goPage: function (pageIndex) {
             this.hideTable();
             var count;
-            var i = (pageIndex - 1) * 10;
+            var i = (pageIndex - 1) * size;
 
-            if (pageIndex < Math.ceil(numberRowsInTable / 10) || pageIndex == numberRowsInTable / 10) {
-                count = 10;
+            if (pageIndex < Math.ceil(numberRowsInTable / size) || pageIndex == numberRowsInTable / size) {
+                count = size;
             } else {
-                count = numberRowsInTable % 10;
+                count = numberRowsInTable % size;
             }
 
 
             for (var k = 0; k < count; k++)
                 theTable.rows[i + k].style.display = '';
 
-            this.jsPage('divPage', numberRowsInTable, 10, pageIndex, 'goPage');
+            this.jsPage('divPage', numberRowsInTable, size, pageIndex, 'goPage');
         },
 
         hideTable: function () {

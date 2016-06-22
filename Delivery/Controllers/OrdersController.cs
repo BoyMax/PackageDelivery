@@ -40,7 +40,7 @@ namespace Delivery.Controllers
 
         public ActionResult Announcement()
         {
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收"|| o.Status =="待选择");
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收"|| o.Status =="待选择").OrderByDescending(o=>o.PublishTime);
             return View(orders.ToList());
         }
         [HttpPost]
@@ -67,7 +67,7 @@ namespace Delivery.Controllers
         public ActionResult Index()
         {
             var userId = int.Parse(Session["LoginId"].ToString());
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId);
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId).OrderByDescending(o => o.PublishTime); ;
             return View(orders.ToList());
         }
 
@@ -102,7 +102,7 @@ namespace Delivery.Controllers
         {
             var userId = int.Parse(Session["LoginId"].ToString());
             var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId);
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId).OrderByDescending(o => o.PublishTime); ;
             return View(orders.ToList());
         }
 

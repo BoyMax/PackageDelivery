@@ -18,13 +18,34 @@
 </head>
 
 
-<body background="~/images/7.png " style="background-repeat:no-repeat ;
-background-size:100% 100%;
-background-attachment: fixed;">
-  <br></br>  <h2>发起申请</h2>
+<body background="~/images/7.png " style="height:100px;background: #f9f7f6;">
+    <h2>发起申请</h2>
     <p>@Html.ActionLink("查看我的订单信息", "Index")</p>
    
-    <div class="row "style="background: rgba(250,250,250, 0.3);border-radius:20px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);" >
+    <div id="r-result">
+        <div class="row" style="margin-top:30px">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-2"> 地点</label>
+                    <input type="text" id="suggestId" class="form-control" size="20" value="百度" />
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-2"> 备注</label>
+                    <input type="text" id="Remark" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="l-map" style="border-radius:20px;"></div>
+        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+        @*<div id="allmap"></div>*@
+    </div>
+
+
+    <br>
+    <div class="row "style="background:rgba(32, 199, 61, 0.09);border-radius:20px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);" >
     <div  class="col-md-5" display="inline">
         @*@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "create-order-form", role = "form" }))
         {*@
@@ -64,14 +85,14 @@ background-attachment: fixed;">
                 <input id="Reward_Type" name="Reward.Type" onclick="change(1)" type="radio" value="1">物品
             </div>
         </div>
-            <br><br>
+
         <div class="form-group">
             <label class="control-label col-sm-4">酬金金额</label>
             <div class="col-sm-5">
                 <input id="moneyInput" class="form-control" type="text" size="14" maxlength="14" onkeyup='this.value=this.value.replace(/\D/gi,"")' />(仅限数字输入)
             </div>
         </div>
-            <br><br>
+
         <div class="form-group">
             <label class="control-label col-sm-4"> 物品信息</label>
             <div class="col-sm-5">
@@ -81,7 +102,7 @@ background-attachment: fixed;">
 
         <div class="form-group">
             <div class="col-md-offset-6 col-sm-10" style="width:350px;">
-                <input id="submit" type="button" class="btn btn-default" value="创建申请" />
+                <input id="submit" type="button" class="btn btn-default" value="创建" />
             </div>
         </div>
        </form>
@@ -91,27 +112,6 @@ background-attachment: fixed;">
    
 
     
-    <div id="r-result" >
-        <div class="row" style="margin-top:80px">
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label class="control-label col-sm-2"> 地点</label>
-                    <input type="text" id="suggestId" class="form-control" size="20" value="百度" />
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label class="control-label col-sm-2"> 备注</label>
-                    <input type="text" id="Remark" class="form-control" />
-                </div>
-            </div>
-        </div>
-              <br></br>
-              <div id="l-map" style="border-radius:20px;"></div>
-              <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
-              @*<div id="allmap"></div>*@
-          </div>
-   
 
 
 
