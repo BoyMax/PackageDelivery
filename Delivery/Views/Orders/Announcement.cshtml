@@ -3,22 +3,6 @@
 @{
     ViewBag.Title = "订单公告";
 }
-
-<html lang="zh">
-<head>
-   @Styles.Render("~/Content/Site.css")
-@Styles.Render("~/Content/bootstrap.min.css")
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
-    <link rel="stylesheet" href="~/Content/app.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/default.css">
-    <script src="~/scripts/app.js"></script>
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-
-
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
 <style>
 
@@ -31,7 +15,7 @@
  } 
  #divPage a, #divPage span {
   text-decoration:none;
-  color:Blue;
+  color:#91B493;
   background-color:White;
   padding:3px 5px;
   font-family:Consolas;
@@ -43,7 +27,7 @@
   color:gray;
  }  
  #divPage a:hover {
-  color:Red;
+  color:#6A8372;
  }
  #divPage .aCur {
   background-color:green;
@@ -51,54 +35,53 @@
   font-weight:bold;
  }
     </style>
-</head>
+
 <body>
-   <div class="bg-grey" style="height:300px;margin-top:80px">
+   <div class="header">
         <div class="container" style="margin-top:80px;border-radius:10px">
             <header>
-                <h2 align="center"><a href="#news" class="scroll-link"><span class="glyphicon glyphicon-list-alt"></span><b>News</b></a></h2>
-                
+                <h2 align="center"><a href="#news" class="scroll-link"><span class="glyphicon glyphicon-list-alt"></span><b>News</b></a></h2>               
             </header>
         </div>
+  <div class="container">
     <div class="row" align="center">
         <div class="col-sm-4">
-            <img src="~/images/clock.png" alt="Clock icon">
+            <img src="~/images/clock.png"  class="img-responsive" alt="Clock icon">
         </div>
         <div class="col-sm-4">
-            <img src="~/images/graph.png" alt="Graph icon">
+            <img src="~/images/graph.png"  class="img-responsive" alt="Graph icon">
         </div>
         <div class="col-sm-4">
-            <img src="~/images/open-box.png" alt="Box icon">
-        </div>
-            
-        </div>
+            <img src="~/images/open-box.png" class="img-responsive" alt="Box icon">
+        </div>           
+    </div>
+   </div>
        @using (Html.BeginForm())
        {
-           <div class="row" style="height:100px;">
-               <div class="col-md-2 col-md-offset-2" style="padding-top:30px">
-                   <select style="border-radius:3px" name="type">
-                       <option value="0">全部</option>
-                       <option value="1">领取地点</option>
-                       <option value="2">酬劳[现金]</option>
-                   </select>
-               </div>
-               <div class="col-md-7" style="padding-top:25px;">
-                   <div class="kuan">
-                       <input type="text" name="key" style="width:330px; height:50px;float:left;border-radius:2px; ">
-                   </div>
-                   <div class="an" style="background-color:darksalmon">
-                       <button type="submit" class="btn_submit bgcolor-8" style="width:90px; height:50px;float:left;border-radius:2px"><span class="glyphicon glyphicon-search"></span></button>
-                   </div>
-               </div>
-           </div>
+        <div class="container">
+            <div class="row search" align="center">
+                <div class="col-md-2 col-md-offset-2 search-select-div">
+                    <select class="search-select" name="type">
+                        <option value="0">全部</option>
+                        <option value="1">领取地点</option>
+                        <option value="2">酬劳[现金]</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <input type="text" name="key" class="search-input">
+                    </div>
+                    <div style="background-color:darksalmon">
+                        <button type="submit" class="submit-btn"><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
        }
        </div>
-                     <div id="news">
-                        
-                             
-                        
-                            <div  id="collapseOne"style="width:100%;">
-                                <table class="bordered table-striped" id="table1">
+                     <div id="news">                  
+                            <div  class="table-responsive">
+                                <table class="table bordered table-striped" id="table1">
                                     <tr>
                                         <th>发单人</th>
                                         <th style="width:200px">
@@ -162,10 +145,10 @@
                                                 </td>
 
                                                 <td>
-                                                    <button id="1"  class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">
-                                                        帮忙代收
+                                                    <button id="1"  class="apply-btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">
+                                                        代收
                                                     </button>
-                                                   <a class="btn btn-default" onclick="showLoc(this)" ><span class="glyphicon glyphicon-map-marker"></span></a>
+                                                   <a class="location-btn" onclick="showLoc(this)" ><span class="glyphicon glyphicon-map-marker"></span></a>
                                                 </td>
                                             </tr>
                                     }
@@ -429,14 +412,14 @@
                 divPage.innerHTML = '';
                 return;
             }
-            var itemNum = 5; //当前页左右两边显示个数
+            var itemNum = 2; //当前页左右两边显示个数
             pageNum = Math.max(pageNum, 1);
             pageNum = Math.min(pageNum, pageNumAll);
             var s = '';
             if (pageNum > 1) {
-                s += this.getLink(fnGo, pageNum - 1, pageNum, '上一页');
+                s += this.getLink(fnGo, pageNum - 1, pageNum, '<<');
             } else {
-                s += '<span>上一页</span> ';
+                s += '<span><<</span> ';
             }
             var begin = 1;
             if (pageNum - itemNum > 1) {
@@ -454,9 +437,9 @@
                 s += '... ' + this.getLink(fnGo, pageNumAll, pageNum);
             }
             if (pageNum < pageNumAll) {
-                s += this.getLink(fnGo, pageNum + 1, pageNum, '下一页');
+                s += this.getLink(fnGo, pageNum + 1, pageNum, '>>');
             } else {
-                s += '<span>下一页</span> ';
+                s += '<span>>></span> ';
             }
             var divPage = document.getElementById(el);
             divPage.innerHTML = s;

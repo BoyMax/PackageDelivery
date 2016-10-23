@@ -449,8 +449,7 @@ namespace Delivery.Controllers
             }
             else
             {
-                var competitors = db.OrderCompetitors.Include(o => o.User).Where(o => o.OrderID == oid);
-                /*页面显示多个代收人信息....明天完成哟~*/               
+                var competitors = db.OrderCompetitors.Include(o => o.User).Where(o => o.OrderID == oid);             
                 ViewBag.competitors=competitors.ToList();
                 var list = competitors.ToList();
                 JArray json = new JArray();
@@ -458,7 +457,8 @@ namespace Delivery.Controllers
                 {
                     JObject obj = new JObject();
                     int competitorId = list[i].UserID;
-                    var comment=db.Orders.Where(o => o.ReceiverID == competitorId && o.Status=="订单完成").Select(s => s.Mark).Average();
+                    var comment=db.Orders.Where(o => o.ReceiverID == competitorId && o.Status=="订单完成")
+                        .Select(s => s.Mark).Average();
                     obj.Add("id", competitorId);
                     obj.Add("name", list[i].User.Name);
                     obj.Add("phone", list[i].User.PhoneNumber);
