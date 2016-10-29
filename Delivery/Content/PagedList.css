@@ -50,8 +50,11 @@
   z-index: 2;
   color: #ffffff;
   cursor: default;
+  /*Edited by vivien
   background-color: #428bca;
-  border-color: #428bca;
+  border-color: #428bca;*/
+  background-color: black;
+  border-color: #777777;
 }
 
 .pagination > .disabled > span,

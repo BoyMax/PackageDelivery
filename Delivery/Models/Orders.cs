@@ -48,7 +48,7 @@ namespace Delivery.Models
         [StringLength(200)]
         public string Comment { get; set; }
 
-        [Display(Name = "发单时间")]
+        [Display(Name = "公告时间")]
         [Column(TypeName = "datetime2")]
         public DateTime PublishTime { get; set; }
 

@@ -3,24 +3,10 @@
 @{
 	ViewBag.Title = "详情";
 }
-<html>
-<head>
- 
-     
-    @Styles.Render("~/Content/Site.css")
-    @Styles.Render("~/Content/bootstrap.min.css")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
-    <link rel="stylesheet" href="~/Content/app.css"></head>
 
-<body background="~/images/6.png " style="background-repeat:no-repeat ;
-background-size:100% 100%; 
-background-attachment: fixed;">
-   
-        <div class="row" style="background:rgba(255,255,255, 0.8);
-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:100px;border-radius:20px">
-            <h2 style="color:black">订单详情</h2>
+<body>  
+        <div class="row" style="background:#eeeeee;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:100px;border-radius:20px">
+            <h2 style="color:black;margin-left:1%">订单详情</h2>
             <div style="float: left;left: 100px;">
                 @*@Html.ActionLink("修改", "Edit", new { id = Model.ID }) |*@
                 @*@Html.ActionLink("返回发起订单", "Index",null,new { @class = "btn btn-link" })*@
@@ -175,8 +161,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                    
             </div> 
         </div>
-
 </body>
-</html>
+
 
 

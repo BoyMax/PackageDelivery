@@ -2,260 +2,222 @@
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
-    ViewBag.Title = "我的订单信息";
+    ViewBag.Title = "我的订单";
 }
 
-
-<html>
-<head>
-    <style>
-      
-
-        /*分页样式*/
-        #divPage {
-            text-align: center;
-            margin: 10px 0px;
-            height: 30px;
-            font-size: 12px;
-        }
-
-            #divPage a, #divPage span {
-                text-decoration: none;
-                color: Blue;
-                background-color: White;
-                padding: 3px 5px;
-                font-family: Consolas;
-                text-align: center;
-                border: solid 1px #ddd;
-                display: inline-block;
-            }
-
-            #divPage span {
-                color: gray;
-            }
-
-            #divPage a:hover {
-                color: Red;
-            }
-
-            #divPage .aCur {
-                background-color: green;
-                color: White;
-                font-weight: bold;
-            }
-    </style>
-</head>
-
 <body>
-    <div class="container-fluid" style="margin-top:80px;border-radius:10px;width:1000px">
-        <header>
-            <h1 align="center">发出订单信息 </h1>
-        </header>
-        <div>
-            <p align="center">
-                @Html.ActionLink("创建新的订单", "Create")
-            </p>
+    <div class="header">
+        <div class="container" style="margin-top:10px;border-radius:10px">
+            <header>
+                <h1 align="center">发出订单信息 </h1>
+            </header>
+            <div>
+                <p align="center">
+                    @Html.ActionLink("创建新的订单", "Create")
+                </p>
+            </div>
         </div>
-    </div>
-    
-            <div class="row" align="center">
-                <div class="col-sm-4">
-                    <img src="~/images/11.png">
-                </div>
-                <div class="col-sm-4">
-                    <img src="~/images/4.png">
-                </div>
-                <div class="col-sm-4">
-                    <img src="~/images/10.png">
-                </div>
 
+        <div class="row" align="center">
+            <div class="col-sm-4">
+                <img src="~/images/11.png">
             </div>
-    <br>
-    @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
-    {
-        <div class="row" style="height:100px;background: rgba(14, 148, 130, 0.1);border-radius:5px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);">
-            <div class="col-md-2 col-md-offset-2" style="padding-top:30px">
-                <select  style="border-radius:3px" name="type">
-                    <option value="0">全部</option>
-                    <option value="1">领取地点</option>
-                    <option value="2">代收地点</option>
-                    <option value="3">状态</option>
-                </select>
+            <div class="col-sm-4">
+                <img src="~/images/4.png">
             </div>
-            <div class="col-md-7" style="padding-top:25px;">
-                <div class="kuan">
-                    <input type="text" name="key" style="width:330px; height:50px;float:left;border-radius:2px; " value=@ViewBag.CurrentFilter>
-                    @*@Html.TextBox("key", ViewBag.CurrentFilter as string,new { @class=""})*@
-                </div>
-                <div class="an" style="background-color:darksalmon">
-                    <button type="submit" class="btn_default bgcolor-8" style="width:90px; height:50px;float:left;border-radius:2px"><span class="glyphicon glyphicon-search"></span></button>
-                </div>
+            <div class="col-sm-4">
+                <img src="~/images/10.png">
             </div>
+
         </div>
-  }
+        <br>
+        @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+        {
+            <div class="container">
+                <div class="row search" align="center">
+                    <div class="col-md-2 col-md-offset-2 search-select-div">
+                        <select class="search-select" name="type">
+                            <option value="0">全部</option>
+                            <option value="1">领取地点</option>
+                            <option value="2">代收地点</option>
+                            <option value="3">状态</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <input type="text" name="key" class="search-input" value=@ViewBag.CurrentFilter>
+                            @*@Html.TextBox("key", ViewBag.CurrentFilter as string,new { @class=""})*@
+                        </div>
+                        <div>
+                            <button type="submit" class="submit-btn"><span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
         @*<div class="col-md-5" style="margin-top:20px">
-            <img src="~/Content/5.png" class="img-rounded" style="width:80%;height:100%;">
-        </div>*@
-   
-        <table class="bordered" align="center" style="background: rgba(245,245,245, 0.3);
-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:100px;" >
-            <tr>
-                <th style="width:200px">
-                    @Html.ActionLink("领取地点", "Index", new { sortOrder = ViewBag.PickLocation, currentFilter = ViewBag.CurrentFilter })
-                    @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
-                </th>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.Sender.Account)
-                    </th>*@
-                <th style="width:200px">
-                    代收地点
-                    @*@Html.DisplayNameFor(model => model.ReceiverLocation.PlaceName)*@
-                </th>
-                <th style="width:100px">
-                    酬金类型
-                </th>
-                <th style="width:80px">
-                    代收人
-                    @*@Html.DisplayNameFor(model => model.Receiver.Account)*@
-                </th>
-                <th style="width:80px">
-                    状态
-                </th>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.Mark)
-                    </th>*@
-                @*<th>
-                        @Html.DisplayNameFor(model => model.Comment)
-                    </th>*@
-               
-                <th>
-                    @Html.DisplayNameFor(model => model.First().PublishTime)
-                    
-                </th>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.EndTime)
-                    </th>*@
-                <th style="width:170px">操作</th>
-            </tr>
-            <tbody id="table2">
-            @foreach (var item in Model)
+                <img src="~/Content/5.png" class="img-rounded" style="width:80%;height:100%;">
+            </div>*@
+        <div class="table-responsive">
+            <table class="table bordered table-striped">
+                <tr>
+                    <th>
+                        @Html.ActionLink("领取地点", "Index", new { sortOrder = ViewBag.PickLocation, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Sender.Account)
+                        </th>*@
+                    <th>
+                        @Html.ActionLink("代收地点", "Index", new { sortOrder = ViewBag.ReceiverLocation, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        酬金类型
+                    </th>
+                    <th>
+                        @Html.ActionLink("代收人", "Index", new { sortOrder = ViewBag.Receiver, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("状态", "Index", new { sortOrder = ViewBag.Status, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Mark)
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Comment)
+                        </th>*@
+
+                    <th>
+                        @Html.ActionLink("公告时间", "Index", new { sortOrder = ViewBag.PublishTime, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </th>*@
+                    <th>操作</th>
+                </tr>
+                <tbody>
+                    @foreach (var item in Model)
             {
                 if (item.Status != "已删除")
                 {
-                    <tr>
-                        @Html.HiddenFor(modelItem => item.ID)
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Sender.Account)
-                        </td>*@
-                    <td>
-                        @if (item.Status == "等待接收")
-                        {
-                            <span>无</span>
-                        }
-                        else if (item.Status == "待选择")
-                        {
-                            <span>无</span>
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Reward.Type)
-                    </td>
-                    <td>
-                        @if (item.Status == "等待接收")
-                        {
-                            <span>无</span>
-                        }
-                        else if (item.Status == "待选择")
-                        {
-                            <button class="btn btn-primary" onClick="delcfm(this)">选择</button>
+                            <tr>
+                                @Html.HiddenFor(modelItem => item.ID)
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Sender.Account)
+                                    </td>*@
+                                <td>
+                                    @if (item.Status == "等待接收")
+                                    {
+                                        <span>无</span>
+                                    }
+                                    else if (item.Status == "待选择")
+                                    {
+                                        <span>无</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.ReceiverLocation.PlaceName)
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Reward.Type)
+                                </td>
+                                <td>
+                                    @if (item.Status == "等待接收")
+                                    {
+                                        <span>无</span>
+                                    }
+                                    else if (item.Status == "待选择")
+                                    {
+                                        <button class="btn btn-primary" onClick="delcfm(this)">选择</button>
                                         @*<button class="btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">选择</button>*@
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.Receiver.Account)
-                        }
-                    </td>
-                    <td>
-                        @if (item.Status == "已代收")
-                        {
-                            <button class="btn btn-primary" onClick="confirmOrder(this)">确认接收</button>
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.Status)
-                        }
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Mark)
-                        </td>*@
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Comment)
-                        </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PublishTime)
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.EndTime)
-                        </td>*@
-                    <td>
-                        @if (item.Status == "等待接收")
-                        {
-<a href="@Url.Action("Edit","Orders", new { id=@item.ID})" >
-    <span class="glyphicon glyphicon-edit"></span>
-</a>
-                           
-                            <span>|</span>
-<a href="@Url.Action("Details", "Orders", new { id=@item.ID})" >
-    <span class="glyphicon glyphicon-eye-open"></span>
-</a>
-                                      
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Receiver.Account)
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Status == "已代收")
+                                    {
+                                        <button class="btn btn-primary" onClick="confirmOrder(this)">确认接收</button>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    }
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Mark)
+                                    </td>*@
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Comment)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PublishTime)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.EndTime)
+                                    </td>*@
+                                <td>
+                                    @if (item.Status == "等待接收")
+                                    {
+                                        <a href="@Url.Action("Edit","Orders", new { id=@item.ID})">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </a>
+
+                                        <span>|</span>
+                                        <a href="@Url.Action("Details", "Orders", new { id=@item.ID})">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </a>
+
                                         <span>|</span>
                                         <a onclick="deleteOrder(this)"> <span class="glyphicon glyphicon-trash"></span></a>
-//@Html.ActionLink("删除", "Delete", new { id = item.ID })
-                        }
-                        else if (item.Status == "待选择")
-                        {
-                           <a href="@Url.Action("Details", "Orders", new { id=@item.ID})" >
-    <span class="glyphicon glyphicon-eye-open"></span>
-</a>
-                            <span>|</span>
+                                        //@Html.ActionLink("删除", "Delete", new { id = item.ID })
+                                    }
+                                    else if (item.Status == "待选择")
+                                    {
+                                        <a href="@Url.Action("Details", "Orders", new { id=@item.ID})">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </a>
+                                        <span>|</span>
                                         <a onclick="deleteOrder(this)"><span class="glyphicon glyphicon-trash"></span></a>
+                                    }
+                                    else if (item.Status == "订单完成")
+                                    {
+                                        <a href="@Url.Action("Details", "Orders", new { id=@item.ID})">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </a>
+                                        <span>|</span>
+                                        <a onclick="comment(this)"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+                                        <span>|</span>
+                                        <a onclick="deleteOrder(this)"><span class="glyphicon glyphicon-trash"></span></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Details", "Orders", new { id=@item.ID})">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
                         }
-                        else if (item.Status == "订单完成")
-                        {
-                            <a href="@Url.Action("Details", "Orders", new { id=@item.ID})" >
-    <span class="glyphicon glyphicon-eye-open"></span>
-</a>
-                            <span>|</span>
-                            <a onclick="comment(this)"><span class="glyphicon glyphicon-thumbs-up"></span></a>
-                            <span>|</span>
-                            <a onclick="deleteOrder(this)"><span class="glyphicon glyphicon-trash"></span></a>
-                        }
-                        else
-                        {
-                           <a href="@Url.Action("Details", "Orders", new { id=@item.ID})" >
-    <span class="glyphicon glyphicon-eye-open"></span>
-</a>
-                        }
-                    </td>
-                </tr>
-                }
-            }
+                    }
                 </tbody>
-        </table>
-    <!--<div id="divPage" style="margin-top:30px"></div>-->
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index",new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-        
-    
-<!--Modal -->
+            </table>
+        </div>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+    </div>
+
+        <!--Modal -->
         <div class="modal fade" id="two">
             <div class="modal-dialog">
                 <div class="modal-content message_align">
@@ -268,7 +230,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                             <tr class="active">
                                 <th>
                                 </th>
-                                <th>姓名</th>           
+                                <th>姓名</th>
                                 <th>手机</th>
                                 <th>地址</th>
                                 <th>评分</th>
@@ -335,12 +297,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
-        <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
-            <a href="#" target="_blank" >Package.com@ecnu.edu.cn</a>
-        </div>
 </body>
-</html>
 
 <script>
 
@@ -530,97 +487,4 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
         });
     }
 
-    //分页
-    var theTable = document.getElementById("table2");
-    var numberRowsInTable = theTable.rows.length;
-    var size = 5;
-    var TableOper = {
-
-        iniTable: function () {
-            this.goPage(1);
-        },
-        // pageIndex：该页面位于第几页;       
-        goPage: function (pageIndex) {
-            this.hideTable();
-            var count;
-            var i = (pageIndex - 1) * size;
-
-            if (pageIndex < Math.ceil(numberRowsInTable / size) || pageIndex == numberRowsInTable / size) {
-                count = size;
-            } else {
-                count = numberRowsInTable % size;
-            }
-
-
-            for (var k = 0; k < count; k++)
-                theTable.rows[i + k].style.display = '';
-
-            this.jsPage('divPage', numberRowsInTable, size, pageIndex, 'goPage');
-        },
-
-        hideTable: function () {
-            for (var i = 0; i < numberRowsInTable; i++) {
-                theTable.rows[i].style.display = 'none';
-            }
-        },
-
-        //js分页
-        //el:分页容器 count:总记录数 pageStep:每页显示多少个 pageNum:第几页 fnGo:分页跳转函数
-        jsPage: function (el, count, pageStep, pageNum, fnGo) {
-            this.getLink = function (fnGo, index, pageNum, text) {
-                var s = '<a href="#p' + index + '" onclick="TableOper.' + fnGo + '(' + index + ');" ';
-                if (index == pageNum) {
-                    s += 'class="aCur" ';
-                }
-                text = text || index;
-                s += '>' + text + '</a> ';
-
-                return s;
-
-            }
-
-            //总页数
-            var pageNumAll = Math.ceil(count / pageStep);
-            if (pageNumAll == 1) {
-                divPage.innerHTML = '';
-                return;
-            }
-            var itemNum = 5; //当前页左右两边显示个数
-            pageNum = Math.max(pageNum, 1);
-            pageNum = Math.min(pageNum, pageNumAll);
-            var s = '';
-            if (pageNum > 1) {
-                s += this.getLink(fnGo, pageNum - 1, pageNum, '上一页');
-            } else {
-                s += '<span>上一页</span> ';
-            }
-            var begin = 1;
-            if (pageNum - itemNum > 1) {
-                s += this.getLink(fnGo, 1, pageNum) + '... ';
-                begin = pageNum - itemNum;
-            }
-            var end = Math.min(pageNumAll, begin + itemNum * 2);
-            if (end == pageNumAll - 1) {
-                end = pageNumAll;
-            }
-            for (var i = begin; i <= end; i++) {
-                s += this.getLink(fnGo, i, pageNum);
-            }
-            if (end < pageNumAll) {
-                s += '... ' + this.getLink(fnGo, pageNumAll, pageNum);
-            }
-            if (pageNum < pageNumAll) {
-                s += this.getLink(fnGo, pageNum + 1, pageNum, '下一页');
-            } else {
-                s += '<span>下一页</span> ';
-            }
-            var divPage = document.getElementById(el);
-            divPage.innerHTML = s;
-        }
-
-    }
-    window.onload = function () {
-        var tableOper = TableOper;
-        tableOper.iniTable();
-    }
 </script>

@@ -1,163 +1,141 @@
-﻿@model IEnumerable<Delivery.Models.Orders>
+﻿@model PagedList.IPagedList<Delivery.Models.Orders>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "订单公告";
 }
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
-<style>
-
-     /*分页样式*/
- #divPage {
-  text-align:center;
-  margin:10px 0px;
-  height:30px;
-  font-size:12px;
- } 
- #divPage a, #divPage span {
-  text-decoration:none;
-  color:#91B493;
-  background-color:White;
-  padding:3px 5px;
-  font-family:Consolas;
-  text-align:center;
-  border:solid 1px #ddd;
-  display:inline-block;
- } 
- #divPage span {
-  color:gray;
- }  
- #divPage a:hover {
-  color:#6A8372;
- }
- #divPage .aCur {
-  background-color:green;
-  color:White;
-  font-weight:bold;
- }
-    </style>
 
 <body>
-   <div class="header">
-        <div class="container" style="margin-top:80px;border-radius:10px">
+    <div class="header">
+        <div class="container" style="margin-top:10px;border-radius:10px">
             <header>
-                <h2 align="center"><a href="#news" class="scroll-link"><span class="glyphicon glyphicon-list-alt"></span><b>News</b></a></h2>               
+                <h2 align="center"><a href="#news" class="scroll-link"><span class="glyphicon glyphicon-list-alt"></span><b>News</b></a></h2>
             </header>
         </div>
-  <div class="container">
-    <div class="row" align="center">
-        <div class="col-sm-4">
-            <img src="~/images/clock.png"  class="img-responsive" alt="Clock icon">
-        </div>
-        <div class="col-sm-4">
-            <img src="~/images/graph.png"  class="img-responsive" alt="Graph icon">
-        </div>
-        <div class="col-sm-4">
-            <img src="~/images/open-box.png" class="img-responsive" alt="Box icon">
-        </div>           
-    </div>
-   </div>
-       @using (Html.BeginForm())
-       {
         <div class="container">
-            <div class="row search" align="center">
-                <div class="col-md-2 col-md-offset-2 search-select-div">
-                    <select class="search-select" name="type">
-                        <option value="0">全部</option>
-                        <option value="1">领取地点</option>
-                        <option value="2">酬劳[现金]</option>
-                    </select>
+            <div class="row" align="center">
+                <div class="col-sm-4">
+                    <img src="~/images/clock.png" class="img-responsive" alt="Clock icon">
                 </div>
-                <div class="col-md-6">
-                    <div>
-                        <input type="text" name="key" class="search-input">
-                    </div>
-                    <div style="background-color:darksalmon">
-                        <button type="submit" class="submit-btn"><span class="glyphicon glyphicon-search"></span></button>
-                    </div>
+                <div class="col-sm-4">
+                    <img src="~/images/graph.png" class="img-responsive" alt="Graph icon">
+                </div>
+                <div class="col-sm-4">
+                    <img src="~/images/open-box.png" class="img-responsive" alt="Box icon">
                 </div>
             </div>
         </div>
-       }
-       </div>
-                     <div id="news">                  
-                            <div  class="table-responsive">
-                                <table class="table bordered table-striped" id="table1">
-                                    <tr>
-                                        <th>发单人</th>
-                                        <th style="width:200px">
-                                            领取地点
-                                            @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
-                                        </th>
-                                        <th>
-                                            酬金类型
-                                        </th>
-                                        <th>
-                                            酬劳
-                                        </th>
-                                        @*<th>
-                                                @Html.DisplayNameFor(model => model.Mark)
-                                            </th>*@
-                                        @*<th>
-                                                @Html.DisplayNameFor(model => model.Comment)
-                                            </th>*@
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.PublishTime)
-                                        </th>
-                                        @*<th>
-                                                @Html.DisplayNameFor(model => model.EndTime)
-                                            </th>*@
-                                        <th>操作</th>
-                                    </tr>
-                                 <tbody id="table2">
-                                    @foreach (var item in Model)
-                                    {
-                                            <tr>
-                                                @Html.HiddenFor(modelItem => item.ID)
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Sender.Name)
-                                                </td>
-                                                <td id="PlaceName">
-                                                    @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Reward.Type)
-                                                </td>
-                                                <td>
-                                                    @if (item.Reward.Type == "现金")
-                                                    {
-                                                        @Html.DisplayFor(modelItem => item.Reward.Money)
-                                                        <span>元</span>
-                                                    }
-                                                    else if (item.Reward.Type == "物品")
-                                                    {
-                                                        <span class="glyphicon glyphicon-gift"></span>@Html.DisplayFor(modelItem => item.Reward.Remark)
-                                                    }
+        @using (Html.BeginForm("Announcement", "Orders", FormMethod.Get))
+        {
+            <div class="container">
+                <div class="row search" align="center">
+                    <div class="col-md-2 col-md-offset-2 search-select-div">
+                        <select class="search-select" name="type">
+                            <option value="0">全部</option>
+                            <option value="1">领取地点</option>
+                            <option value="2">酬劳[现金]</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <input type="text" name="key" class="search-input" value=@ViewBag.CurrentFilter>
+                        </div>
+                        <div style="background-color:darksalmon">
+                            <button type="submit" class="submit-btn"><span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div> 
+    <div id="news">
+        <div class="table-responsive">
+            <table class="table bordered table-striped">
+                <tr>
+                    <th>
+                        @Html.ActionLink("发单人", "Announcement", new { sortOrder = ViewBag.SenderName, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("领取地点", "Announcement", new { sortOrder = ViewBag.PickLocation, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
+                    </th>
+                    <th>
+                        酬金类型
+                    </th>
+                    <th>
+                        @Html.ActionLink("酬金", "Announcement", new { sortOrder = ViewBag.Money, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Mark)
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Comment)
+                        </th>*@
+                    <th>
+                        @Html.ActionLink("公告时间", "Announcement", new { sortOrder = ViewBag.PublishTime, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </th>*@
+                    <th>操作</th>
+                </tr>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            @Html.HiddenFor(modelItem => item.ID)
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sender.Name)
+                            </td>
+                            <td id="PlaceName">
+                                @Html.DisplayFor(modelItem => item.PickLocation.PlaceName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Reward.Type)
+                            </td>
+                            <td>
+                                @if (item.Reward.Type == "现金")
+                                {
+                                    @Html.DisplayFor(modelItem => item.Reward.Money)
+                                    <span>元</span>
+                                }
+                                else if (item.Reward.Type == "物品")
+                                {
+                                    <span class="glyphicon glyphicon-gift"></span>@Html.DisplayFor(modelItem => item.Reward.Remark)
+                                }
 
-                                                    else if (item.Reward.Type == "现金+物品")
-                                                    {
-                                                    @Html.DisplayFor(modelItem => item.Reward.Money)<span>元</span>
+                                else if (item.Reward.Type == "现金+物品")
+                                {
+                                    @Html.DisplayFor(modelItem => item.Reward.Money)<span>元</span>
                                                     @Html.DisplayFor(modelItem => item.Reward.Remark)
-                                                    }
-                                                </td>
+                                }
+                            </td>
 
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.PublishTime)
-                                                </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PublishTime)
+                            </td>
 
-                                                <td>
-                                                    <button id="1"  class="apply-btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">
-                                                        代收
-                                                    </button>
-                                                   <a class="location-btn" onclick="showLoc(this)" ><span class="glyphicon glyphicon-map-marker"></span></a>
-                                                </td>
-                                            </tr>
-                                    }
-                                     </tbody>
-                                </table>
-                            </div>
-                         <div id="divPage" style="margin-top:30px"></div>
-                   </div>
-                    @*<div class="panel-footer"> </div>*@
+                            <td>
+                                <button id="1" class="apply-btn btn-primary" onClick="delcfm('${ctxPath}/manager/project/delete?id=${vo.id?default()}',this)">
+                                    代收
+                                </button>
+                                <a class="location-btn" onclick="showLoc(this)"><span class="glyphicon glyphicon-map-marker"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*  Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                @Html.PagedListPager(Model, page => Url.Action("Announcement", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            </div>
+        </div>
+    </div>
+          
                           
     <div style="height:80px" id="map">
         <label class="control-label col-md-2"> 地点查看</label>
@@ -212,8 +190,6 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </body>
-</html>
-
 
 <script type="text/javascript">
     // 百度地图API功能
@@ -323,132 +299,4 @@
             error: function () { }
         });
     }
-
-    
-   
-    /*
-    $(function () {
-        $(".demo1").bootstrapNews({
-            newsPerPage: 5,
-            autoplay: true,
-            pauseOnHover: true,
-            direction: 'up',
-            newsTickerInterval: 4000,
-            onToDo: function () {
-                //console.log(this);
-            }
-        });
-
-        $(".demo2").bootstrapNews({
-            newsPerPage: 4,
-            autoplay: true,
-            pauseOnHover: true,
-            navigation: false,
-            direction: 'down',
-            newsTickerInterval: 2500,
-            onToDo: function () {
-                //console.log(this);
-            }
-        });
-
-        $("#demo3").bootstrapNews({
-            newsPerPage: 3,
-            autoplay: false,
-            onToDo: function () {
-                //console.log(this);
-            }
-        });
-    });*/
-    var theTable = document.getElementById("table2");
-    var numberRowsInTable = theTable.rows.length;
-    var TableOper = {
-
-        iniTable: function () {
-            this.goPage(1);
-        },
-        // pageIndex：该页面位于第几页;
-        goPage: function (pageIndex) {
-            this.hideTable();
-            var count;
-            var i = (pageIndex - 1) * 5;
-
-            if (pageIndex < Math.ceil(numberRowsInTable / 5) || pageIndex == numberRowsInTable / 5) {
-                count = 5;
-            } else {
-                count = numberRowsInTable % 5;
-            }
-           
-             
-               for (var k=0; k <count; k++) 
-                theTable.rows[i+k].style.display = '';
-      
-           this.jsPage('divPage', numberRowsInTable, 5, pageIndex, 'goPage');
-        },
-
-        hideTable: function() {
-        for (var i = 0; i < numberRowsInTable; i++) {
-            theTable.rows[i].style.display = 'none';
-        }
-    },
-
-        //js分页
-        //el:分页容器 count:总记录数 pageStep:每页显示多少个 pageNum:第几页 fnGo:分页跳转函数
-        jsPage: function (el, count, pageStep, pageNum, fnGo) {
-            this.getLink = function (fnGo, index, pageNum, text) {
-                var s = '<a href="#p' + index + '" onclick="TableOper.' + fnGo + '(' + index + ');" ';
-                if (index == pageNum) {
-                    s += 'class="aCur" ';
-                }
-                text = text || index;
-                s += '>' + text + '</a> ';
-
-                return s;
-
-            }
-
-            //总页数
-            var pageNumAll = Math.ceil(count / pageStep);
-            if (pageNumAll == 1) {
-                divPage.innerHTML = '';
-                return;
-            }
-            var itemNum = 2; //当前页左右两边显示个数
-            pageNum = Math.max(pageNum, 1);
-            pageNum = Math.min(pageNum, pageNumAll);
-            var s = '';
-            if (pageNum > 1) {
-                s += this.getLink(fnGo, pageNum - 1, pageNum, '<<');
-            } else {
-                s += '<span><<</span> ';
-            }
-            var begin = 1;
-            if (pageNum - itemNum > 1) {
-                s += this.getLink(fnGo, 1, pageNum) + '... ';
-                begin = pageNum - itemNum;
-            }
-            var end = Math.min(pageNumAll, begin + itemNum * 2);
-            if (end == pageNumAll - 1) {
-                end = pageNumAll;
-            }
-            for (var i = begin; i <= end; i++) {
-                s += this.getLink(fnGo, i, pageNum);
-            }
-            if (end < pageNumAll) {
-                s += '... ' + this.getLink(fnGo, pageNumAll, pageNum);
-            }
-            if (pageNum < pageNumAll) {
-                s += this.getLink(fnGo, pageNum + 1, pageNum, '>>');
-            } else {
-                s += '<span>>></span> ';
-            }
-            var divPage = document.getElementById(el);
-            divPage.innerHTML = s;
-        }
-
-    }
-    window.onload = function () {
-        var tableOper = TableOper;
-        tableOper.iniTable();
-    }
-   
 </script>

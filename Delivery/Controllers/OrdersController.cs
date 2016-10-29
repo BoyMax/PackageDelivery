@@ -39,14 +39,24 @@ namespace Delivery.Controllers
             }
         }
 
-        public ActionResult Announcement()
+        public ActionResult Announcement(string sortOrder, string currentFilter, int? type, string key, int? page)
         {
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收"|| o.Status =="待选择").OrderByDescending(o=>o.PublishTime);
-            return View(orders.ToList());
-        }
-        [HttpPost]
-        public ActionResult Announcement(int type, string key)
-        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SenderName = sortOrder == "sendName_asc" ? "sendName_desc" : "sendName_asc";
+            ViewBag.PickLocation = sortOrder == "pickLoc_asc" ? "pickLoc_desc" : "pickLoc_asc";
+            ViewBag.Money = sortOrder == "money_asc" ? "money_desc" : "money_asc";
+            ViewBag.PublishTime = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (key != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                key = currentFilter;
+            }
+            ViewBag.CurrentFilter = key;
+
             IQueryable<Orders> orders;
             if (type == 1)
             {
@@ -59,29 +69,40 @@ namespace Delivery.Controllers
             }
             else
                 orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收" || o.Status == "待选择");
-            ModelState.Clear();
-            return View(orders.ToList());
-        }
 
-        [HttpPost]
-        public ActionResult AnnouncementPage(int type, string key,int nextPage)
-        {
-            IQueryable<Orders> orders;
+            switch (sortOrder)
+            {
+                case "sendName_asc":
+                    orders = orders.OrderBy(s => s.Sender.Name);
+                    break;
+                case "sendName_desc":
+                    orders = orders.OrderByDescending(s => s.Sender.Name);
+                    break;
+                case "pickLoc_desc":
+                    orders = orders.OrderByDescending(s => s.PickLocation.PlaceName);
+                    break;
+                case "pickLoc_asc":
+                    orders = orders.OrderBy(s => s.PickLocation.PlaceName);
+                    break;
+                case "money_asc":
+                    orders = orders.OrderBy(s => s.Reward.Money);
+                    break;
+                case "money_desc":
+                    orders = orders.OrderByDescending(s => s.Reward.Money);
+                    break;
+                case "Date":
+                    orders = orders.OrderBy(s => s.PublishTime);
+                    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(s => s.PublishTime);
+                    break;
+                default:
+                    orders = orders.OrderByDescending(s => s.PublishTime);
+                    break;
+            }
             int pageSize = 5;
-            int front = (nextPage - 1)* pageSize;
-            if (type == 1)
-            {
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.PickLocation != null && o.PickLocation.PlaceName.Contains(key) && (o.Status == "等待接收" || o.Status == "待选择"));
-            }
-            else if (type == 2)
-            {
-                int money = int.Parse(key);
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Reward != null && o.Reward.Money == money && (o.Status == "等待接收" || o.Status == "待选择"));
-            }
-            else
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收" || o.Status == "待选择");
-            ModelState.Clear();
-            return View(orders.ToList());
+            int pageNumber = (page ?? 1);
+            return View(orders.ToPagedList(pageNumber, pageSize));
         }
 
 
@@ -97,7 +118,10 @@ namespace Delivery.Controllers
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.PickLocation = sortOrder== "pickLoc_asc" ? "pickLoc_desc" : "pickLoc_asc";
-            //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.ReceiverLocation = sortOrder == "recLoc_asc" ? "recLoc_desc" : "recLoc_asc";
+            ViewBag.Receiver=sortOrder == "receiver_asc" ? "receiver_desc" : "receiver_asc";
+            ViewBag.Status = sortOrder == "status_asc" ? "status_desc" : "status_asc";
+            ViewBag.PublishTime = sortOrder == "Date" ? "date_desc" : "Date";
             var userId = int.Parse(Session["LoginId"].ToString());
           
             if (key != null)
@@ -137,12 +161,30 @@ namespace Delivery.Controllers
                 case "pickLoc_asc":
                     orders=orders.OrderBy(s => s.PickLocation.PlaceName);
                     break;
-                /*case "Date":
-                    orders = orders.OrderBy(s => s.EnrollmentDate);
+                case "recLoc_asc":
+                    orders = orders.OrderBy(s => s.ReceiverLocation.PlaceName);
+                    break;
+                case "recLoc_desc":
+                    orders = orders.OrderByDescending(s => s.ReceiverLocation.PlaceName);
+                    break;
+                case "receiver_asc":
+                    orders = orders.OrderBy(s => s.Receiver.Name);
+                    break;
+                case "receiver_desc":
+                    orders = orders.OrderByDescending(s => s.Receiver.Name);
+                    break;
+                case "status_asc":
+                    orders = orders.OrderBy(s => s.Status);
+                    break;
+                case "status_desc":
+                    orders = orders.OrderByDescending(s => s.Status);
+                    break;
+                case "Date":
+                    orders = orders.OrderBy(s => s.PublishTime);
                     break;
                 case "date_desc":
-                    orders = orders.OrderByDescending(s => s.EnrollmentDate);
-                    break;*/
+                    orders = orders.OrderByDescending(s => s.PublishTime);
+                    break;
                 default:
                     orders = orders.OrderByDescending(s => s.PublishTime);
                     break;
@@ -152,19 +194,38 @@ namespace Delivery.Controllers
             return View(orders.ToPagedList(pageNumber, pageSize));
         }
         
+        /*
         public ActionResult ReceiveIndex()
         {
             var userId = int.Parse(Session["LoginId"].ToString());
             var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
             var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId).OrderByDescending(o => o.PublishTime); 
             return View(orders.ToList());
-        }
+        }*/
 
-        [HttpPost]
-        public ActionResult ReceiveIndex(int type, string key)
+        public ActionResult ReceiveIndex(string sortOrder, string currentFilter, int? type, string key, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SenderName = sortOrder == "sendName_asc" ? "sendName_desc" : "sendName_asc";
+            ViewBag.PickLocation = sortOrder == "pickLoc_asc" ? "pickLoc_desc" : "pickLoc_asc";
+            ViewBag.ReceiverLocation = sortOrder == "recLoc_asc" ? "recLoc_desc" : "recLoc_asc";
+            ViewBag.Status = sortOrder == "status_asc" ? "status_desc" : "status_asc";
+            ViewBag.PublishTime = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (key != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                key = currentFilter;
+            }
+            ViewBag.CurrentFilter = key;
+
             var userId = int.Parse(Session["LoginId"].ToString());
             var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
+
+
             IQueryable<Orders> orders;
             if (type == 1)
             {
@@ -182,8 +243,46 @@ namespace Delivery.Controllers
             }
             else
                 orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status == "待选择" || o.ReceiverID == userId);
-            ModelState.Clear();
-            return View(orders.ToList());
+            switch (sortOrder)
+            {
+                case "sendName_asc":
+                    orders = orders.OrderBy(s => s.Sender.Name);
+                    break;
+                case "sendName_desc":
+                    orders = orders.OrderByDescending(s => s.Sender.Name);
+                    break;
+                case "pickLoc_desc":
+                    orders = orders.OrderByDescending(s => s.PickLocation.PlaceName);
+                    break;
+                case "pickLoc_asc":
+                    orders = orders.OrderBy(s => s.PickLocation.PlaceName);
+                    break;
+                case "recLoc_asc":
+                    orders = orders.OrderBy(s => s.ReceiverLocation.PlaceName);
+                    break;
+                case "recLoc_desc":
+                    orders = orders.OrderByDescending(s => s.ReceiverLocation.PlaceName);
+                    break;
+                case "status_asc":
+                    orders = orders.OrderBy(s => s.Status);
+                    break;
+                case "status_desc":
+                    orders = orders.OrderByDescending(s => s.Status);
+                    break;
+                case "Date":
+                    orders = orders.OrderBy(s => s.PublishTime);
+                    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(s => s.PublishTime);
+                    break;
+                default:
+                    orders = orders.OrderByDescending(s => s.PublishTime);
+                    break;
+            }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(orders.ToPagedList(pageNumber, pageSize));
+
         }
 
 
