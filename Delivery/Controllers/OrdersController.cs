@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Delivery.Models;
 using Newtonsoft.Json;  
 using Newtonsoft.Json.Linq;
+using PagedList;
 using System.Runtime.Serialization.Json;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
@@ -62,47 +63,100 @@ namespace Delivery.Controllers
             return View(orders.ToList());
         }
 
-
-        // GET: Orders
-        public ActionResult Index()
-        {
-            var userId = int.Parse(Session["LoginId"].ToString());
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId).OrderByDescending(o => o.PublishTime); ;
-            return View(orders.ToList());
-        }
-
         [HttpPost]
-        public ActionResult Index(int type, string key)
+        public ActionResult AnnouncementPage(int type, string key,int nextPage)
         {
-            var userId = int.Parse(Session["LoginId"].ToString());
             IQueryable<Orders> orders;
+            int pageSize = 5;
+            int front = (nextPage - 1)* pageSize;
             if (type == 1)
             {
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId &&o.PickLocation != null && o.PickLocation.PlaceName.Contains(key) );
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.PickLocation != null && o.PickLocation.PlaceName.Contains(key) && (o.Status == "等待接收" || o.Status == "待选择"));
             }
             else if (type == 2)
             {
                 int money = int.Parse(key);
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId &&  o.ReceiverLocation != null && o.ReceiverLocation.PlaceName.Contains(key));
-            }
-
-            else if (type == 3)
-            {              
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId && o.Status != null && o.Status.Contains(key));
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Reward != null && o.Reward.Money == money && (o.Status == "等待接收" || o.Status == "待选择"));
             }
             else
-                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where( o => o.SenderID == userId);
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.Status == "等待接收" || o.Status == "待选择");
             ModelState.Clear();
             return View(orders.ToList());
         }
 
 
+        /* GET: Orders
+        public ActionResult Index()
+        {
+            var userId = int.Parse(Session["LoginId"].ToString());
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId).OrderByDescending(o => o.PublishTime); ;
+            return View(orders.ToPagedList(1, 5));
+        }*/
 
+        public ActionResult Index(string sortOrder,string currentFilter,int? type,string key,int? page)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.PickLocation = sortOrder== "pickLoc_asc" ? "pickLoc_desc" : "pickLoc_asc";
+            //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            var userId = int.Parse(Session["LoginId"].ToString());
+          
+            if (key != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                key = currentFilter;
+            }
+            ViewBag.CurrentFilter = key;
+
+            IQueryable<Orders> orders;
+            if (type == 1)
+            {
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId && o.PickLocation != null && o.PickLocation.PlaceName.Contains(key));
+            }
+            else if (type == 2)
+            {
+                int money = int.Parse(key);
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId && o.ReceiverLocation != null && o.ReceiverLocation.PlaceName.Contains(key));
+            }
+
+            else if (type == 3)
+            {
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId && o.Status != null && o.Status.Contains(key));
+            }
+            else
+                orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => o.SenderID == userId);
+           
+
+            switch (sortOrder)
+            {
+                case "pickLoc_desc":
+                    orders = orders.OrderByDescending(s => s.PickLocation.PlaceName);
+                    break;
+                case "pickLoc_asc":
+                    orders=orders.OrderBy(s => s.PickLocation.PlaceName);
+                    break;
+                /*case "Date":
+                    orders = orders.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(s => s.EnrollmentDate);
+                    break;*/
+                default:
+                    orders = orders.OrderByDescending(s => s.PublishTime);
+                    break;
+            }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(orders.ToPagedList(pageNumber, pageSize));
+        }
+        
         public ActionResult ReceiveIndex()
         {
             var userId = int.Parse(Session["LoginId"].ToString());
             var competitor = db.OrderCompetitors.Where(oc => oc.UserID == userId);
-            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId).OrderByDescending(o => o.PublishTime); ;
+            var orders = db.Orders.Include(o => o.PickLocation).Include(o => o.Receiver).Include(o => o.ReceiverLocation).Include(o => o.Reward).Include(o => o.Sender).Where(o => db.OrderCompetitors.Where(oc => (oc.UserID == userId)).Select(oc => oc.OrderID).Contains(o.ID) && o.Status=="待选择" || o.ReceiverID==userId).OrderByDescending(o => o.PublishTime); 
             return View(orders.ToList());
         }
 

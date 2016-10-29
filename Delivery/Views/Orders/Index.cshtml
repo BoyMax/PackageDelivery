@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Delivery.Models.Orders> 
-
+﻿@model PagedList.IPagedList<Delivery.Models.Orders> 
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "我的订单信息";
 }
@@ -70,7 +71,7 @@
 
             </div>
     <br>
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
     {
         <div class="row" style="height:100px;background: rgba(14, 148, 130, 0.1);border-radius:5px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);">
             <div class="col-md-2 col-md-offset-2" style="padding-top:30px">
@@ -83,15 +84,15 @@
             </div>
             <div class="col-md-7" style="padding-top:25px;">
                 <div class="kuan">
-                    <input type="text" name="key" style="width:330px; height:50px;float:left;border-radius:2px; ">
+                    <input type="text" name="key" style="width:330px; height:50px;float:left;border-radius:2px; " value=@ViewBag.CurrentFilter>
+                    @*@Html.TextBox("key", ViewBag.CurrentFilter as string,new { @class=""})*@
                 </div>
                 <div class="an" style="background-color:darksalmon">
                     <button type="submit" class="btn_default bgcolor-8" style="width:90px; height:50px;float:left;border-radius:2px"><span class="glyphicon glyphicon-search"></span></button>
                 </div>
             </div>
         </div>
-    }
-  
+  }
         @*<div class="col-md-5" style="margin-top:20px">
             <img src="~/Content/5.png" class="img-rounded" style="width:80%;height:100%;">
         </div>*@
@@ -100,7 +101,7 @@
 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endColorstr=#99F4DBBB);margin-top:100px;" >
             <tr>
                 <th style="width:200px">
-                    领取地点
+                    @Html.ActionLink("领取地点", "Index", new { sortOrder = ViewBag.PickLocation, currentFilter = ViewBag.CurrentFilter })
                     @*@Html.DisplayNameFor(model => model.PickLocation.PlaceName)*@
                 </th>
                 @*<th>
@@ -126,8 +127,10 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
                 @*<th>
                         @Html.DisplayNameFor(model => model.Comment)
                     </th>*@
+               
                 <th>
-                    @Html.DisplayNameFor(model => model.PublishTime)
+                    @Html.DisplayNameFor(model => model.First().PublishTime)
+                    
                 </th>
                 @*<th>
                         @Html.DisplayNameFor(model => model.EndTime)
@@ -247,9 +250,12 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99F4DBBB, endCo
             }
                 </tbody>
         </table>
-    <div id="divPage" style="margin-top:30px"></div>
-
-
+    <!--<div id="divPage" style="margin-top:30px"></div>-->
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index",new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        
+    
+<!--Modal -->
         <div class="modal fade" id="two">
             <div class="modal-dialog">
                 <div class="modal-content message_align">
