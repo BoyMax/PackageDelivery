@@ -100,7 +100,7 @@ namespace Delivery.Controllers
                     orders = orders.OrderByDescending(s => s.PublishTime);
                     break;
             }
-            int pageSize = 5;
+            int pageSize = 8;
             int pageNumber = (page ?? 1);
             return View(orders.ToPagedList(pageNumber, pageSize));
         }
@@ -189,7 +189,7 @@ namespace Delivery.Controllers
                     orders = orders.OrderByDescending(s => s.PublishTime);
                     break;
             }
-            int pageSize = 5;
+            int pageSize = 8;
             int pageNumber = (page ?? 1);
             return View(orders.ToPagedList(pageNumber, pageSize));
         }
@@ -279,7 +279,7 @@ namespace Delivery.Controllers
                     orders = orders.OrderByDescending(s => s.PublishTime);
                     break;
             }
-            int pageSize = 5;
+            int pageSize = 8;
             int pageNumber = (page ?? 1);
             return View(orders.ToPagedList(pageNumber, pageSize));
 

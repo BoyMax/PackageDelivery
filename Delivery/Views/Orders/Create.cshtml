@@ -3,12 +3,7 @@
     ViewBag.Title = "发起申请";
 }
 
-<html>
-<head>
  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
-
-</head>
-
 
 <body>
     <h2>发起申请</h2>
@@ -99,18 +94,10 @@
         </div>
        </form>
       </div>
-        </div>
-
-   
-
-    
-
-
-
-   
+     </div>   
 </body>
-</html>
-@section Scripts {
+
+@section Scripts { 
     @Scripts.Render("~/bundles/jqueryval")
 }
 <script type="text/javascript">
@@ -234,6 +221,7 @@
             alert("请确认包裹信息");
             return;
         }
+        alert("hi");
         var PlaceName= $("#suggestId").val();
         var Remark = $("#Remark").val();
         //var SenderID=$("#SenderID").val();

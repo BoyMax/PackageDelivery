@@ -101,7 +101,7 @@
     background-color: #eee;
     background-image: -webkit-linear-gradient(#fcfcfc, #eee);
     background-image: linear-gradient(#fcfcfc, #eee);
-    border: 1px solid #d5d5d5;
+    border: 2px solid #d5d5d5;
     border-radius: 3px;
     -webkit-appearance: none;
 }
@@ -130,7 +130,7 @@
     background-color:#eee;
     background-image: -webkit-linear-gradient(#lightgray, #eeeeeee);
     background-image: linear-gradient(#lightgray, #eeeeeee);
-    border-color: #fff;
+    border-color: dimgrey;
 }
 
 .btn-primary {
@@ -240,7 +240,6 @@ table{
     float:left;
     border-radius:2px;
     background-color:#fff;
-    color:green;
 }
 
 .header{
@@ -248,6 +247,19 @@ table{
     margin-top:5%;
 }
 
+.btn-border{
+    position: relative;
+    display: inline-block;
+    padding: 5px 12px;
+    line-height: 20px;
+    border:2px solid;
+    border-color: #dddddd;
+    border-radius:5px;
+    top:3px;
+}
+.btn-border:hover{
+    border-color:black;
+}
 .bordered {				
 				-moz-border-radius: 20px;
 				-webkit-border-radius: 20px;
