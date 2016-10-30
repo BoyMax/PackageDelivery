@@ -9,7 +9,7 @@
     <div class="header">
         <div class="container" style="margin-top:10px;border-radius:10px">
             <header>
-                <h1 align="center">发出订单信息 </h1>
+                <h2 style="font-weight:bold" align="center">发出订单</h2>
             </header>
             <div>
                 <p align="center">
@@ -212,7 +212,7 @@
         </div>
 
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3 page-size">
             @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
         </div>
     </div>

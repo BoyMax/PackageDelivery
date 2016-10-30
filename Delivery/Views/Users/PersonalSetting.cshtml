@@ -5,8 +5,10 @@
 }
 
 <body>
-            <div class="row" >
-                <h2 align="center">个人设置</h2>
+    <h2 style="margin-top:10%;font-weight:bold" align="center">个人设置</h2>
+    <div class="header-setting">
+        <div class="container">
+            <div class="row">
                 <div class="col-sm-4">
                     <div class="icon-box">
                         <img src="~/images/clock.png" alt="Clock icon">
@@ -41,7 +43,6 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="col-sm-4">
                     <div class="icon-box">
                         <img src="~/images/graph.png" alt="Graph icon">
@@ -58,7 +59,6 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="col-sm-4">
                     <div class="icon-box">
                         <img src="~/images/open-box.png" alt="Box icon">
@@ -66,11 +66,11 @@
                             <form id="Form1" method="post"
                                   enctype="multipart/form-data">
                                 <fieldset>
-                                    <legend>常用地址:   <a href="javascript:addUpload()"><span class="glyphicon glyphicon-plus"></span></a></legend>                                 
+                                    <h3> 常用地址:   <a href="javascript:addUpload()"><span class="glyphicon glyphicon-plus"></span></a></h3>
                                     <div>
                                         <table>
-                                            <tr >
-                                                <td id="tdRrmove"  width="2000">
+                                            <tr>
+                                                <td id="tdRrmove" width="2000">
                                                     <!--承接整个file文件框的HTML容器-->
                                                     <div id="uploadContent">
                                                         <!--默认的file文件框
@@ -82,7 +82,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    
+
                                     <br />
                                     <br />
                                 </fieldset>
@@ -91,10 +91,11 @@
                     </div>
                 </div>
             </div>
-
             <div class="text-center mt-lg">
                 <a class="btn btn-lg btn-action" onclick="save()">保存</a>
             </div>
+        </div>
+    </div>
 </body>
 
 

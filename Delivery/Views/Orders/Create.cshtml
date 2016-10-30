@@ -1,7 +1,10 @@
 ﻿
 @{
     ViewBag.Title = "发起申请";
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 }
+
 
  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ta8D0yykrTj7hGKuvdaYOWcOiwvhsZG4"></script>
 
@@ -19,7 +22,7 @@
             </div>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label class="control-label col-sm-2"> 备注</label>
+                    <label class="control-label col-sm-4"> 详细地址备注</label>
                     <input type="text" id="Remark" class="form-control" />
                 </div>
             </div>
@@ -221,7 +224,6 @@
             alert("请确认包裹信息");
             return;
         }
-        alert("hi");
         var PlaceName= $("#suggestId").val();
         var Remark = $("#Remark").val();
         //var SenderID=$("#SenderID").val();

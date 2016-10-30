@@ -142,6 +142,26 @@
 }
 
 
+.icon-box {
+  text-align: center; 
+}
+
+@media (max-width: 767px) 
+{
+  .icon-box {
+    text-align: center;
+  }
+  .icon-box img {
+      float: none;
+      margin-bottom: 25px; 
+  }
+  .icon-box .icon-box-info {
+      float: none;
+      width: 100%;
+      margin-left: 0; 
+  }
+}
+
 
 body {
     font: 14px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -247,6 +267,13 @@ table{
     margin-top:5%;
 }
 
+.header-setting{
+    margin-top:10%;
+}
+.page-size{
+    width:500px;
+    max-width:500px;
+}
 .btn-border{
     position: relative;
     display: inline-block;
